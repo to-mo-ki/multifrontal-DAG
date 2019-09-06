@@ -1,6 +1,7 @@
 program jagged_array_test
   use sparse_matrix_maker_m
   use test_util
+  use jagged_array_m
   implicit none
   type(jagged_array_c) :: ccs
   integer :: i, j

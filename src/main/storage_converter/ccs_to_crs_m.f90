@@ -1,6 +1,9 @@
 module ccs_to_crs_m
   use jagged_array_m
   implicit none
+  private
+
+  public :: ccs_to_crs
   
 contains
   subroutine ccs_to_crs(ccs, crs)

@@ -1,6 +1,9 @@
 module sparse_matrix_maker_m
   use jagged_array_m
   implicit none
+  private
+
+  public :: make_ccs
   
 contains
   subroutine make_ccs(ccs)

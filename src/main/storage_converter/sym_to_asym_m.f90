@@ -1,6 +1,9 @@
 module sym_to_asym_m
   use jagged_array_m
   implicit none
+  private
+
+  public :: sym_to_asym
   
 contains
   subroutine sym_to_asym(sym, asym)
