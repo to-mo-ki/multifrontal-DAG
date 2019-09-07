@@ -3,13 +3,8 @@ module assert_equal_m
   use to_str_m, only: to_str
   implicit none
   private
-  interface assert_equal
-    module procedure assert_equal_int
-    module procedure assert_equal_logical
-    module procedure assert_equal_char
-    module procedure assert_equal_DP
-  end interface
-  public :: assert_equal
+  
+  public :: assert_equal_int, assert_equal_logical, assert_equal_char, assert_equal_DP
   
 contains
   subroutine assert_equal_int(message, answer, check)

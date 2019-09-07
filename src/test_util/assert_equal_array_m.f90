@@ -3,13 +3,11 @@ module assert_equal_array_m
   use log_m
   implicit none
   private
-  interface assert_equal_array
-    module procedure assert_equal_array_DP
-    module procedure assert_equal_array_int
-  end interface
-  public :: assert_equal_array, assert_equal_partial_array
+
+  public :: assert_equal_array_DP, assert_equal_array_int, assert_equal_partial_array
+  
 contains
-  subroutine assert_equal_array_DP(message, answer, n, check)
+  subroutine assert_equal_array_DP(message, answer, check, n)
     character(*), intent(in) :: message
     double precision, intent(in) :: answer(:), check(:)
     integer, intent(in) :: n
@@ -40,7 +38,7 @@ contains
 
   end subroutine
 
-  subroutine assert_equal_array_int(message, answer, n, check)
+  subroutine assert_equal_array_int(message, answer, check, n)
     character(*), intent(in) :: message
     integer, intent(in) :: answer(:), check(:)
     integer, intent(in) :: n
@@ -71,7 +69,7 @@ contains
 
   end subroutine
 
-  subroutine assert_equal_partial_array(message, answer, pos, n, check, precision)
+  subroutine assert_equal_partial_array(message, answer, pos, check, precision, n)
     character(*), intent(in) :: message
     double precision, intent(in) :: answer(*), check(n)
     integer, intent(in) :: n, pos(*)

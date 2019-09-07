@@ -64,7 +64,7 @@ contains
       i = i + 1
       val(i) = iterator%next()
     enddo
-    call assert_equal_array(message_list, val(:i), i, list)
+    call assert_equal(message_list, val(:i), list, i)
 
   end subroutine
 
