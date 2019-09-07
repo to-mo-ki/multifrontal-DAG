@@ -4,10 +4,15 @@ module tree_m
   implicit none
   private
 
+  interface create_tree_child
+    module procedure :: create_tree_child_by_num_child_and_parent
+      module procedure :: create_tree_child_by_parent
+  end interface
+
   public :: create_tree_child, create_parent, tree_traverse_postordering, count_subtree_size
 
 contains
-  type(jagged_array_c) function create_tree_child(num_child, parent) result(tree_child)
+  type(jagged_array_c) function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
     integer, pointer, contiguous, intent(in) :: num_child(:), parent(:)
     integer, pointer, contiguous :: childs(:), ptr(:)
     integer, allocatable :: child_pos(:)
@@ -29,6 +34,24 @@ contains
     enddo
 
     tree_child = create_jagged_array(ptr, childs)
+  
+  end function
+
+  type(jagged_array_c) function create_tree_child_by_parent(parent) result(tree_child)
+    integer, pointer, contiguous, intent(in) :: parent(:)
+    integer, pointer, contiguous :: childs(:), ptr(:)
+    integer, allocatable, target :: num_child(:)
+    integer :: n, i
+
+    n = size(parent)
+    allocate(num_child(n))
+    num_child = 0
+
+    do i=1, n-1
+      num_child(parent(i)) = num_child(parent(i)) + 1
+    enddo
+
+    tree_child = create_tree_child_by_num_child_and_parent(num_child, parent)
   
   end function
 
