@@ -7,9 +7,8 @@ module assert_equal_array_m
   public :: assert_equal_array_DP, assert_equal_array_int, assert_equal_partial_array
   
 contains
-  subroutine assert_equal_array_DP(message, answer, check, n2)
+  subroutine assert_equal_array_DP(message, answer, check)
     character(*), intent(in) :: message
-    integer, intent(in) :: n2
     double precision, intent(in) :: answer(:), check(:)
     logical :: err_flag
     logical, allocatable :: err_flag_array(:)
@@ -48,9 +47,8 @@ contains
 
   end subroutine
 
-  subroutine assert_equal_array_int(message, answer, check, n2)
+  subroutine assert_equal_array_int(message, answer, check)
     character(*), intent(in) :: message
-    integer, intent(in) :: n2
     integer, intent(in) :: answer(:), check(:)
     logical :: err_flag
     logical, allocatable :: err_flag_array(:)

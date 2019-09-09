@@ -10,7 +10,7 @@ program compute_tree_test
   call make_crs(row, col)
   crs = create_jagged_array(row, col)
   parent => compute_tree(crs)
-  call assert_equal("compute tree", parent, (/7, 4, 5, 6, 6, 8, 8, 9, 0/), 9)
+  call assert_equal("compute tree", parent, (/7, 4, 5, 6, 6, 8, 8, 9, 0/))
 
   
 end program compute_tree_test

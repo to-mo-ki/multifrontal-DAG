@@ -12,6 +12,6 @@ program finding_leaves_test
   allocate(subtree_size(9))
   subtree_size = (/1, 2, 1, 2, 1, 2, 5, 8, 9/)
   isleaf => finding_leaves(subtree_size, ccs)
-  call assert_equal("finding_leaves", isleaf, (/1, 1, 1, 0, 1, 1, 0, 0, 0/), 9)
+  call assert_equal("finding_leaves", isleaf, (/1, 1, 1, 0, 1, 1, 0, 0, 0/))
   
 end program finding_leaves_test

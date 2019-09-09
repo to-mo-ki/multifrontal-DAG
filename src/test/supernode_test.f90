@@ -20,29 +20,19 @@ program supernode_test
   isleaf = (/1, 1, 1, 0, 1, 1, 0, 0, 0/)
 
   first_node => search_first_node_in_supernode(isleaf, tree_child)
-  call assert_equal("first node", first_node, (/1, 2, 3, 5, 6, 7, 8, 10/), 8)
+  call assert_equal("first node", first_node, (/1, 2, 3, 5, 6, 7, 8, 10/))
 
 
   num_child_supernode => create_supernodal_tree(first_node, tree_child)
-  call assert_equal("supernodal tree", num_child_supernode, (/0, 1, 0, 0, 1, 2, 2/), 7)
+  call assert_equal("supernodal tree", num_child_supernode, (/0, 1, 0, 0, 1, 2, 2/))
 
   ccs_supernode = create_supernodal_ccs(first_node, ccs)
-
-  call assert_equal("supernodal ccs:N", ccs_supernode%get_num_arrays(), 7)
-  call assert_equal("supernodal ccs:col(1)", ccs_supernode%get_array_length(1), 2)
-  call assert_equal("supernodal ccs:col(2)", ccs_supernode%get_array_length(2), 1)
-  call assert_equal("supernodal ccs:col(3)", ccs_supernode%get_array_length(3), 2)
-  call assert_equal("supernodal ccs:col(4)", ccs_supernode%get_array_length(4), 2)
-  call assert_equal("supernodal ccs:col(5)", ccs_supernode%get_array_length(5), 2)
-  call assert_equal("supernodal ccs:col(6)", ccs_supernode%get_array_length(6), 1)
-  call assert_equal("supernodal ccs:col(7)", ccs_supernode%get_array_length(7), 0)
-
   
-  call assert_equal("supernodal ccs:row(1)", ccs_supernode%get_array(1), (/2, 8/), 2)
-  call assert_equal("supernodal ccs:row(2)", ccs_supernode%get_array(2), (/9/), 1)
-  call assert_equal("supernodal ccs:row(3)", ccs_supernode%get_array(3), (/7, 9/), 2)
-  call assert_equal("supernodal ccs:row(4)", ccs_supernode%get_array(4), (/6, 8/), 2)
-  call assert_equal("supernodal ccs:row(5)", ccs_supernode%get_array(5), (/7, 8/), 2)
-  call assert_equal("supernodal ccs:row(6)", ccs_supernode%get_array(6), (/9/), 1)
+  call assert_equal("supernodal ccs(1)", ccs_supernode%get_array(1), (/2, 8/))
+  call assert_equal("supernodal ccs(2)", ccs_supernode%get_array(2), (/9/))
+  call assert_equal("supernodal ccs(3)", ccs_supernode%get_array(3), (/7, 9/))
+  call assert_equal("supernodal ccs(4)", ccs_supernode%get_array(4), (/6, 8/))
+  call assert_equal("supernodal ccs(5)", ccs_supernode%get_array(5), (/7, 8/))
+  call assert_equal("supernodal ccs(6)", ccs_supernode%get_array(6), (/9/))
   
 end program supernode_test

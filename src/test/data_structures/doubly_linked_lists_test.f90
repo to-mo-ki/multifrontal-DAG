@@ -59,7 +59,7 @@ contains
       i = i + 1
       val(i) = iterator%next()
     enddo
-    call assert_equal(message_list, val(:i), list, i)
+    call assert_equal(message_list, val(:i), list)
 
   end subroutine
 
