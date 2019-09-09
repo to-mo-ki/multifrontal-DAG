@@ -39,5 +39,8 @@ program tree_test
   call assert_equal("tree_child by parent:array(8)", tree_child%get_array(8), (/6, 7/), 2)
   call assert_equal("tree_child by parent:array(9)", tree_child%get_array(9), (/8/), 1)
 
+  num_child = (/0, 1, 0, 1, 0, 1, 2, 2, 1/)
+  parent => create_parent_in_postordering_tree(num_child)
+  call assert_equal("create_parent_in_postordering_tree", parent, (/2, 8, 4, 7, 6, 7, 8, 9, 0/), 9)
 
 end program 

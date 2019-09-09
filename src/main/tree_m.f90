@@ -9,7 +9,7 @@ module tree_m
       module procedure :: create_tree_child_by_parent
   end interface
 
-  public :: create_tree_child, create_parent, tree_traverse_postordering, count_subtree_size
+  public :: create_tree_child, create_parent_in_postordering_tree, tree_traverse_postordering, count_subtree_size
 
 contains
   type(jagged_array_c) function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
@@ -55,8 +55,7 @@ contains
   
   end function
 
-  function create_parent(num_child) result(parent)
-    ! TODO: no test(condition: postordering)
+  function create_parent_in_postordering_tree(num_child) result(parent)
     integer, pointer, contiguous, intent(in) :: num_child(:)
     integer, pointer, contiguous :: parent(:)
     integer :: i, j, node, n

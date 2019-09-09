@@ -5,6 +5,8 @@ module analyze_phase_m
   use tree_m
   use reordering_m
   use perm_m
+  use finding_leaves_m
+  use supernode_m
   implicit none
   private
   
@@ -13,8 +15,10 @@ contains
     ! NOTE: reorderingは外部で行う
     type(jagged_array_c), intent(in) :: origin_ccs
     type(jagged_array_c) :: origin_crs, tree_child, postordering_ccs
-    integer, pointer, contiguous :: parent(:), postordering_parent(:), postordering_perm(:), postordering_iperm
-
+    integer, pointer, contiguous :: parent(:), postordering_parent(:), postordering_perm(:), postordering_iperm(:)
+    integer, pointer, contiguous :: subtree_size(:), isleaf(:)
+    integer, pointer, contiguous :: first_node(:), last_node(:), num_child_suprenode(:), tree_child_supernode(:), parent_supernode(:)
+    type(jagged_array_c) :: ccs_supernode
     call ccs_to_crs(origin_ccs, origin_crs)
     parent => compute_tree(origin_crs)
     tree_child => create_tree_child(parent)
@@ -22,6 +26,27 @@ contains
     call set_iperm(postordering_perm, postordering_iperm)
     postordering_ccs = reordering_ccs(origin_ccs, postordering_perm, postordering_iperm)
     postordering_parent => reordering_tree(parent, postordering_perm, postordering_iperm)
+    deallocate(tree_child)
+    tree_child => create_tree_child(postordering_parent)
+    
+    ! finding supernode
+    subtree_size => count_subtree_size(tree_child)
+    isleaf => finding_leaves(subtree_size, postordering_ccs)
+    first_node => search_first_node_in_supernode(isleaf, tree_child)
+    last_node => search_last_node_in_supernode(first_node, size(isleaf))
+    ccs_supernode = create_supernodal_ccs(last_node, postordering_ccs)
+    num_child_supernode => create_supernodal_tree(first_node, tree_child)
+    parent_supernode => create_parent(num_child_supernode)
+    tree_child_supernode => create_tree_child(num_child_suprenode, parent_supernode)
+
+
+    ! column count
+    ! relax supernode
+    ! symbolic
+
+    ! local index
+    ! reordering-ccs_value
+
     
     
 
