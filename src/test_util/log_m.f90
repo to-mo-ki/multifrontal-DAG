@@ -20,13 +20,13 @@ contains
   subroutine fail_message(message)
     character(*), intent(in) :: message
     call update_count(.true.)
-    write(*,*) ' *** Error [AssertEQ] *** Checking ', trim(message), ' FAILURE'
+    write(*,"(a, a, a)") ' *** Error [AssertEQ] *** Checking ', trim(message), ' FAILURE'
   end subroutine
 
   subroutine success_message(message)
     character(*), intent(in) :: message
     call update_count(.false.)
-    write(*,*) ' *** MESSAGE [AssertEQ] *** Checking ', trim(message),  ' OK'
+    write(*,"(a, a, a)") ' *** MESSAGE [AssertEQ] *** Checking ', trim(message),  ' OK'
   end subroutine
 
   subroutine update_count(err_flag)

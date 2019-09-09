@@ -7,12 +7,22 @@ module assert_equal_array_m
   public :: assert_equal_array_DP, assert_equal_array_int, assert_equal_partial_array
   
 contains
-  subroutine assert_equal_array_DP(message, answer, check, n)
+  subroutine assert_equal_array_DP(message, answer, check, n2)
     character(*), intent(in) :: message
+    integer, intent(in) :: n2
     double precision, intent(in) :: answer(:), check(:)
-    integer, intent(in) :: n
-    logical :: err_flag_array(n), err_flag
-    integer :: i
+    logical :: err_flag
+    logical, allocatable :: err_flag_array(:)
+    integer :: i, n
+
+    if(size(answer) /= size(check))then
+      call fail_message(message)
+      write(*,*) "  different of array size ", "answer:", trim(to_str(size(answer))), " check:", trim(to_str(size(check)))
+      return
+    endif
+    n = size(answer)
+    allocate(err_flag_array(n))
+
     err_flag = .false.
     err_flag_array = .false.
     do i=1,n
@@ -38,12 +48,22 @@ contains
 
   end subroutine
 
-  subroutine assert_equal_array_int(message, answer, check, n)
+  subroutine assert_equal_array_int(message, answer, check, n2)
     character(*), intent(in) :: message
+    integer, intent(in) :: n2
     integer, intent(in) :: answer(:), check(:)
-    integer, intent(in) :: n
-    logical :: err_flag_array(n), err_flag
-    integer :: i
+    logical :: err_flag
+    logical, allocatable :: err_flag_array(:)
+    integer :: i, n
+
+    if(size(answer) /= size(check))then
+      call fail_message(message)
+      write(*,*) "different of array size ", "answer:", trim(to_str(size(answer))), " check:", trim(to_str(size(check)))
+      return
+    endif
+    n = size(answer)
+    allocate(err_flag_array(n))
+
     err_flag = .false.
     err_flag_array = .false.
     do i=1,n
