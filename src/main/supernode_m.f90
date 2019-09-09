@@ -25,7 +25,7 @@ contains
       endif
     enddo
     ptr = ptr + 1
-    tmp_first_node(ptr) = n
+    tmp_first_node(ptr) = n+1
 
     allocate(first_node(ptr))
     first_node = tmp_first_node(:ptr)
@@ -55,10 +55,11 @@ contains
     n = size(first_node)-1
     allocate(col(n+1))
     col(1) = 1
-    do i=1, n
+    do i=1, n-1
       num_cols = first_node(i+1) - first_node(i)
       col(i+1) = col(i) + ccs_node%get_array_length(first_node(i)) - num_cols
     enddo
+    col(n+1) = col(n)
     
     num_vals = col(n+1)-1
     allocate(row(num_vals))

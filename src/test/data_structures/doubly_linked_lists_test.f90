@@ -14,20 +14,15 @@ program doubly_linked_list_test
   call lists%add(3, 2)
   call lists%add(2, 2)
 
-  call assert_equal("length after 4 adds", lists%get_length(2), 4)
   call check_list("list after 4 adds", 2, (/1, 5, 3, 2/))
   call lists%remove(5, 2)
-  call assert_equal("length after middle remove", lists%get_length(2), 3)
   call check_list("list after middle remove", 2, (/1, 3, 2/))
   call lists%remove(1, 2)
-  call assert_equal("length after head remove", lists%get_length(2), 2)
   call check_list("list after head remove", 2, (/3, 2/))
   call lists%remove(2, 2)
-  call assert_equal("length after tail remove", lists%get_length(2), 1)
   call check_list("list after tail remove", 2, (/3/))
   call lists%remove(3, 2)
-  call assert_equal("length after all remove", lists%get_length(2), 0)
-
+  
   call lists%merge(2, 4)
   call assert_equal("length after null and null merge(from)", lists%get_length(2), 0)
   call assert_equal("length after null and null merge(to)", lists%get_length(4), 0)
@@ -58,7 +53,7 @@ contains
     character(len=*), intent(in) :: message_list
     integer, intent(in) :: idx, list(:)
 
-    iterator = lists%create_iterator(2)
+    iterator = lists%create_iterator(idx)
     i=0
     do while(iterator%has_next())
       i = i + 1

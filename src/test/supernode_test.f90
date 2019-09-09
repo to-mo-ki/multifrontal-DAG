@@ -20,7 +20,7 @@ program supernode_test
   isleaf = (/1, 1, 1, 0, 1, 1, 0, 0, 0/)
 
   first_node => search_first_node_in_supernode(isleaf, tree_child)
-  call assert_equal("first node", first_node, (/1, 2, 3, 5, 6, 7, 8/), 7)
+  call assert_equal("first node", first_node, (/1, 2, 3, 5, 6, 7, 8, 10/), 8)
 
 
   num_child_supernode => create_supernodal_tree(first_node, tree_child)
