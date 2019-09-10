@@ -1,4 +1,4 @@
-module supernode_m
+module fundamental_supernode_m
   use jagged_array_m
   implicit none
   private

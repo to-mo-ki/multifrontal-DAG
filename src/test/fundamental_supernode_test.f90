@@ -1,6 +1,6 @@
-program supernode_test
+program fundamental_supernode_test
   use jagged_array_m
-  use supernode_m
+  use fundamental_supernode_m
   use sparse_matrix_maker_m
   use test_util
   implicit none
@@ -42,4 +42,4 @@ program supernode_test
   call assert_equal("column count in supernode", cc_supernode, (/2, 2, 2, 2, 2, 2, 0/))
 
   
-end program supernode_test
+end program fundamental_supernode_test
