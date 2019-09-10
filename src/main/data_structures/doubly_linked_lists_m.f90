@@ -11,6 +11,7 @@ module doubly_linked_lists_m
     procedure :: remove
     procedure :: get_length
     procedure :: get_num_lists
+    procedure :: get_num_elements
     procedure :: create_iterator
   end type
 
@@ -110,6 +111,14 @@ contains
     do i=1, size(this%head)
       if(this%head(i) /= 0) num_lists = num_lists + 1
     enddo
+
+  end function
+
+  integer function get_num_elements(this) result(num_elements)
+    class(doubly_linked_lists_c) :: this
+    integer :: i
+
+    num_elements = size(this%head)
 
   end function
 

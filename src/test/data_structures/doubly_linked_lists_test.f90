@@ -9,6 +9,7 @@ program doubly_linked_list_test
 
   n = 5
   lists = create_doubly_linked_lists(n)
+  call assert_equal("num elements", lists%get_num_elements(), n)
   call lists%add(1, 2)
   call lists%add(5, 2)
   call lists%add(3, 2)
