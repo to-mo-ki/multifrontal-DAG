@@ -3,7 +3,7 @@ module supernode_m
   implicit none
   private
 
-  public :: search_first_node_in_supernode
+  public :: search_first_node_in_supernode, create_supernodal_column_count
   public :: create_supernodal_ccs, create_supernodal_tree
   
 contains
@@ -29,6 +29,20 @@ contains
 
     allocate(first_node(ptr))
     first_node = tmp_first_node(:ptr)
+
+  end function
+
+  function create_supernodal_column_count(first_node, cc_node) result(cc_supernode)
+    integer, pointer, contiguous :: cc_supernode(:)
+    integer, pointer, contiguous, intent(in) :: first_node(:), cc_node(:)
+    integer :: i, n, last_node
+
+    n = size(first_node) - 1
+    allocate(cc_supernode(n))
+    do i=1, n
+      last_node = first_node(i+1)-1
+      cc_supernode(i) = cc_node(last_node) - 1
+    enddo
 
   end function
 

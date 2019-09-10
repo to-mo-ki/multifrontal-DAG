@@ -8,6 +8,7 @@ program supernode_test
   type(jagged_array_c) :: ccs, tree_child, ccs_supernode
   integer, pointer, contiguous :: col(:), row(:), child_ptr(:), child_val(:)
   integer, pointer, contiguous :: isleaf(:), first_node(:), num_child_supernode(:)
+  integer, pointer, contiguous :: cc_node(:), cc_supernode(:)
 
   call make_ccs_postordering(col, row)
   ccs = create_jagged_array(col, row)
@@ -34,5 +35,11 @@ program supernode_test
   call assert_equal("supernodal ccs(4)", ccs_supernode%get_array(4), (/6, 8/))
   call assert_equal("supernodal ccs(5)", ccs_supernode%get_array(5), (/7, 8/))
   call assert_equal("supernodal ccs(6)", ccs_supernode%get_array(6), (/9/))
+
+  allocate(cc_node(9))
+  cc_node = (/3, 3, 4, 3, 3, 3, 3, 2, 1/)
+  cc_supernode => create_supernodal_column_count(first_node, cc_node)
+  call assert_equal("column count in supernode", cc_supernode, (/2, 2, 2, 2, 2, 2, 0/))
+
   
 end program supernode_test
