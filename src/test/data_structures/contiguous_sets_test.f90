@@ -1,15 +1,17 @@
-program contiguous_set_test
-  use contiguous_set_m
+program contiguous_sets_test
+  use contiguous_sets_m
   use test_util
   implicit none
 
   integer, pointer, contiguous :: length(:)
-  type(contiguous_set_c) :: set
+  type(contiguous_sets_c) :: set
   allocate(length(4))
 
   length = (/2, 1, 0, 3/)
-  set = create_contiguous_set(length)
+  set = create_contiguous_sets(length)
 
+  call assert_equal("num sets", set%get_num_sets(), 4)
+  call assert_equal("num elements", set%get_num_elements(), 6)
   call assert_equal("first:1", set%get_first(1), 1)
   call assert_equal("first:2", set%get_first(2), 3)
   call assert_equal("first:4", set%get_first(4), 4)
