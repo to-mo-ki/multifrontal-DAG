@@ -25,29 +25,27 @@ contains
     type(jagged_array_c), intent(in) :: ccs_origin
     integer, pointer, contiguous, intent(in) :: perm(:), iperm(:)
     integer, pointer, contiguous :: ccs_col(:), ccs_row(:), rows_origin(:), rows_reordered(:)
-    integer, allocatable :: num_cols(:)
+    integer, allocatable :: num_col(:)
     integer :: n, nonzero, i, col_origin, col_reordered
 
     n = ccs_origin%get_num_arrays()
-    nonzero = ccs_origin%get_num_vals()
-    allocate(ccs_col(n+1), ccs_row(nonzero))
+    allocate(num_col(n))
 
-    ccs_col(1) = 1
     do col_reordered=1,n
       col_origin = perm(col_reordered)
-      ccs_col(col_reordered+1) = ccs_col(col_reordered) + ccs_origin%get_array_length(col_origin)
+      num_col(col_reordered) = ccs_origin%get_array_length(col_origin)
     enddo
-    
+
+    ccs_reordered = create_jagged_array(num_col)
+
     do col_origin=1, n
       col_reordered = iperm(col_origin)
       rows_origin => ccs_origin%get_array(col_origin)
-      rows_reordered => ccs_row(ccs_col(col_reordered):ccs_col(col_reordered+1)-1)
+      rows_reordered => ccs_reordered%get_array(col_reordered)
       do i=1, size(rows_reordered)
         rows_reordered(i) = iperm(rows_origin(i))
       end do
     end do
-
-    ccs_reordered = create_jagged_array(ccs_col, ccs_row)
 
   end function
 end module

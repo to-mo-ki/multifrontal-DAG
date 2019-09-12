@@ -13,22 +13,14 @@ contains
     type(contiguous_sets_c), intent(in) :: node_sets
     integer, pointer, contiguous, intent(in) :: cc(:)
     type(jagged_array_c), intent(in) :: tree_child
-    integer, pointer, contiguous :: col(:), row(:)
     integer :: i, j, k, n, num_vals, child, row_num, ptr, order
     integer, allocatable :: full_array(:)
     integer, pointer, contiguous :: childs(:), rows_a(:), rows_l(:), rows_child(:)
 
     n = ccs_a%get_num_arrays()
     order = node_sets%get_num_elements()
-    allocate(col(n+1))
-    col(1) = 1
-    do i=1, n
-      col(i+1) = col(i) + cc(i)
-    enddo
-    num_vals = col(n+1)-1
-    allocate(row(num_vals))
-    
-    ccs_l = create_jagged_array(col, row)
+
+    ccs_l = create_jagged_array(cc)
     
     allocate(full_array(order))
     full_array = 0

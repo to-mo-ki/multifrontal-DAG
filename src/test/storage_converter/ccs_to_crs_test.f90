@@ -6,11 +6,11 @@ program ccs_to_crs_test
   implicit none
   type(jagged_array_c) :: ccs, crs
   integer :: n
-  integer, pointer, contiguous :: cols(:), col(:), row(:)
+  integer, pointer, contiguous :: num_row(:), row(:)
 
   n = 9
-  call make_ccs(col, row)
-  ccs = create_jagged_array(col, row)
+  call make_ccs(num_row, row)
+  ccs = create_jagged_array(num_row, row)
   call ccs_to_crs(ccs, crs)
 
   call assert_equal("crs_row(1)", crs%get_array(1), (/1/))

@@ -10,7 +10,7 @@ program relaxed_supernode_test
   type(doubly_linked_lists_c) :: merge_lists
   integer, pointer, contiguous :: map(:), first_node(:)
   type(contiguous_sets_c) :: node_sets_relaxed, node_sets_fundamental
-  integer, pointer, contiguous :: col(:), row(:)
+  integer, pointer, contiguous :: num_row(:), row(:)
   integer :: i
 
   merge_lists = create_doubly_linked_lists(7)
@@ -32,10 +32,10 @@ program relaxed_supernode_test
   enddo
   call assert_equal("max_zero=1:create node sets", first_node, (/1, 3, 5, 7, 10/))
 
-  allocate(col(8), row(10))
-  col = (/1, 3, 4, 6, 8, 10, 11, 11/)
+  allocate(num_row(7), row(10))
+  num_row = (/2, 1, 2, 2, 2, 1, 0/)
   row = (/2, 8, 9, 7, 9, 6, 8, 7, 8, 9/)
-  ccs_fundamental = create_jagged_array(col, row)
+  ccs_fundamental = create_jagged_array(num_row, row)
   ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_fundamental, 9)
 
   call assert_equal("max_zero=1:relaxed ccs(num_array)", ccs_relaxed%get_num_arrays(), 4)
@@ -62,10 +62,10 @@ program relaxed_supernode_test
     first_node(i) = node_sets_relaxed%get_first(i)
   enddo
   call assert_equal("max_zero=2:create node sets", first_node, (/1, 3, 6, 10/))
-  allocate(col(8), row(10))
-  col = (/1, 3, 5, 7, 8, 10, 11, 11/)
+  allocate(num_row(8), row(10))
+  num_row = (/2, 1, 2, 2, 2, 1, 0/)
   row = (/2, 8, 5, 8, 5, 9, 9, 6, 7, 9/)
-  ccs_fundamental = create_jagged_array(col, row)
+  ccs_fundamental = create_jagged_array(num_row, row)
   merge_lists = create_doubly_linked_lists(7)
   do i=1, 7
     call merge_lists%add(i, i)
@@ -79,7 +79,7 @@ program relaxed_supernode_test
   ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_fundamental, 9)
   call assert_equal("max_zero=2:relaxed ccs(num_array)", ccs_relaxed%get_num_arrays(), 3)
   call assert_equal("max_zero=2:relaxed ccs(1)", ccs_relaxed%get_array(1), (/5, 8/))
-  call assert_equal("max_zero=2:relaxed ccs(2)", ccs_relaxed%get_array(2), (/9/))
+  call assert_equal("max_zero=2:relaxed ccs(2)", ccs_relaxed%get_array(2), (/8, 9/))
   call assert_equal("max_zero=2:relaxed ccs(3)", ccs_relaxed%get_array_length(3), 0)
   
 end program relaxed_supernode_test

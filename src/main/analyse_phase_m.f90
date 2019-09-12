@@ -41,7 +41,7 @@ contains
     tree_child = create_tree_child(postordering_parent)
     
     ! finding supernode
-    call finding_supernode(tree_child, postordering_ccs, tree_child_supernode, ccs_supernode, node_sets)
+    call finding_supernode(tree_child, postordering_ccs, tree_child_supernode, node_sets)
     ! column count
     cc_node => column_count(postordering_ccs, tree_child, postordering_parent)
     cc_supernode => create_supernodal_column_count(node_sets, cc_node)
@@ -63,18 +63,17 @@ contains
 
   end subroutine
 
-  subroutine finding_supernode(tree_child_node, ccs_node, tree_child_supernode, ccs_supernode, node_sets)
+  subroutine finding_supernode(tree_child_node, ccs_node, tree_child_supernode, node_sets)
     use finding_leaves_m
     use fundamental_supernode_m
     type(jagged_array_c), intent(in) :: tree_child_node, ccs_node
-    type(jagged_array_c), intent(out) :: tree_child_supernode, ccs_supernode
+    type(jagged_array_c), intent(out) :: tree_child_supernode
     type(contiguous_sets_c), intent(out) :: node_sets
     integer, pointer, contiguous :: subtree_size(:), isleaf(:), num_child_supernode(:), parent_supernode(:)
 
     subtree_size => count_subtree_size(tree_child_node)
     isleaf => finding_leaves(subtree_size, ccs_node)
     node_sets = search_node_sets_in_supernode(isleaf, tree_child_node)
-    ccs_supernode = create_supernodal_ccs(node_sets, ccs_node)
     num_child_supernode => create_supernodal_tree(node_sets, tree_child_node)
     parent_supernode => create_parent_in_postordering_tree(num_child_supernode)
     tree_child_supernode = create_tree_child(num_child_supernode, parent_supernode)

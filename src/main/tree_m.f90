@@ -14,26 +14,24 @@ module tree_m
 contains
   type(jagged_array_c) function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
     integer, pointer, contiguous, intent(in) :: num_child(:), parent(:)
-    integer, pointer, contiguous :: childs(:), ptr(:)
+    integer, pointer, contiguous :: childs(:)
     integer, allocatable :: child_pos(:)
     integer :: n, i
 
     n = size(num_child)
-    allocate(childs(n), ptr(n+1), child_pos(n))
+    allocate(child_pos(n))
 
-    ptr(1) = 1
-    do i=1, n
-      ptr(i+1) = ptr(i) + num_child(i)
-    enddo
+    tree_child = create_jagged_array(num_child)
 
-    child_pos = ptr(:n)
+    child_pos = 1
     do i=1, n
       if(parent(i) == 0) cycle
+      childs => tree_child%get_array(parent(i))
       childs(child_pos(parent(i))) = i
       child_pos(parent(i)) = child_pos(parent(i)) + 1
     enddo
 
-    tree_child = create_jagged_array(ptr, childs)
+    
   
   end function
 

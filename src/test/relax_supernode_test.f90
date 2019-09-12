@@ -10,16 +10,16 @@ program relax_supernode_test
   
   type(doubly_linked_lists_c) :: merge_lists
   type(jagged_array_c) :: tree_child
-  integer, pointer, contiguous :: cc(:), child_ptr(:), child_val(:)
+  integer, pointer, contiguous :: cc(:), num_child(:), child_val(:)
   type(contiguous_sets_c) :: node_sets
 
-  allocate(cc(7), child_ptr(8), child_val(7))
+  allocate(cc(7), num_child(7), child_val(6))
   
   cc = (/2, 2, 2, 2, 2, 2, 0/)
-  child_ptr = (/1, 1, 2, 2, 2, 3, 5, 7/)
+  num_child = (/0, 1, 0, 0, 1, 2, 2/)
   child_val = (/1, 4, 3, 5, 2, 6/)
 
-  tree_child = create_jagged_array(child_ptr, child_val)
+  tree_child = create_jagged_array(num_child, child_val)
   node_sets = create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
   merge_lists = compute_merge_lists(cc, tree_child, node_sets, 0)
   call assert_equal("max_zero=0:1", get_merge_nodes(1), (/1/))

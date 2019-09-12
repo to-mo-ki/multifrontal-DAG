@@ -60,16 +60,15 @@ contains
     integer, intent(in) :: order
     type(iterator_c) :: iterator
     integer, pointer, contiguous :: col(:), row(:), rows_fundamental(:), rows_relaxed(:)
-    integer :: n, num_vals, node, num_col, row_num, ptr, num_row, i, j
-    integer, allocatable :: full_array(:)
+    integer :: n, num_vals, node, row_num, ptr, num_row, i, j
+    integer, allocatable :: full_array(:), num_col(:)
 
     n = size(map)
-    allocate(col(n+1), full_array(order))
-    col(1) = 1
+    allocate(num_col(n), full_array(order))
+    num_col = 0
     full_array = 0
     do i=1, n
       iterator = merge_lists%create_iterator(map(i))
-      num_col = 0
       do while(iterator%has_next())
         node = iterator%next()
         rows_fundamental => ccs_fundamental%get_array(node)
@@ -78,22 +77,17 @@ contains
           if(row_num <= node_sets%get_last(i) .or. full_array(row_num) == i)then
             cycle
           endif
-          num_col = num_col + 1
+          num_col(i) = num_col(i) + 1
           full_array(row_num) = i
         enddo
       enddo
-      col(i+1) = col(i) + num_col
     enddo
-
-    num_vals = col(n+1)-1
-    allocate(row(num_vals))
     
-    ccs_relaxed = create_jagged_array(col, row)
+    ccs_relaxed = create_jagged_array(num_col)
     
     full_array = 0
     do i=1, n
       iterator = merge_lists%create_iterator(map(i))
-      num_col = 0
       rows_relaxed => ccs_relaxed%get_array(i)
       ptr = 0
       do while(iterator%has_next())
