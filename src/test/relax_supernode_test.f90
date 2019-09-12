@@ -1,6 +1,7 @@
 program relax_supernode_test
   use jagged_array_m
   use doubly_linked_lists_m
+  use contiguous_sets_m
   use iterator_m
   use relax_supernode_m
   use sparse_matrix_maker_m
@@ -9,17 +10,18 @@ program relax_supernode_test
   
   type(doubly_linked_lists_c) :: merge_lists
   type(jagged_array_c) :: tree_child
-  integer, pointer, contiguous :: cc(:), child_ptr(:), child_val(:), first_node(:)
+  integer, pointer, contiguous :: cc(:), child_ptr(:), child_val(:)
+  type(contiguous_sets_c) :: node_sets
 
-  allocate(cc(7), child_ptr(8), child_val(7), first_node(8))
+  allocate(cc(7), child_ptr(8), child_val(7))
   
   cc = (/2, 2, 2, 2, 2, 2, 0/)
   child_ptr = (/1, 1, 2, 2, 2, 3, 5, 7/)
   child_val = (/1, 4, 3, 5, 2, 6/)
 
   tree_child = create_jagged_array(child_ptr, child_val)
-  first_node = (/1, 2, 3, 5, 6, 7, 8, 10/)
-  merge_lists = compute_merge_lists(cc, tree_child, first_node, 0)
+  node_sets = create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  merge_lists = compute_merge_lists(cc, tree_child, node_sets, 0)
   call assert_equal("max_zero=0:1", get_merge_nodes(1), (/1/))
   call assert_equal("max_zero=0:2", get_merge_nodes(2), (/2/))
   call assert_equal("max_zero=0:3", get_merge_nodes(3), (/3/))
@@ -27,13 +29,13 @@ program relax_supernode_test
   call assert_equal("max_zero=0:5", get_merge_nodes(5), (/5/))
   call assert_equal("max_zero=0:7", get_merge_nodes(7), (/7, 6/))
 
-  merge_lists = compute_merge_lists(cc, tree_child, first_node, 1)
+  merge_lists = compute_merge_lists(cc, tree_child, node_sets, 1)
   call assert_equal("max_zero=1:2", get_merge_nodes(2), (/2, 1/))
   call assert_equal("max_zero=1:3", get_merge_nodes(3), (/3/))
   call assert_equal("max_zero=1:5", get_merge_nodes(5), (/5, 4/))
   call assert_equal("max_zero=1:7", get_merge_nodes(7), (/7, 6/))
   
-  merge_lists = compute_merge_lists(cc, tree_child, first_node, 2)
+  merge_lists = compute_merge_lists(cc, tree_child, node_sets, 2)
   call assert_equal("max_zero=2:5", get_merge_nodes(5), (/5, 4/))
   call assert_equal("max_zero=2:6", get_merge_nodes(6), (/6, 3/))
   call assert_equal("max_zero=2:7", get_merge_nodes(7), (/7, 2, 1/))

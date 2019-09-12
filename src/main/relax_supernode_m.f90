@@ -1,6 +1,7 @@
 module relax_supernode_m
   use jagged_array_m
   use doubly_linked_lists_m
+  use contiguous_sets_m
   use iterator_m
   use stack_m
   implicit none
@@ -9,8 +10,9 @@ module relax_supernode_m
   public :: compute_merge_lists
   
 contains
-  type(doubly_linked_lists_c) function compute_merge_lists(cc, tree_child, first_node, max_zero) result(merge_lists)
-    integer, pointer, contiguous, intent(in) :: cc(:), first_node(:)
+  type(doubly_linked_lists_c) function compute_merge_lists(cc, tree_child, node_sets, max_zero) result(merge_lists)
+    integer, pointer, contiguous, intent(in) :: cc(:)
+    type(contiguous_sets_c) :: node_sets
     type(jagged_array_c), intent(in) :: tree_child
     integer, intent(in) :: max_zero
     integer :: n, i, j, k, min_zero, child, additional_zero, merge_node
@@ -29,7 +31,7 @@ contains
 
     allocate(num_cols(n))
     do i=1, n
-      num_cols(i) = first_node(i+1) - first_node(i)
+      num_cols(i) = node_sets%get_length(i)
     enddo
     allocate(num_zeros(n))
     stack = create_stack(n)

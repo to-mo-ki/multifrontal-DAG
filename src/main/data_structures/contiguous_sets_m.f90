@@ -15,7 +15,7 @@ module contiguous_sets_m
 
 contains
   type(contiguous_sets_c) function create_contiguous_sets(set_length) result(this)
-    integer, pointer, contiguous :: set_length(:)
+    integer :: set_length(:)
     integer :: n, i
 
     n = size(set_length)

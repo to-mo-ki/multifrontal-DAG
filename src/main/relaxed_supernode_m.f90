@@ -1,11 +1,12 @@
 module relaxed_supernode_m
   use doubly_linked_lists_m
   use jagged_array_m
+  use contiguous_sets_m
   use iterator_m
   implicit none
   private
 
-  public :: build_map, create_first_node, create_ccs
+  public :: build_map, create_node_sets, create_ccs
   
 contains
   ! merge_listへのポインタ
@@ -27,34 +28,34 @@ contains
 
   end function
 
-  function create_first_node(first_node_fundamental, map, merge_lists) result(first_node_relaxed)
-    integer, pointer, contiguous :: first_node_relaxed(:)
-    integer, pointer, contiguous, intent(in) :: first_node_fundamental(:), map(:)
+  type(contiguous_sets_c) function create_node_sets(node_sets_fundamental, map, merge_lists) result(node_sets_relaxed)
+    type(contiguous_sets_c), intent(in) :: node_sets_fundamental
+    integer, pointer, contiguous, intent(in) :: map(:)
     type(doubly_linked_lists_c), intent(in) :: merge_lists
     type(iterator_c) :: iterator
-    integer :: n, num_col, i, node
-
+    integer :: n, i, node
+    integer, allocatable :: num_col(:)
+    
     n = size(map)
-    allocate(first_node_relaxed(n+1))
-    first_node_relaxed(1) = 1
+    allocate(num_col(n))
+    num_col = 0
     do i=1, n
       iterator = merge_lists%create_iterator(map(i))
-      num_col = 0
       do while(iterator%has_next())
         node = iterator%next()
-        num_col = num_col + first_node_fundamental(node+1) - first_node_fundamental(node)
+        num_col(i) = num_col(i) + node_sets_fundamental%get_length(node)
       enddo
-      first_node_relaxed(i+1) = first_node_relaxed(i) + num_col
     enddo
+    node_sets_relaxed = create_contiguous_sets(num_col)
 
   end function
 
-  type(jagged_array_c) function create_ccs(map, merge_lists, first_node, ccs_fundamental, order) result(ccs_relaxed)
+  type(jagged_array_c) function create_ccs(map, merge_lists, node_sets, ccs_fundamental, order) result(ccs_relaxed)
     ! HACK: サブルーチン化
     use sort_m
     integer, pointer, contiguous :: map(:)
     type(doubly_linked_lists_c), intent(in) :: merge_lists
-    integer, pointer, contiguous, intent(in) :: first_node(:)
+    type(contiguous_sets_c), intent(in) :: node_sets
     type(jagged_array_c), intent(in) :: ccs_fundamental
     integer, intent(in) :: order
     type(iterator_c) :: iterator
@@ -74,7 +75,7 @@ contains
         rows_fundamental => ccs_fundamental%get_array(node)
         do j=1, size(rows_fundamental)
           row_num = rows_fundamental(j)
-          if(row_num < first_node(i+1) .or. full_array(row_num) == i)then
+          if(row_num <= node_sets%get_last(i) .or. full_array(row_num) == i)then
             cycle
           endif
           num_col = num_col + 1
@@ -100,7 +101,7 @@ contains
         rows_fundamental => ccs_fundamental%get_array(node)
         do j=1, size(rows_fundamental)
           row_num = rows_fundamental(j)
-          if(row_num < first_node(i+1) .or. full_array(row_num) == i)then
+          if(row_num <= node_sets%get_last(i) .or. full_array(row_num) == i)then
             cycle
           endif
           ptr = ptr + 1
