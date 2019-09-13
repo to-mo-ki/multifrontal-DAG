@@ -23,8 +23,8 @@ contains
     type(jagged_array_c) :: origin_crs, tree_child, postordering_ccs, ccs_l
     integer, pointer, contiguous :: parent(:), postordering_parent(:), postordering_perm(:), postordering_iperm(:)
     type(contiguous_sets_c) :: node_sets, node_sets_relaxed
-    integer, pointer, contiguous :: cc_node(:), cc_fundamental(:)
-    type(jagged_array_c) :: ccs_supernode, tree_child_fundamental, ccs_supernode2, ccs_relaxed
+    integer, pointer, contiguous :: cc_node(:), cc_fundamental(:), cc_relaxed(:)
+    type(jagged_array_c) :: ccs_supernode, tree_child_fundamental, tree_child_relaxed, ccs_supernode2, ccs_relaxed
     type(doubly_linked_lists_c) :: merge_lists, son_lists
     integer, pointer, contiguous :: map(:)
     integer, pointer, contiguous :: relaxed_perm(:), relaxed_iperm(:)
@@ -49,7 +49,7 @@ contains
     cc_fundamental => create_supernodal_column_count(node_sets, cc_node)
     
     ! relax supernode
-    call relax_supernode(cc_fundamental, tree_child_fundamental, node_sets, max_zero, node_sets_relaxed, relaxed_perm)
+    call relax_supernode(cc_fundamental, tree_child_fundamental, node_sets, max_zero, cc_relaxed, tree_child_relaxed, node_sets_relaxed, relaxed_perm)
     call set_iperm(relaxed_perm, relaxed_iperm)
     ccs_relaxed = reordering_ccs(postordering_ccs, relaxed_perm, relaxed_iperm)
 
@@ -84,20 +84,26 @@ contains
    
   end subroutine
 
-  subroutine relax_supernode(cc_fundamental, tree_child_fundamental, node_sets, max_zero, node_sets_relaxed, relaxed_perm)
+  subroutine relax_supernode(cc_fundamental, tree_child_fundamental, node_sets, max_zero, cc_relaxed, tree_child_relaxed, node_sets_relaxed, relaxed_perm)
     integer, pointer, contiguous, intent(in) :: cc_fundamental(:)
     type(jagged_array_c), intent(in) :: tree_child_fundamental
     type(contiguous_sets_c), intent(in) :: node_sets
     integer, intent(in) :: max_zero
-    integer, pointer, contiguous, intent(out) :: relaxed_perm(:)
+    integer, pointer, contiguous, intent(out) :: cc_relaxed(:)
+    type(jagged_array_c), intent(out) :: tree_child_relaxed
     type(contiguous_sets_c), intent(out) :: node_sets_relaxed
-    type(doubly_linked_lists_c) :: merge_lists
-    integer, pointer, contiguous :: map(:), relaxed_iperm(:)
+    integer, pointer, contiguous, intent(out) :: relaxed_perm(:)
+    type(doubly_linked_lists_c) :: merge_lists, sons
+    integer, pointer, contiguous :: map(:), relaxed_iperm(:), num_child(:), parent(:)
 
-    merge_lists = compute_merge_lists(cc_fundamental, tree_child_fundamental, node_sets, max_zero)
+    merge_lists = compute_merge_lists(cc_fundamental, tree_child_fundamental, node_sets, max_zero, sons)
     map => build_map(merge_lists)
     node_sets_relaxed = create_node_sets(node_sets, map, merge_lists)
     relaxed_perm => create_perm(node_sets, node_sets_relaxed, map, merge_lists)
+    num_child => count_num_child(sons, map)
+    parent => create_parent_in_postordering_tree(num_child)
+    tree_child_relaxed = create_tree_child(num_child, parent)
+    cc_relaxed => build_cc(cc_fundamental, map)
     
   end subroutine
 end module

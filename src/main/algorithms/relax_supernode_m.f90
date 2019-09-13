@@ -10,7 +10,7 @@ module relax_supernode_m
   public :: compute_merge_lists
   
 contains
-  type(doubly_linked_lists_c) function compute_merge_lists(cc, tree_child, node_sets, max_zero) result(merge_lists)
+  type(doubly_linked_lists_c) function compute_merge_lists(cc, tree_child, node_sets, max_zero, son_lists) result(merge_lists)
     integer, pointer, contiguous, intent(in) :: cc(:)
     type(contiguous_sets_c) :: node_sets
     type(jagged_array_c), intent(in) :: tree_child
@@ -18,7 +18,7 @@ contains
     integer :: n, i, j, k, min_zero, child, additional_zero, merge_node
     integer, pointer, contiguous :: childs(:)
     integer, allocatable :: num_cols(:), num_zeros(:)
-    type(doubly_linked_lists_c) :: son_lists
+    type(doubly_linked_lists_c), intent(out) :: son_lists
     type(iterator_c) :: iterator
     type(stack_c) :: stack
     
