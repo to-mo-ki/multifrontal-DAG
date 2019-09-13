@@ -31,19 +31,7 @@ program relaxed_supernode_test
     first_node(i) = node_sets_relaxed%get_first(i)
   enddo
   call assert_equal("max_zero=1:create node sets", first_node, (/1, 3, 5, 7, 10/))
-
-  allocate(num_row(7), row(10))
-  num_row = (/2, 1, 2, 2, 2, 1, 0/)
-  row = (/2, 8, 9, 7, 9, 6, 8, 7, 8, 9/)
-  ccs_fundamental = create_jagged_array(num_row, row)
-  ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_fundamental, 9)
-
-  call assert_equal("max_zero=1:relaxed ccs(num_array)", ccs_relaxed%get_num_arrays(), 4)
-  call assert_equal("max_zero=1:relaxed ccs(1)", ccs_relaxed%get_array(1), (/8, 9/))
-  call assert_equal("max_zero=1:relaxed ccs(2)", ccs_relaxed%get_array(2), (/7, 9/))
-  call assert_equal("max_zero=1:relaxed ccs(3)", ccs_relaxed%get_array(3), (/7, 8/))
-  call assert_equal("max_zero=1:relaxed ccs(4)", ccs_relaxed%get_array_length(4), 0)
-
+  
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
   call assert_equal("max_zero=1:perm", perm, (/2, 1, 3, 4, 6, 5, 8, 9, 7/))
 
@@ -65,13 +53,7 @@ program relaxed_supernode_test
     first_node(i) = node_sets_relaxed%get_first(i)
   enddo
   call assert_equal("max_zero=2:create node sets", first_node, (/1, 3, 6, 10/))
-  ! FIXME: crete_ccsはバグあり
-  ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_fundamental, 9)
-  call assert_equal("max_zero=2:relaxed ccs(num_array)", ccs_relaxed%get_num_arrays(), 3)
-  call assert_equal("max_zero=2:relaxed ccs(1)", ccs_relaxed%get_array(1), (/5, 8/))
-  call assert_equal("max_zero=2:relaxed ccs(2)", ccs_relaxed%get_array(2), (/8, 9/))
-  call assert_equal("max_zero=2:relaxed ccs(3)", ccs_relaxed%get_array_length(3), 0)
-
+  
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
   call assert_equal("max_zero=2:perm", perm, (/6, 5, 7, 3, 4, 8, 9, 2, 1/))
   

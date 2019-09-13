@@ -6,7 +6,7 @@ module relaxed_supernode_m
   implicit none
   private
 
-  public :: build_map, create_node_sets, create_ccs, create_perm
+  public :: build_map, create_node_sets, create_perm
   
 contains
   ! merge_listへのポインタ
@@ -72,65 +72,6 @@ contains
       enddo
     enddo
     node_sets_relaxed = create_contiguous_sets(num_col)
-
-  end function
-
-  type(jagged_array_c) function create_ccs(map, merge_lists, node_sets, ccs_fundamental, order) result(ccs_relaxed)
-    ! HACK: サブルーチン化
-    use sort_m
-    integer, pointer, contiguous :: map(:)
-    type(doubly_linked_lists_c), intent(in) :: merge_lists
-    type(contiguous_sets_c), intent(in) :: node_sets
-    type(jagged_array_c), intent(in) :: ccs_fundamental
-    integer, intent(in) :: order
-    type(iterator_c) :: iterator
-    integer, pointer, contiguous :: col(:), row(:), rows_fundamental(:), rows_relaxed(:)
-    integer :: n, num_vals, node, row_num, ptr, num_row, i, j
-    integer, allocatable :: full_array(:), num_col(:)
-
-    n = size(map)
-    allocate(num_col(n), full_array(order))
-    num_col = 0
-    full_array = 0
-    do i=1, n
-      iterator = merge_lists%create_iterator(map(i))
-      do while(iterator%has_next())
-        node = iterator%next()
-        rows_fundamental => ccs_fundamental%get_array(node)
-        do j=1, size(rows_fundamental)
-          row_num = rows_fundamental(j)
-          if(row_num <= node_sets%get_last(i) .or. full_array(row_num) == i)then
-            cycle
-          endif
-          num_col(i) = num_col(i) + 1
-          full_array(row_num) = i
-        enddo
-      enddo
-    enddo
-    
-    ccs_relaxed = create_jagged_array(num_col)
-    
-    full_array = 0
-    do i=1, n
-      iterator = merge_lists%create_iterator(map(i))
-      rows_relaxed => ccs_relaxed%get_array(i)
-      ptr = 0
-      do while(iterator%has_next())
-        node = iterator%next()
-        rows_fundamental => ccs_fundamental%get_array(node)
-        do j=1, size(rows_fundamental)
-          row_num = rows_fundamental(j)
-          if(row_num <= node_sets%get_last(i) .or. full_array(row_num) == i)then
-            cycle
-          endif
-          ptr = ptr + 1
-          rows_relaxed(ptr) = row_num
-          full_array(row_num) = i
-        enddo
-      enddo
-      num_row = ccs_relaxed%get_array_length(i)
-      call sort(rows_relaxed, num_row)
-    enddo
 
   end function
 

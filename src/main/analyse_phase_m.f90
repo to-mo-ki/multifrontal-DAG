@@ -58,7 +58,7 @@ contains
     ! map2 by map & nodes_set
     ! merge_lists2
     ! ccs_supernode
-    ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_supernode2, order)
+    !ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_supernode2, order)
     ! symbolic
 
     ! local index
