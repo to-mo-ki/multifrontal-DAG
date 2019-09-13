@@ -7,10 +7,11 @@ program relaxed_supernode_test
   implicit none
 
   type(jagged_array_c) :: ccs_fundamental, ccs_relaxed
-  type(doubly_linked_lists_c) :: merge_lists
-  integer, pointer, contiguous :: map(:), first_node(:), perm(:)
+  type(doubly_linked_lists_c) :: merge_lists, sons
+  integer, pointer, contiguous :: map(:), first_node(:), perm(:), num_child(:)
   type(contiguous_sets_c) :: node_sets_relaxed, node_sets_fundamental
   integer, pointer, contiguous :: num_row(:), row(:)
+  integer, pointer, contiguous :: cc_fundamental(:), cc_relaxed(:)
   integer :: i
 
   merge_lists = create_doubly_linked_lists(7)
@@ -35,6 +36,19 @@ program relaxed_supernode_test
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
   call assert_equal("max_zero=1:perm", perm, (/2, 1, 3, 4, 6, 5, 8, 9, 7/))
 
+  allocate(cc_fundamental(7))
+  cc_fundamental = (/2, 2, 2, 2, 2, 2, 0/)
+  cc_relaxed => build_cc(cc_fundamental, map)
+  call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 2, 0/))
+
+  sons = create_doubly_linked_lists(7)
+  call sons%add(2, 7)
+  call sons%add(3, 7)
+  call sons%add(5, 7)
+
+  num_child => count_num_child(sons, map)
+  call assert_equal("max_zero=1:count num child", num_child, (/0, 0, 0, 3/))
+
   merge_lists = create_doubly_linked_lists(7)
   do i=1, 7
     call merge_lists%add(i, i)
@@ -56,5 +70,15 @@ program relaxed_supernode_test
   
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
   call assert_equal("max_zero=2:perm", perm, (/6, 5, 7, 3, 4, 8, 9, 2, 1/))
+
+  cc_relaxed => build_cc(cc_fundamental, map)
+  call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 0/))
+
+  sons = create_doubly_linked_lists(7)
+  call sons%add(5, 6)
+  call sons%add(6, 7)
+  num_child => count_num_child(sons, map)
+  call assert_equal("max_zero=2:count num child", num_child, (/0, 1, 1/))
+
   
 end program relaxed_supernode_test

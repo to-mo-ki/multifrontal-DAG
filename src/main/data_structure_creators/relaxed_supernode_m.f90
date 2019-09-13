@@ -7,6 +7,7 @@ module relaxed_supernode_m
   private
 
   public :: build_map, create_node_sets, create_perm
+  public :: count_num_child, build_cc
   
 contains
   ! merge_listへのポインタ
@@ -72,6 +73,33 @@ contains
       enddo
     enddo
     node_sets_relaxed = create_contiguous_sets(num_col)
+
+  end function
+
+  function count_num_child(sons, map) result(num_child)
+    integer, pointer, contiguous :: num_child(:)
+    type(doubly_linked_lists_c), intent(in) :: sons
+    integer, pointer, contiguous :: map(:)
+    integer :: i, n
+
+    n = size(map)
+    allocate(num_child(n))
+    do i=1, n
+      num_child(i) = sons%get_length(map(i))
+    enddo
+
+  end function
+
+  function build_cc(cc_fundamental, map) result(cc_relaxed)
+    integer, pointer, contiguous :: cc_relaxed(:)
+    integer, pointer, contiguous, intent(in) :: cc_fundamental(:), map(:)
+    integer :: n, i
+
+    n = size(map)
+    allocate(cc_relaxed(n))
+    do i=1, n
+      cc_relaxed(i) = cc_fundamental(map(i))
+    enddo
 
   end function
 
