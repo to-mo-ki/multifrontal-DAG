@@ -50,8 +50,14 @@ contains
     merge_lists = compute_merge_lists(cc_supernode, tree_child_supernode, node_sets, max_zero)
     map => build_map(merge_lists)
     node_sets_relaxed = create_node_sets(node_sets, map, merge_lists)
+    ! relaxed_perm = 
+    ! call set_iperm(relaxed_iperm)
+    ! ccs_relaxed = reordering_ccs(relaxed_ccs, relaxed_perm, relaxed_iperm)
+    
     ! TODO: ccs_supernode2, map2, merge_lists2 by reordering ccs_supernode
-
+    ! map2 by map & nodes_set
+    ! merge_lists2
+    ! ccs_supernode
     ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_supernode2, order)
     ! symbolic
 

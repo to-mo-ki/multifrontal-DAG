@@ -8,7 +8,7 @@ program relaxed_supernode_test
 
   type(jagged_array_c) :: ccs_fundamental, ccs_relaxed
   type(doubly_linked_lists_c) :: merge_lists
-  integer, pointer, contiguous :: map(:), first_node(:)
+  integer, pointer, contiguous :: map(:), first_node(:), perm(:)
   type(contiguous_sets_c) :: node_sets_relaxed, node_sets_fundamental
   integer, pointer, contiguous :: num_row(:), row(:)
   integer :: i
@@ -44,6 +44,9 @@ program relaxed_supernode_test
   call assert_equal("max_zero=1:relaxed ccs(3)", ccs_relaxed%get_array(3), (/7, 8/))
   call assert_equal("max_zero=1:relaxed ccs(4)", ccs_relaxed%get_array_length(4), 0)
 
+  perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
+  call assert_equal("max_zero=1:perm", perm, (/2, 1, 3, 4, 6, 5, 8, 9, 7/))
+
   merge_lists = create_doubly_linked_lists(7)
   do i=1, 7
     call merge_lists%add(i, i)
@@ -62,24 +65,14 @@ program relaxed_supernode_test
     first_node(i) = node_sets_relaxed%get_first(i)
   enddo
   call assert_equal("max_zero=2:create node sets", first_node, (/1, 3, 6, 10/))
-  allocate(num_row(8), row(10))
-  num_row = (/2, 1, 2, 2, 2, 1, 0/)
-  row = (/2, 8, 5, 8, 5, 9, 9, 6, 7, 9/)
-  ccs_fundamental = create_jagged_array(num_row, row)
-  merge_lists = create_doubly_linked_lists(7)
-  do i=1, 7
-    call merge_lists%add(i, i)
-  enddo
-  call merge_lists%merge(1, 2)
-  call merge_lists%merge(3, 4)
-  call merge_lists%merge(5, 6)
-  call merge_lists%merge(6, 7)
-  allocate(map(3))
-  map = (/2, 4, 7/)
+  ! FIXME: crete_ccsはバグあり
   ccs_relaxed = create_ccs(map, merge_lists, node_sets_relaxed, ccs_fundamental, 9)
   call assert_equal("max_zero=2:relaxed ccs(num_array)", ccs_relaxed%get_num_arrays(), 3)
   call assert_equal("max_zero=2:relaxed ccs(1)", ccs_relaxed%get_array(1), (/5, 8/))
   call assert_equal("max_zero=2:relaxed ccs(2)", ccs_relaxed%get_array(2), (/8, 9/))
   call assert_equal("max_zero=2:relaxed ccs(3)", ccs_relaxed%get_array_length(3), 0)
+
+  perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
+  call assert_equal("max_zero=2:perm", perm, (/6, 5, 7, 3, 4, 8, 9, 2, 1/))
   
 end program relaxed_supernode_test
