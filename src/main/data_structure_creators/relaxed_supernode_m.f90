@@ -3,6 +3,7 @@ module relaxed_supernode_m
   use jagged_array_m
   use contiguous_sets_m
   use iterator_m
+  use stack_m
   implicit none
   private
 
@@ -36,15 +37,21 @@ contains
     integer, pointer, contiguous, intent(in) :: map(:)
     type(iterator_c) :: iterator
     integer :: i, j, num_relaxed, node, order, ptr
+    type(stack_c) :: stack
 
     num_relaxed = node_sets_relaxed%get_num_sets()
     order = node_sets_relaxed%get_num_elements()
     allocate(perm(order))
+    stack = create_stack(num_relaxed)
+    
     ptr = 1
     do i=1, num_relaxed
       iterator = merge_lists%create_iterator(map(i))
       do while(iterator%has_next())
-        node = iterator%next()
+        call stack%push(iterator%next())
+      enddo
+      do while(.not. stack%is_empty())
+        node = stack%pop()
         do j=node_sets_fundamental%get_first(node), node_sets_fundamental%get_last(node)
           perm(ptr) = j
           ptr = ptr + 1

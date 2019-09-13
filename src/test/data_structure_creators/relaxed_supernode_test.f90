@@ -34,7 +34,7 @@ program relaxed_supernode_test
   call assert_equal("max_zero=1:create node sets", first_node, (/1, 3, 5, 7, 10/))
   
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
-  call assert_equal("max_zero=1:perm", perm, (/2, 1, 3, 4, 6, 5, 8, 9, 7/))
+  call assert_equal("max_zero=1:perm", perm, (/1, 2, 3, 4, 5, 6, 7, 8, 9/))
 
   allocate(cc_fundamental(7))
   cc_fundamental = (/2, 2, 2, 2, 2, 2, 0/)
@@ -69,7 +69,7 @@ program relaxed_supernode_test
   call assert_equal("max_zero=2:create node sets", first_node, (/1, 3, 6, 10/))
   
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
-  call assert_equal("max_zero=2:perm", perm, (/6, 5, 7, 3, 4, 8, 9, 2, 1/))
+  call assert_equal("max_zero=2:perm", perm, (/5, 6, 3, 4, 7, 1, 2, 8, 9/))
 
   cc_relaxed => build_cc(cc_fundamental, map)
   call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 0/))

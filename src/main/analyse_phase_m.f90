@@ -54,7 +54,7 @@ contains
 
     ! symbolic
     ! TODO: cc_relaxed, tree_childを求める
-    !ccs_l = symbolic_factorize(ccs_supernode, node_sets_relaxed, cc_relaxed, tree_child_relaxed)
+    ccs_l = symbolic_factorize(ccs_supernode, relaxed%node_sets, relaxed%cc, relaxed%tree_child)
 
     ! local index
     ! reordering-ccs_value
