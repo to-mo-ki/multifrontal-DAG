@@ -14,7 +14,7 @@ contains
     type(contiguous_sets_c), pointer, intent(in) :: node_sets
     integer, pointer, contiguous, intent(in) :: cc(:)
     type(jagged_array_c), pointer, intent(in) :: tree_child
-    integer :: i, j, k, n, num_vals, child, row_num, ptr, order
+    integer :: i, j, k, n, child, row_num, ptr, order
     integer, allocatable :: full_array(:)
     integer, pointer, contiguous :: childs(:), rows_a(:), rows_l(:), rows_child(:)
 

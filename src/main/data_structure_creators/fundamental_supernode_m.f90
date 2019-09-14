@@ -73,11 +73,10 @@ contains
     ! HACK: サブルーチン化
     use sort_m
     type(jagged_array_c), pointer :: ccs_supernode
-    integer, pointer, contiguous :: map(:)
     type(contiguous_sets_c), pointer, intent(in) :: node_sets
     type(jagged_array_c), pointer, intent(in) :: ccs_node
     integer, pointer, contiguous :: rows_node(:), rows_supernode(:)
-    integer :: n, row_num, ptr, i, j, k, num_supernode
+    integer :: n, row_num, i, j, k, num_supernode
     integer, allocatable :: full_array(:), num_row(:), row_ptr(:)
 
     n = ccs_node%get_num_arrays()

@@ -9,7 +9,7 @@ contains
   subroutine ccs_to_crs(ccs, crs)
     type(jagged_array_c), pointer, intent(in) :: ccs
     type(jagged_array_c), pointer, intent(out) :: crs
-    integer :: i, j, n, nonzero, offset
+    integer :: i, j, n, nonzero
     integer, pointer, contiguous :: crs_col(:), rows(:)
     integer, allocatable :: num_row(:), row_ptr(:)
     n = ccs%get_num_arrays()

@@ -118,7 +118,6 @@ contains
 
   integer function get_num_elements(this) result(num_elements)
     class(doubly_linked_lists_c) :: this
-    integer :: i
 
     num_elements = size(this%head)
 

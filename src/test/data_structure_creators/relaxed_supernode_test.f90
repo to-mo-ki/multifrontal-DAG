@@ -6,11 +6,9 @@ program relaxed_supernode_test
   use test_util
   implicit none
 
-  type(jagged_array_c), pointer :: ccs_fundamental, ccs_relaxed
   type(doubly_linked_lists_c), pointer :: merge_lists, sons
   integer, pointer, contiguous :: map(:), first_node(:), perm(:), num_child(:)
   type(contiguous_sets_c), pointer :: node_sets_relaxed, node_sets_fundamental
-  integer, pointer, contiguous :: num_row(:), row(:)
   integer, pointer, contiguous :: cc_fundamental(:), cc_relaxed(:)
   integer :: i
 

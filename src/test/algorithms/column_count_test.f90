@@ -7,7 +7,6 @@ program column_count_test
 
   type(jagged_array_c), pointer :: ccs, tree_child
   integer, pointer, contiguous :: num_row(:), row(:), cc(:), num_child(:), child_val(:), parent(:)
-  integer :: i
 
   call make_ccs_postordering(num_row, row)
   ccs => create_jagged_array(num_row, row)

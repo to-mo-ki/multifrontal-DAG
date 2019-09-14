@@ -12,7 +12,7 @@ contains
     type(jagged_array_c), pointer, intent(in) :: sym
     type(jagged_array_c), pointer, intent(out) :: asym
     integer, pointer, contiguous :: asym_rows(:), sym_rows(:)
-    integer :: ptr, i, j, n, sym_nonzero, asym_nonzero, offset, col
+    integer :: i, j, n, sym_nonzero, asym_nonzero, offset
     integer, allocatable :: num_row(:), col_ptr(:), num_col(:)
     
     n = sym%get_num_arrays()

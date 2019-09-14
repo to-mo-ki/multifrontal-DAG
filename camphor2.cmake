@@ -1,6 +1,6 @@
 set(CMAKE_Fortran_COMPILER "ifort")
 set(CMAKE_Fortran_FLAGS_RELEASE "-qopenmp -ipo -mkl" CACHE STRING "" FORCE)
-set(CMAKE_Fortran_FLAGS_DEBUG "-qopenmp -O0 -traceback -g -debug -check bounds,stack,uninit -mkl" CACHE STRING "" FORCE)
+set(CMAKE_Fortran_FLAGS_DEBUG "-qopenmp -O0 -traceback -g -debug -check bounds,stack,uninit -mkl -warn all" CACHE STRING "" FORCE)
 
 # ifortの最適化
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")

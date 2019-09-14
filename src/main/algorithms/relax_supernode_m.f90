@@ -16,11 +16,10 @@ contains
     type(contiguous_sets_c), pointer :: node_sets
     type(jagged_array_c), pointer, intent(in) :: tree_child
     integer, intent(in) :: max_zero
-    integer :: n, i, j, k, min_zero, child, additional_zero, merge_node
+    integer :: n, i, j, k, additional_zero, merge_node
     integer, pointer, contiguous :: childs(:)
     integer, allocatable :: num_cols(:), num_zeros(:)
     type(doubly_linked_lists_c), pointer, intent(out) :: son_lists
-    type(iterator_c), pointer :: iterator
     type(stack_c), pointer :: stack
     
     n = size(cc)

@@ -6,7 +6,7 @@ program tree_test
 
   integer, pointer, contiguous :: num_child(:), parent(:), perm(:), subtree_size(:)
   type(jagged_array_c), pointer :: tree_child
-  integer :: i, n
+  integer :: n
 
   n = 9
   allocate(num_child(n), parent(n))

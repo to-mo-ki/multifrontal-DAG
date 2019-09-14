@@ -4,7 +4,6 @@ program jagged_array_test
   use jagged_array_m
   implicit none
   type(jagged_array_c), pointer :: ccs
-  integer :: i, j
   integer, pointer, contiguous :: col(:), row(:)
 
   call make_ccs(col, row)

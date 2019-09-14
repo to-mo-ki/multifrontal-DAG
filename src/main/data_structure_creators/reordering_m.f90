@@ -25,9 +25,9 @@ contains
     type(jagged_array_c), pointer :: ccs_reordered
     type(jagged_array_c), pointer, intent(in) :: ccs_origin
     integer, pointer, contiguous, intent(in) :: perm(:), iperm(:)
-    integer, pointer, contiguous :: ccs_col(:), ccs_row(:), rows_origin(:), rows_reordered(:)
+    integer, pointer, contiguous :: rows_origin(:), rows_reordered(:)
     integer, allocatable :: num_col(:)
-    integer :: n, nonzero, i, col_origin, col_reordered
+    integer :: n, i, col_origin, col_reordered
 
     n = ccs_origin%get_num_arrays()
     allocate(num_col(n))

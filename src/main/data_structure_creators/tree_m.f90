@@ -39,7 +39,6 @@ contains
   function create_tree_child_by_parent(parent) result(tree_child)
     type(jagged_array_c), pointer :: tree_child
     integer, pointer, contiguous, intent(in) :: parent(:)
-    integer, pointer, contiguous :: childs(:), ptr(:)
     integer, allocatable, target :: num_child(:)
     integer :: n, i
 
