@@ -7,8 +7,8 @@ module ccs_to_crs_m
   
 contains
   subroutine ccs_to_crs(ccs, crs)
-    type(jagged_array_c), intent(in) :: ccs
-    type(jagged_array_c), intent(out) :: crs
+    type(jagged_array_c), pointer, intent(in) :: ccs
+    type(jagged_array_c), pointer, intent(out) :: crs
     integer :: i, j, n, nonzero, offset
     integer, pointer, contiguous :: crs_col(:), rows(:)
     integer, allocatable :: num_row(:), row_ptr(:)
@@ -26,7 +26,7 @@ contains
       enddo
     enddo
 
-    crs = create_jagged_array(num_row, crs_col)
+    crs => create_jagged_array(num_row, crs_col)
 
     row_ptr = 1
     do j=1, n

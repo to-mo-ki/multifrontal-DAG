@@ -12,7 +12,8 @@ module tree_m
   public :: create_tree_child, create_parent_in_postordering_tree, tree_traverse_postordering, count_subtree_size
 
 contains
-  type(jagged_array_c) function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
+  function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
+    type(jagged_array_c), pointer :: tree_child
     integer, pointer, contiguous, intent(in) :: num_child(:), parent(:)
     integer, pointer, contiguous :: childs(:)
     integer, allocatable :: child_pos(:)
@@ -21,7 +22,7 @@ contains
     n = size(num_child)
     allocate(child_pos(n))
 
-    tree_child = create_jagged_array(num_child)
+    tree_child => create_jagged_array(num_child)
 
     child_pos = 1
     do i=1, n
@@ -35,7 +36,8 @@ contains
   
   end function
 
-  type(jagged_array_c) function create_tree_child_by_parent(parent) result(tree_child)
+  function create_tree_child_by_parent(parent) result(tree_child)
+    type(jagged_array_c), pointer :: tree_child
     integer, pointer, contiguous, intent(in) :: parent(:)
     integer, pointer, contiguous :: childs(:), ptr(:)
     integer, allocatable, target :: num_child(:)
@@ -49,7 +51,7 @@ contains
       num_child(parent(i)) = num_child(parent(i)) + 1
     enddo
 
-    tree_child = create_tree_child_by_num_child_and_parent(num_child, parent)
+    tree_child => create_tree_child_by_num_child_and_parent(num_child, parent)
   
   end function
 
@@ -57,10 +59,10 @@ contains
     integer, pointer, contiguous, intent(in) :: num_child(:)
     integer, pointer, contiguous :: parent(:)
     integer :: i, j, node, n
-    type(stack_c) :: stack
+    type(stack_c), pointer :: stack
 
     n = size(num_child)
-    stack = create_stack(n)
+    stack => create_stack(n)
     allocate(parent(n))
     parent = 0
 
@@ -76,13 +78,13 @@ contains
 
   function tree_traverse_postordering(tree_child) result(perm)
     integer, pointer, contiguous :: perm(:), childs(:)
-    type(jagged_array_c) :: tree_child
+    type(jagged_array_c), pointer :: tree_child
     integer :: ptr, i, node, n
-    type(stack_c) :: stack
+    type(stack_c), pointer :: stack
 
     n = tree_child%get_num_arrays()
     ptr = n
-    stack = create_stack(n)
+    stack => create_stack(n)
     allocate(perm(n))
     call stack%push(n)
     do while(.not. stack%is_empty())
@@ -99,7 +101,7 @@ contains
 
   function count_subtree_size(tree_child) result(subtree_size)
     integer, pointer, contiguous :: subtree_size(:), childs(:)
-    type(jagged_array_c) :: tree_child
+    type(jagged_array_c), pointer :: tree_child
     integer :: i, j, n
     
     n = tree_child%get_num_arrays()

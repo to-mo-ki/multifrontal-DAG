@@ -6,24 +6,24 @@ program fundamental_supernode_test
   use test_util
   implicit none
 
-  type(jagged_array_c) :: ccs, tree_child, ccs_supernode
+  type(jagged_array_c), pointer :: ccs, tree_child, ccs_supernode
   integer, pointer, contiguous :: col(:), row(:), child_ptr(:), child_val(:)
   integer, pointer, contiguous :: isleaf(:), num_child_supernode(:), first_node(:)
-  type(contiguous_sets_c) :: node_sets
+  type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: cc_node(:), cc_supernode(:)
   integer :: i
 
   call make_ccs_postordering(col, row)
-  ccs = create_jagged_array(col, row)
+  ccs => create_jagged_array(col, row)
   allocate(child_ptr(9))
   allocate(child_val(8))
   child_ptr = (/0, 1, 0, 1, 0, 1, 2, 2, 1/)
   child_val = (/1, 3, 5, 4, 6, 2, 7, 8/)
-  tree_child = create_jagged_array(child_ptr, child_val)
+  tree_child => create_jagged_array(child_ptr, child_val)
   allocate(isleaf(9))
   isleaf = (/1, 1, 1, 0, 1, 1, 0, 0, 0/)
 
-  node_sets = search_node_sets_in_supernode(isleaf, tree_child)
+  node_sets => search_node_sets_in_supernode(isleaf, tree_child)
   allocate(first_node(8))
   do i=1, 8
     first_node(i) = node_sets%get_first(i)
@@ -34,7 +34,7 @@ program fundamental_supernode_test
   num_child_supernode => create_supernodal_tree(node_sets, tree_child)
   call assert_equal("supernodal tree", num_child_supernode, (/0, 1, 0, 0, 1, 2, 2/))
 
-  ccs_supernode = create_supernodal_ccs(node_sets, ccs)
+  ccs_supernode => create_supernodal_ccs(node_sets, ccs)
   
   call assert_equal("supernodal ccs(1)", ccs_supernode%get_array(1), (/2, 8/))
   call assert_equal("supernodal ccs(2)", ccs_supernode%get_array(2), (/9/))

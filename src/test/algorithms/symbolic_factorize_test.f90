@@ -6,15 +6,15 @@ program symbolic_factorize_test
   use test_util
   implicit none
 
-  type(jagged_array_c) :: ccs_a, ccs_l, tree_child
+  type(jagged_array_c), pointer :: ccs_a, ccs_l, tree_child
   integer, pointer, contiguous :: num_row(:), row(:), cc(:), num_child(:), child_val(:)
-  type(contiguous_sets_c) :: node_sets
+  type(contiguous_sets_c), pointer :: node_sets
 
   allocate(num_row(7), row(11))
   num_row = (/2, 1, 2, 2, 2, 2, 0/)
   row = (/2, 8, 9, 7, 9, 6, 8, 7, 8, 8, 9/)
-  ccs_a = create_jagged_array(num_row, row)
-  node_sets = create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  ccs_a => create_jagged_array(num_row, row)
+  node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
 
   allocate(cc(7))
   cc = (/2, 2, 2, 2, 2, 2, 0/)
@@ -22,9 +22,9 @@ program symbolic_factorize_test
   allocate(num_child(7), child_val(6))
   num_child = (/0, 1, 0, 0, 1, 2, 2/)
   child_val = (/1, 4, 3, 5, 2, 6/)
-  tree_child = create_jagged_array(num_child, child_val)
+  tree_child => create_jagged_array(num_child, child_val)
 
-  ccs_l = symbolic_factorize(ccs_a, node_sets, cc, tree_child)
+  ccs_l => symbolic_factorize(ccs_a, node_sets, cc, tree_child)
 
   call assert_equal("col(1)", ccs_l%get_array(1), (/2, 8/))
   call assert_equal("col(2)", ccs_l%get_array(2), (/8, 9/))

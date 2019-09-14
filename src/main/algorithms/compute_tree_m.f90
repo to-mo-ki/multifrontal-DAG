@@ -9,7 +9,7 @@ contains
   function compute_tree(crs) result(parent)
     ! OPTIMIZE: 素集合データ構造を用いたものに変更する必要あり
     integer, pointer, contiguous :: parent(:)
-    type(jagged_array_c), intent(in) :: crs
+    type(jagged_array_c), pointer, intent(in) :: crs
     integer :: j, i, r, t, n
     integer, pointer, contiguous :: rows(:)
     integer, allocatable :: virtual(:), pos_parent(:)

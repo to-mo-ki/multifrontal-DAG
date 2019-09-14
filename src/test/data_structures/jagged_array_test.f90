@@ -3,12 +3,12 @@ program jagged_array_test
   use test_util
   use jagged_array_m
   implicit none
-  type(jagged_array_c) :: ccs
+  type(jagged_array_c), pointer :: ccs
   integer :: i, j
   integer, pointer, contiguous :: col(:), row(:)
 
   call make_ccs(col, row)
-  ccs = create_jagged_array(col, row)
+  ccs => create_jagged_array(col, row)
   call assert_equal("get_num_arrays", ccs%get_num_arrays(), 9)
   call assert_equal("get_num_vals", ccs%get_num_vals(), 21)
 

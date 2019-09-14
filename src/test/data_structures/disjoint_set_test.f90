@@ -3,9 +3,9 @@ program disjoint_set_test
   use test_util
   implicit none
 
-  type(disjoint_set_c) :: set
+  type(disjoint_set_c), pointer :: set
 
-  set = create_disjoint_set(5)
+  set => create_disjoint_set(5)
   call set%link(1, 2)
   call assert_equal("link(1,2);find(1)", set%find(1), 2)
   call set%link(3, 1)

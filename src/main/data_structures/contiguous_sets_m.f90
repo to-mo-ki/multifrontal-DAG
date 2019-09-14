@@ -14,10 +14,12 @@ module contiguous_sets_m
   public :: create_contiguous_sets
 
 contains
-  type(contiguous_sets_c) function create_contiguous_sets(set_length) result(this)
+  function create_contiguous_sets(set_length) result(this)
+    type(contiguous_sets_c), pointer :: this
     integer :: set_length(:)
     integer :: n, i
-
+    
+    allocate(this)
     n = size(set_length)
     allocate(this%ptr(n+1))
     this%ptr(1) = 1

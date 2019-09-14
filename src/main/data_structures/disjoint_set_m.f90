@@ -12,10 +12,12 @@ module disjoint_set_m
   public :: create_disjoint_set
   
 contains
-  type(disjoint_set_c) function create_disjoint_set(n) result(this)
+  function create_disjoint_set(n) result(this)
+    type(disjoint_set_c), pointer :: this
     integer, intent(in) :: n
     integer :: i
     
+    allocate(this)
     allocate(this%parent(n))
     do i=1, n
       this%parent(i) = i

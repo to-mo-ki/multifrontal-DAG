@@ -4,11 +4,11 @@ program sym_to_asym_test
   use sparse_matrix_maker_m
   use test_util
   implicit none
-  type(jagged_array_c) :: sym, asym
+  type(jagged_array_c), pointer :: sym, asym
   integer, pointer, contiguous :: col(:), row(:)
 
   call make_ccs(col, row)
-  sym = create_jagged_array(col, row)
+  sym => create_jagged_array(col, row)
   call sym_to_asym(sym, asym)
 
   call assert_equal("asym_row(1)", asym%get_array(1), (/7, 8/))

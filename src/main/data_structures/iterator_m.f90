@@ -1,4 +1,5 @@
 module iterator_m
+  ! OPTIMIZE: iteratorをポインタで渡すのは毎回allocateが発生するのでよくないかもしれない
   implicit none
   private
   type, public :: iterator_c
@@ -14,10 +15,12 @@ module iterator_m
   
 contains
 
-  type(iterator_c) function create_iterator(node, next_node) result(this)
+  function create_iterator(node, next_node) result(this)
+    type(iterator_c), pointer :: this
     integer, intent(in) :: node
     integer, pointer, contiguous, intent(in) :: next_node(:)
 
+    allocate(this)
     this%node = node
     this%next_node => next_node
 

@@ -8,7 +8,7 @@ contains
     integer, pointer, contiguous, intent(in) :: subtree_size(:)
     integer, pointer, contiguous :: rows(:)
     integer, allocatable :: prev_rownz(:)
-    type(jagged_array_c), intent(in) :: ccs
+    type(jagged_array_c), pointer, intent(in) :: ccs
     integer :: n, j, i
 
     n = ccs%get_num_arrays()

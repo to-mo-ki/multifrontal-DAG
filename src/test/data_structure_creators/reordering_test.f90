@@ -5,7 +5,7 @@ program reordering_test
   use test_util
   implicit none
 
-  type(jagged_array_c) :: ccs_origin, ccs_reordered
+  type(jagged_array_c), pointer :: ccs_origin, ccs_reordered
   integer, pointer, contiguous :: perm(:), iperm(:), col(:), row(:), parent_origin(:), parent_reordered(:)
   
   allocate(perm(9), iperm(9))
@@ -18,8 +18,8 @@ program reordering_test
   call assert_equal("reordering_tree", parent_reordered, (/2, 8, 4, 7, 6, 7, 8, 9, 0/))
 
   call make_ccs(col, row)
-  ccs_origin = create_jagged_array(col, row)
-  ccs_reordered = reordering_ccs(ccs_origin, perm, iperm)
+  ccs_origin => create_jagged_array(col, row)
+  ccs_reordered => reordering_ccs(ccs_origin, perm, iperm)
 
   call assert_equal("reordering_ccs(1)", ccs_reordered%get_array(1), (/1, 2, 8/))
   call assert_equal("reordering_ccs(2)", ccs_reordered%get_array(2), (/2, 9/))

@@ -4,11 +4,11 @@ program contiguous_sets_test
   implicit none
 
   integer, pointer, contiguous :: length(:)
-  type(contiguous_sets_c) :: set
+  type(contiguous_sets_c), pointer :: set
   allocate(length(4))
 
   length = (/2, 1, 0, 3/)
-  set = create_contiguous_sets(length)
+  set => create_contiguous_sets(length)
 
   call assert_equal("num sets", set%get_num_sets(), 4)
   call assert_equal("num elements", set%get_num_elements(), 6)

@@ -5,8 +5,8 @@ module supernode_m
   private
   
   type, public :: supernode_c
-    type(jagged_array_c) :: ccs, tree_child
-    type(contiguous_sets_c) :: node_sets
+    type(jagged_array_c), pointer :: ccs, tree_child
+    type(contiguous_sets_c), pointer :: node_sets
     integer, pointer, contiguous :: perm(:), iperm(:), cc(:)
   end type
 

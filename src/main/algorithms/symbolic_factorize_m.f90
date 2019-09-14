@@ -7,12 +7,13 @@ module symbolic_factorize_m
   public :: symbolic_factorize
   
 contains
-  type(jagged_array_c) function symbolic_factorize(ccs_a, node_sets, cc, tree_child) result(ccs_l)
+  function symbolic_factorize(ccs_a, node_sets, cc, tree_child) result(ccs_l)
     use sort_m
-    type(jagged_array_c), intent(in) :: ccs_a
-    type(contiguous_sets_c), intent(in) :: node_sets
+    type(jagged_array_c), pointer :: ccs_l
+    type(jagged_array_c), pointer, intent(in) :: ccs_a
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets
     integer, pointer, contiguous, intent(in) :: cc(:)
-    type(jagged_array_c), intent(in) :: tree_child
+    type(jagged_array_c), pointer, intent(in) :: tree_child
     integer :: i, j, k, n, num_vals, child, row_num, ptr, order
     integer, allocatable :: full_array(:)
     integer, pointer, contiguous :: childs(:), rows_a(:), rows_l(:), rows_child(:)
@@ -20,7 +21,7 @@ contains
     n = ccs_a%get_num_arrays()
     order = node_sets%get_num_elements()
 
-    ccs_l = create_jagged_array(cc)
+    ccs_l => create_jagged_array(cc)
     
     allocate(full_array(order))
     full_array = 0

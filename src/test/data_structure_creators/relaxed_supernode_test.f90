@@ -6,15 +6,15 @@ program relaxed_supernode_test
   use test_util
   implicit none
 
-  type(jagged_array_c) :: ccs_fundamental, ccs_relaxed
-  type(doubly_linked_lists_c) :: merge_lists, sons
+  type(jagged_array_c), pointer :: ccs_fundamental, ccs_relaxed
+  type(doubly_linked_lists_c), pointer :: merge_lists, sons
   integer, pointer, contiguous :: map(:), first_node(:), perm(:), num_child(:)
-  type(contiguous_sets_c) :: node_sets_relaxed, node_sets_fundamental
+  type(contiguous_sets_c), pointer :: node_sets_relaxed, node_sets_fundamental
   integer, pointer, contiguous :: num_row(:), row(:)
   integer, pointer, contiguous :: cc_fundamental(:), cc_relaxed(:)
   integer :: i
 
-  merge_lists = create_doubly_linked_lists(7)
+  merge_lists => create_doubly_linked_lists(7)
   do i=1, 7
     call merge_lists%add(i, i)
   enddo
@@ -25,8 +25,8 @@ program relaxed_supernode_test
   map => build_map(merge_lists)
   call assert_equal("max_zero=1:build map", map, (/2, 3, 5, 7/))
 
-  node_sets_fundamental = create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
-  node_sets_relaxed = create_node_sets(node_sets_fundamental, map, merge_lists)
+  node_sets_fundamental => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  node_sets_relaxed => create_node_sets(node_sets_fundamental, map, merge_lists)
   allocate(first_node(5))
   do i=1, 5
     first_node(i) = node_sets_relaxed%get_first(i)
@@ -41,7 +41,7 @@ program relaxed_supernode_test
   cc_relaxed => build_cc(cc_fundamental, map)
   call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 2, 0/))
 
-  sons = create_doubly_linked_lists(7)
+  sons => create_doubly_linked_lists(7)
   call sons%add(2, 7)
   call sons%add(3, 7)
   call sons%add(5, 7)
@@ -49,7 +49,7 @@ program relaxed_supernode_test
   num_child => count_num_child(sons, map)
   call assert_equal("max_zero=1:count num child", num_child, (/0, 0, 0, 3/))
 
-  merge_lists = create_doubly_linked_lists(7)
+  merge_lists => create_doubly_linked_lists(7)
   do i=1, 7
     call merge_lists%add(i, i)
   enddo
@@ -61,7 +61,7 @@ program relaxed_supernode_test
   map => build_map(merge_lists)
   call assert_equal("max_zero=2:build map", map, (/5, 6, 7/))
 
-  node_sets_relaxed = create_node_sets(node_sets_fundamental, map, merge_lists)
+  node_sets_relaxed => create_node_sets(node_sets_fundamental, map, merge_lists)
   allocate(first_node(4))
   do i=1, 4
     first_node(i) = node_sets_relaxed%get_first(i)
@@ -74,7 +74,7 @@ program relaxed_supernode_test
   cc_relaxed => build_cc(cc_fundamental, map)
   call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 0/))
 
-  sons = create_doubly_linked_lists(7)
+  sons => create_doubly_linked_lists(7)
   call sons%add(5, 6)
   call sons%add(6, 7)
   num_child => count_num_child(sons, map)

@@ -9,9 +9,9 @@ module fundamental_supernode_m
   
 contains
   function search_node_sets_in_supernode(isleaf, tree_child) result(node_sets)
-    type(contiguous_sets_c) :: node_sets
+    type(contiguous_sets_c), pointer :: node_sets
     integer, pointer, contiguous, intent(in) :: isleaf(:)
-    type(jagged_array_c), intent(in) :: tree_child
+    type(jagged_array_c), pointer, intent(in) :: tree_child
     integer, allocatable :: num_nodes(:)
     integer :: n, i, ptr, count, num_supernodes
 
@@ -35,13 +35,13 @@ contains
       num_nodes(ptr) = num_nodes(ptr) + 1
     enddo
     
-    node_sets = create_contiguous_sets(num_nodes)
+    node_sets => create_contiguous_sets(num_nodes)
 
   end function
 
   function create_supernodal_column_count(node_sets, cc_node) result(cc_supernode)
     integer, pointer, contiguous :: cc_supernode(:)
-    type(contiguous_sets_c), intent(in) :: node_sets
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets
     integer, pointer, contiguous, intent(in) :: cc_node(:)
     integer :: i, n, last_node
 
@@ -56,8 +56,8 @@ contains
 
   function create_supernodal_tree(node_sets, tree_child) result(num_child_supernode)
     integer, pointer, contiguous :: num_child_supernode(:)
-    type(contiguous_sets_c), intent(in) :: node_sets
-    type(jagged_array_c), intent(in) :: tree_child
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets
+    type(jagged_array_c), pointer, intent(in) :: tree_child
     integer :: n, i
 
     n = node_sets%get_num_sets()
@@ -69,12 +69,13 @@ contains
   end function
 
 
-  type(jagged_array_c) function create_supernodal_ccs(node_sets, ccs_node) result(ccs_supernode)
+  function create_supernodal_ccs(node_sets, ccs_node) result(ccs_supernode)
     ! HACK: サブルーチン化
     use sort_m
+    type(jagged_array_c), pointer :: ccs_supernode
     integer, pointer, contiguous :: map(:)
-    type(contiguous_sets_c), intent(in) :: node_sets
-    type(jagged_array_c), intent(in) :: ccs_node
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets
+    type(jagged_array_c), pointer, intent(in) :: ccs_node
     integer, pointer, contiguous :: rows_node(:), rows_supernode(:)
     integer :: n, row_num, ptr, i, j, k, num_supernode
     integer, allocatable :: full_array(:), num_row(:), row_ptr(:)
@@ -97,7 +98,7 @@ contains
         enddo
       enddo
     enddo
-    ccs_supernode = create_jagged_array(num_row)
+    ccs_supernode => create_jagged_array(num_row)
     
     full_array = 0
     row_ptr = 1

@@ -3,9 +3,9 @@ program stack_test
   use test_util
   implicit none
   
-  type(stack_c) :: stack
+  type(stack_c), pointer :: stack
 
-  stack = create_stack(10)
+  stack => create_stack(10)
   call assert_equal("first empty", stack%is_empty(), .true.)
   call stack%push(1)
   call assert_equal("second empty", stack%is_empty(), .false.)

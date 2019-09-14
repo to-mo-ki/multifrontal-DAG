@@ -5,10 +5,10 @@ program finding_leaves_test
   use test_util
   implicit none
 
-  type(jagged_array_c) :: ccs
+  type(jagged_array_c), pointer :: ccs
   integer, pointer, contiguous :: num_row(:), row(:), subtree_size(:), isleaf(:)
   call make_ccs_postordering(num_row, row)
-  ccs = create_jagged_array(num_row, row)
+  ccs => create_jagged_array(num_row, row)
   allocate(subtree_size(9))
   subtree_size = (/1, 2, 1, 2, 1, 2, 5, 8, 9/)
   isleaf => finding_leaves(subtree_size, ccs)

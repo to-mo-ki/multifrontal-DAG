@@ -11,8 +11,8 @@ contains
     ! TODO: separate least common ancestor
     ! TODO: understand algorithm
     integer, pointer, contiguous :: cc(:)
-    type(jagged_array_c), intent(in) :: ccs, tree_child
-    type(disjoint_set_c) :: disjoint_set
+    type(jagged_array_c), pointer, intent(in) :: ccs, tree_child
+    type(disjoint_set_c), pointer :: disjoint_set
     integer, pointer, contiguous, intent(in) :: parent(:)
     integer :: n, p, pp, q, i, u
     integer, allocatable :: wt(:), prev_p(:)
@@ -38,7 +38,7 @@ contains
       call compute_level(childs(i), n, level, tree_child)
     enddo
 
-    disjoint_set = create_disjoint_set(n)
+    disjoint_set => create_disjoint_set(n)
 
     do p=1, n
       if(p /= n)then
@@ -68,7 +68,7 @@ contains
   recursive subroutine compute_level(node, parent, level, tree_child)
     integer, intent(in) :: node, parent
     integer, pointer, contiguous :: level(:), childs(:)
-    type(jagged_array_c), intent(in) :: tree_child
+    type(jagged_array_c), pointer, intent(in) :: tree_child
     integer :: i
 
     level(node) = level(parent) + 1

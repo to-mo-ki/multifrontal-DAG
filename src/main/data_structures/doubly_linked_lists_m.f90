@@ -18,9 +18,11 @@ module doubly_linked_lists_m
   public :: create_doubly_linked_lists
 
 contains
-  type(doubly_linked_lists_c) function create_doubly_linked_lists(n) result(this)
+  function create_doubly_linked_lists(n) result(this)
+    type(doubly_linked_lists_c), pointer :: this
     integer,intent(in) :: n
 
+    allocate(this)
     allocate(this%next(n), this%prev(n), this%head(n), this%tail(n))
     this%next = 0
     this%prev = 0
@@ -90,12 +92,12 @@ contains
 
   integer function get_length(this, node) result(length)
     class(doubly_linked_lists_c) :: this
-    type(iterator_c) :: iterator
+    type(iterator_c), pointer :: iterator
     integer, intent(in) :: node
     integer :: tmp
 
     length = 0
-    iterator = this%create_iterator(node)
+    iterator => this%create_iterator(node)
     do while(iterator%has_next())
       length = length + 1
       tmp = iterator%next()
@@ -122,10 +124,13 @@ contains
 
   end function
 
-  type(iterator_c) function create_iterator(this, idx) result(iterator)
+  function create_iterator(this, idx) result(iterator)
+    type(iterator_c), pointer :: iterator
     class(doubly_linked_lists_c) :: this
     integer, intent(in) :: idx
-    iterator = new_iterator(this%head(idx), this%next)
+
+    allocate(iterator)
+    iterator => new_iterator(this%head(idx), this%next)
   end function
 
 end module

@@ -9,8 +9,8 @@ contains
   subroutine sym_to_asym(sym, asym)
     ! NOTE: Not include diagonal, CCS
     ! HACK: 特に変数名
-    type(jagged_array_c), intent(in) :: sym
-    type(jagged_array_c), intent(out) :: asym
+    type(jagged_array_c), pointer, intent(in) :: sym
+    type(jagged_array_c), pointer, intent(out) :: asym
     integer, pointer, contiguous :: asym_rows(:), sym_rows(:)
     integer :: ptr, i, j, n, sym_nonzero, asym_nonzero, offset, col
     integer, allocatable :: num_row(:), col_ptr(:), num_col(:)
@@ -37,7 +37,7 @@ contains
       num_col(i) = sym%get_array_length(i) + num_row(i) - 2
     enddo
 
-    asym = create_jagged_array(num_col)
+    asym => create_jagged_array(num_col)
 
     !下半分を格納
     do j=1, n

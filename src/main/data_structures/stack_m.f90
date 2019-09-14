@@ -15,8 +15,11 @@ module stack_m
 
 contains
 
-  type(stack_c) function create_stack(length) result(this)
+  function create_stack(length) result(this)
+    type(stack_c), pointer :: this
      integer,intent(in) :: length
+     
+     allocate(this)
      this%ptr = 0
      allocate(this%val(length))
    end function create_stack

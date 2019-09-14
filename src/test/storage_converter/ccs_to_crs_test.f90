@@ -4,13 +4,13 @@ program ccs_to_crs_test
   use sparse_matrix_maker_m
   use test_util
   implicit none
-  type(jagged_array_c) :: ccs, crs
+  type(jagged_array_c), pointer :: ccs, crs
   integer :: n
   integer, pointer, contiguous :: num_row(:), row(:)
 
   n = 9
   call make_ccs(num_row, row)
-  ccs = create_jagged_array(num_row, row)
+  ccs => create_jagged_array(num_row, row)
   call ccs_to_crs(ccs, crs)
 
   call assert_equal("crs_row(1)", crs%get_array(1), (/1/))

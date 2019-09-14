@@ -3,12 +3,12 @@ program iterator_test
   use test_util
   implicit none
   integer, pointer, contiguous :: next_node(:)
-  type(iterator_c) :: iterator
+  type(iterator_c), pointer :: iterator
 
   allocate(next_node(5))
 
   next_node = (/3, 5, 0, 2, 1/)
-  iterator = create_iterator(4, next_node)
+  iterator => create_iterator(4, next_node)
   call assert_equal("has_next(1)", iterator%has_next(), .true.)
   call assert_equal("next(1)", iterator%next(), 4)
   call assert_equal("has_next(2)", iterator%has_next(), .true.)

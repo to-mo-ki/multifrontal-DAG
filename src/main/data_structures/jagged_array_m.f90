@@ -5,7 +5,7 @@ module jagged_array_m
   private
   type, public :: jagged_array_c
     private
-    type(contiguous_sets_c) :: set
+    type(contiguous_sets_c), pointer :: set
     integer, pointer, contiguous :: val(:)
   contains
     procedure :: get_array
@@ -22,19 +22,23 @@ module jagged_array_m
   public :: create_jagged_array
   
 contains
-  type(jagged_array_c) function create_jagged_array1(num_length) result(this)
+  function create_jagged_array1(num_length) result(this)
+    type(jagged_array_c), pointer :: this
     integer :: num_length(:)
 
-    this%set = create_contiguous_sets(num_length)
+    allocate(this)
+    this%set => create_contiguous_sets(num_length)
     allocate(this%val(this%set%get_num_elements()))
 
   end function
 
-  type(jagged_array_c) function create_jagged_array2(num_length, val) result(this)
+  function create_jagged_array2(num_length, val) result(this)
+    type(jagged_array_c), pointer :: this
     integer :: num_length(:)
     integer, pointer, contiguous :: val(:)
 
-    this%set = create_contiguous_sets(num_length)
+    allocate(this)
+    this%set => create_contiguous_sets(num_length)
     this%val => val
 
   end function

@@ -10,21 +10,22 @@ module relax_supernode_m
   public :: compute_merge_lists
   
 contains
-  type(doubly_linked_lists_c) function compute_merge_lists(cc, tree_child, node_sets, max_zero, son_lists) result(merge_lists)
+  function compute_merge_lists(cc, tree_child, node_sets, max_zero, son_lists) result(merge_lists)
+    type(doubly_linked_lists_c), pointer :: merge_lists
     integer, pointer, contiguous, intent(in) :: cc(:)
-    type(contiguous_sets_c) :: node_sets
-    type(jagged_array_c), intent(in) :: tree_child
+    type(contiguous_sets_c), pointer :: node_sets
+    type(jagged_array_c), pointer, intent(in) :: tree_child
     integer, intent(in) :: max_zero
     integer :: n, i, j, k, min_zero, child, additional_zero, merge_node
     integer, pointer, contiguous :: childs(:)
     integer, allocatable :: num_cols(:), num_zeros(:)
-    type(doubly_linked_lists_c), intent(out) :: son_lists
-    type(iterator_c) :: iterator
-    type(stack_c) :: stack
+    type(doubly_linked_lists_c), pointer, intent(out) :: son_lists
+    type(iterator_c), pointer :: iterator
+    type(stack_c), pointer :: stack
     
     n = size(cc)
-    son_lists = create_doubly_linked_lists(n)
-    merge_lists = create_doubly_linked_lists(n)
+    son_lists => create_doubly_linked_lists(n)
+    merge_lists => create_doubly_linked_lists(n)
     do i=1, n
       call merge_lists%add(i, i)
     enddo
@@ -34,7 +35,7 @@ contains
       num_cols(i) = node_sets%get_length(i)
     enddo
     allocate(num_zeros(n))
-    stack = create_stack(n)
+    stack => create_stack(n)
     do k=1, n
       if(tree_child%get_array_length(k) == 0) cycle
       childs => tree_child%get_array(k)
@@ -66,13 +67,13 @@ contains
   integer function choose_merge_node(parent, max_zero, son_lists, cc, num_zeros, num_cols, min_zero) result(merge_node)
     integer, intent(in) :: parent, max_zero, cc(:), num_zeros(:), num_cols(:)
     integer, intent(out) :: min_zero
-    type(doubly_linked_lists_c), intent(in) :: son_lists
+    type(doubly_linked_lists_c), pointer, intent(in) :: son_lists
     integer :: child, additional_zero
-    type(iterator_c) :: iterator
+    type(iterator_c), pointer :: iterator
 
     min_zero = max_zero
     merge_node = 0
-    iterator = son_lists%create_iterator(parent)
+    iterator => son_lists%create_iterator(parent)
     do while(iterator%has_next())
       child = iterator%next()
       additional_zero = get_additional_zero(parent, child, cc, num_cols) + num_zeros(parent) + num_zeros(child)

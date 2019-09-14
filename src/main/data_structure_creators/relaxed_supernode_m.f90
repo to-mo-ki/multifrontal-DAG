@@ -14,7 +14,7 @@ contains
   ! merge_listへのポインタ
   function build_map(merge_lists) result(map)
     integer, pointer, contiguous :: map(:)
-    type(doubly_linked_lists_c), intent(in) :: merge_lists
+    type(doubly_linked_lists_c), pointer, intent(in) :: merge_lists
     integer :: n, num_lists, i, ptr
 
     num_lists = merge_lists%get_num_lists()
@@ -32,21 +32,21 @@ contains
 
   function create_perm(node_sets_fundamental, node_sets_relaxed,  map, merge_lists) result(perm)
     integer, pointer, contiguous :: perm(:)
-    type(contiguous_sets_c), intent(in) :: node_sets_fundamental, node_sets_relaxed
-    type(doubly_linked_lists_c), intent(in) :: merge_lists
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets_fundamental, node_sets_relaxed
+    type(doubly_linked_lists_c), pointer, intent(in) :: merge_lists
     integer, pointer, contiguous, intent(in) :: map(:)
-    type(iterator_c) :: iterator
+    type(iterator_c), pointer :: iterator
     integer :: i, j, num_relaxed, node, order, ptr
-    type(stack_c) :: stack
+    type(stack_c), pointer :: stack
 
     num_relaxed = node_sets_relaxed%get_num_sets()
     order = node_sets_relaxed%get_num_elements()
     allocate(perm(order))
-    stack = create_stack(num_relaxed)
+    stack => create_stack(num_relaxed)
     
     ptr = 1
     do i=1, num_relaxed
-      iterator = merge_lists%create_iterator(map(i))
+      iterator => merge_lists%create_iterator(map(i))
       do while(iterator%has_next())
         call stack%push(iterator%next())
       enddo
@@ -61,11 +61,12 @@ contains
 
   end function
 
-  type(contiguous_sets_c) function create_node_sets(node_sets_fundamental, map, merge_lists) result(node_sets_relaxed)
-    type(contiguous_sets_c), intent(in) :: node_sets_fundamental
+  function create_node_sets(node_sets_fundamental, map, merge_lists) result(node_sets_relaxed)
+    type(contiguous_sets_c), pointer :: node_sets_relaxed
+    type(contiguous_sets_c), pointer, intent(in) :: node_sets_fundamental
     integer, pointer, contiguous, intent(in) :: map(:)
-    type(doubly_linked_lists_c), intent(in) :: merge_lists
-    type(iterator_c) :: iterator
+    type(doubly_linked_lists_c), pointer, intent(in) :: merge_lists
+    type(iterator_c), pointer :: iterator
     integer :: n, i, node
     integer, allocatable :: num_col(:)
     
@@ -73,19 +74,19 @@ contains
     allocate(num_col(n))
     num_col = 0
     do i=1, n
-      iterator = merge_lists%create_iterator(map(i))
+      iterator => merge_lists%create_iterator(map(i))
       do while(iterator%has_next())
         node = iterator%next()
         num_col(i) = num_col(i) + node_sets_fundamental%get_length(node)
       enddo
     enddo
-    node_sets_relaxed = create_contiguous_sets(num_col)
+    node_sets_relaxed => create_contiguous_sets(num_col)
 
   end function
 
   function count_num_child(sons, map) result(num_child)
     integer, pointer, contiguous :: num_child(:)
-    type(doubly_linked_lists_c), intent(in) :: sons
+    type(doubly_linked_lists_c), pointer, intent(in) :: sons
     integer, pointer, contiguous :: map(:)
     integer :: i, n
 

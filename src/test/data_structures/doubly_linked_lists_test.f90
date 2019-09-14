@@ -3,12 +3,12 @@ program doubly_linked_list_test
   use iterator_m
   use test_util
   implicit none
-  type(doubly_linked_lists_c) :: lists
-  type(iterator_c) :: iterator
+  type(doubly_linked_lists_c), pointer :: lists
+  type(iterator_c), pointer :: iterator
   integer :: n, i, val(5)
 
   n = 5
-  lists = create_doubly_linked_lists(n)
+  lists => create_doubly_linked_lists(n)
   call assert_equal("num elements", lists%get_num_elements(), n)
   call lists%add(1, 2)
   call lists%add(5, 2)
@@ -54,7 +54,7 @@ contains
     character(len=*), intent(in) :: message_list
     integer, intent(in) :: idx, list(:)
 
-    iterator = lists%create_iterator(idx)
+    iterator => lists%create_iterator(idx)
     i=0
     do while(iterator%has_next())
       i = i + 1
