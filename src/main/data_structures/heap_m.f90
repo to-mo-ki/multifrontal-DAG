@@ -11,6 +11,7 @@ module heap_m
     procedure, public :: update_top_node
     procedure, public :: get_top_node
     procedure, public :: delete_top_node
+    procedure, public :: is_empty
     procedure, public :: set_zero
     procedure, public :: max
     procedure, public :: build_heap
@@ -123,6 +124,13 @@ contains
     call this%reheap(1)
   
   end subroutine
+
+  logical function is_empty(this)
+    class(heap_c) :: this
+
+    is_empty = this%num_node == 0
+    
+  end function
 
   integer function max(this)
     class(heap_c) :: this

@@ -12,10 +12,12 @@ program heap_test
   min_heap => create_min_heap(10)
   call min_heap%build_heap(test)
   call assert_equal("min_heap:max", min_heap%max(), 100)
+  call assert_equal("min_heap:non_empty", min_heap%is_empty(), .false.)
   do i=1, 9
     answer(i) = min_heap%get_top_node()
     call min_heap%delete_top_node()
   enddo
+  call assert_equal("min_heap:empty", min_heap%is_empty(), .true.)
   call assert_equal("min_heap", answer, (/1, 2, 3, 7, 17, 19, 25, 36, 100/))
 
   max_heap => create_max_heap(10)
