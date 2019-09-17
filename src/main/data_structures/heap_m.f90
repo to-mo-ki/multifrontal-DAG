@@ -8,8 +8,9 @@ module heap_m
     procedure(exchange_i), nopass, pointer :: exchange => null()
   contains
     procedure :: reheap
-    procedure, public :: add_top_node
-    procedure, public :: pop_top_node
+    procedure, public :: update_top_node
+    procedure, public :: get_top_node
+    procedure, public :: delete_top_node
     procedure, public :: set_zero
     procedure, public :: max
     procedure, public :: build_heap
@@ -99,24 +100,29 @@ contains
     this%num_node = num_node
   end subroutine
 
-  subroutine add_top_node(this, num)
+  subroutine update_top_node(this, num)
     class(heap_c) :: this
     integer, intent(in) :: num
 
-    this%nodes(1) = this%nodes(1) + num
+    this%nodes(1) = num
     call this%reheap(1)
     
   end subroutine
 
-  integer function pop_top_node(this) result(top_node)
+  integer function get_top_node(this) result(top_node)
+    class(heap_c) :: this
+    top_node = this%nodes(1)
+  
+  end function
+
+  subroutine delete_top_node(this)
     class(heap_c) :: this
 
-    top_node = this%nodes(1)
     this%nodes(1) = this%nodes(this%num_node)
     this%num_node = this%num_node - 1
     call this%reheap(1)
-
-  end function
+  
+  end subroutine
 
   integer function max(this)
     class(heap_c) :: this
