@@ -9,7 +9,7 @@ program fundamental_supernode_test
 
   type(jagged_array_c), pointer :: ccs, tree_child, ccs_supernode
   integer, pointer, contiguous :: col(:), row(:), num_child(:), child_val(:)
-  integer, pointer, contiguous :: isleaf(:), num_child_supernode(:), first_node(:)
+  integer, pointer, contiguous :: isleaf(:), num_child_supernode(:), first_node(:), num_child_check(:)
   type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: cc_node(:), cc_supernode(:)
   integer :: i
@@ -31,7 +31,8 @@ program fundamental_supernode_test
 
 
   num_child_supernode => create_supernodal_tree(node_sets, tree_child)
-  call assert_equal("supernodal tree", num_child_supernode, (/0, 1, 0, 0, 1, 2, 2/))
+  call make_supernodal_tree(num_child_check)
+  call assert_equal("supernodal tree", num_child_supernode, num_child_check)
 
   ccs_supernode => create_supernodal_ccs(node_sets, ccs)
   

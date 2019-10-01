@@ -2,6 +2,7 @@ program generate_local_index_test
   use jagged_array_m
   use contiguous_sets_m
   use generate_local_index_m
+  use tree_maker_m
   use test_util
   implicit none
   type(jagged_array_c), pointer :: row_index, local_index, tree_child
@@ -9,9 +10,7 @@ program generate_local_index_test
   integer, pointer, contiguous :: num_child(:), child_val(:)
   integer, pointer, contiguous :: row(:), num_row(:)
 
-  allocate(num_child(7), child_val(6))
-  num_child = (/0, 1, 0, 0, 1, 2, 2/)
-  child_val = (/1, 4, 3, 5, 2, 6/)
+  call make_supernodal_tree(num_child, child_val)
   tree_child => create_jagged_array(num_child, child_val)
 
   allocate(num_row(7), row(12))

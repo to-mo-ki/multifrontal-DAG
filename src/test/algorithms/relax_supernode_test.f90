@@ -6,6 +6,7 @@ program relax_supernode_test
   use iterator_m
   use relax_supernode_m
   use sparse_matrix_maker_m
+  use tree_maker_m
   use test_util
   implicit none
   
@@ -14,11 +15,10 @@ program relax_supernode_test
   integer, pointer, contiguous :: cc(:), num_child(:), child_val(:)
   type(contiguous_sets_c), pointer :: node_sets
 
-  allocate(cc(7), num_child(7), child_val(6))
+  allocate(cc(7))
   
   cc = (/2, 2, 2, 2, 2, 2, 0/)
-  num_child = (/0, 1, 0, 0, 1, 2, 2/)
-  child_val = (/1, 4, 3, 5, 2, 6/)
+  call make_supernodal_tree(num_child, child_val)
 
   tree_child => create_jagged_array(num_child, child_val)
   node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))

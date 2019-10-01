@@ -2,6 +2,7 @@ program tree_pruning_test
   use jagged_array_m
   use contiguous_sets_m
   use tree_pruning_m
+  use tree_maker_m
   use test_util
 
   implicit none
@@ -14,8 +15,7 @@ program tree_pruning_test
   allocate(cc(7), num_child(7), child(6), node_length(7))
   
   cc = (/2, 2, 2, 2, 2, 2, 0/)
-  num_child = (/0, 1, 0, 0, 1, 2, 2/)
-  child = (/1, 4, 3, 5, 2, 6/)
+  call make_supernodal_tree(num_child, child)
   node_length = (/1, 1, 2, 1, 1, 1, 2/)
   
   tree_child => create_jagged_array(num_child, child)

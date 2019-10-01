@@ -26,4 +26,19 @@ contains
     endif
 
   end subroutine
+
+  subroutine make_supernodal_tree(num_child, child_val)
+    integer, pointer, contiguous, optional :: num_child(:), child_val(:)
+    if(present(num_child))then
+      allocate(num_child(7))
+      num_child = (/0, 1, 0, 0, 1, 2, 2/)
+    endif
+    if(present(child_val))then
+      allocate(child_val(6))
+      child_val = (/1, 4, 3, 5, 2, 6/)
+    endif
+    
+  end subroutine
+
+
 end module
