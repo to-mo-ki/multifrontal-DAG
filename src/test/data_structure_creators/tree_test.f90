@@ -10,9 +10,8 @@ program tree_test
   integer :: n
 
   n = 9
-  allocate(num_child(n), parent(n))
-  num_child = (/0, 0, 0, 1, 1, 2, 1, 2, 1/)
-  call make_original_tree(parent)
+  call make_original_tree(num_child=num_child)
+  call make_original_tree(parent=parent)
   tree_child => create_tree_child(num_child, parent)
   
   call assert_equal("tree_child by parent and num_child:array(4)", tree_child%get_array(4), (/2/))
