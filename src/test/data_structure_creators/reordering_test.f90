@@ -2,6 +2,7 @@ program reordering_test
   use jagged_array_m
   use reordering_m
   use sparse_matrix_maker_m
+  use tree_maker_m
   use test_util
   implicit none
 
@@ -13,7 +14,7 @@ program reordering_test
   iperm = (/1, 3, 5, 4, 6, 7, 2, 8, 9/)
 
   allocate(parent_origin(9))
-  parent_origin = (/7, 4, 5, 6, 6, 8, 8, 9, 0/)
+  call make_original_tree(parent_origin)
   parent_reordered => reordering_tree(parent_origin, perm, iperm)
   call assert_equal("reordering_tree", parent_reordered, (/2, 8, 4, 7, 6, 7, 8, 9, 0/))
 

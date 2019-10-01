@@ -2,6 +2,7 @@ program column_count_test
   use jagged_array_m
   use column_count_m
   use sparse_matrix_maker_m
+  use tree_maker_m
   use test_util
   implicit none
 
@@ -14,9 +15,7 @@ program column_count_test
   allocate(parent(9))
   parent = (/2, 8, 4, 7, 6, 7, 8, 9, 0/)
   
-  allocate(num_child(9), child_val(8))
-  num_child = (/0, 1, 0, 1, 0, 1, 2, 2, 1/)
-  child_val = (/1, 3, 5, 4, 6, 2, 7, 8/)
+  call make_postordering_tree(num_child, child_val)
   tree_child => create_jagged_array(num_child, child_val)
   
   cc => column_count(ccs, tree_child, parent)

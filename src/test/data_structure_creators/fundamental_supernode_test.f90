@@ -3,11 +3,12 @@ program fundamental_supernode_test
   use contiguous_sets_m
   use fundamental_supernode_m
   use sparse_matrix_maker_m
+  use tree_maker_m
   use test_util
   implicit none
 
   type(jagged_array_c), pointer :: ccs, tree_child, ccs_supernode
-  integer, pointer, contiguous :: col(:), row(:), child_ptr(:), child_val(:)
+  integer, pointer, contiguous :: col(:), row(:), num_child(:), child_val(:)
   integer, pointer, contiguous :: isleaf(:), num_child_supernode(:), first_node(:)
   type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: cc_node(:), cc_supernode(:)
@@ -15,11 +16,9 @@ program fundamental_supernode_test
 
   call make_ccs_postordering(col, row)
   ccs => create_jagged_array(col, row)
-  allocate(child_ptr(9))
-  allocate(child_val(8))
-  child_ptr = (/0, 1, 0, 1, 0, 1, 2, 2, 1/)
-  child_val = (/1, 3, 5, 4, 6, 2, 7, 8/)
-  tree_child => create_jagged_array(child_ptr, child_val)
+  call make_postordering_tree(num_child, child_val)
+  tree_child => create_jagged_array(num_child, child_val)
+  
   allocate(isleaf(9))
   isleaf = (/1, 1, 1, 0, 1, 1, 0, 0, 0/)
 
