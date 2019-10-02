@@ -13,6 +13,7 @@ program fundamental_supernode_test
   type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: cc_node(:), cc_supernode(:)
   integer :: i
+  integer, pointer, contiguous :: check_cc_supernode(:)
 
   call make_ccs_postordering(col, row)
   ccs => create_jagged_array(col, row)
@@ -41,7 +42,8 @@ program fundamental_supernode_test
   allocate(cc_node(9))
   cc_node = (/3, 3, 4, 3, 3, 3, 3, 2, 1/)
   cc_supernode => create_supernodal_column_count(node_sets, cc_node)
-  call assert_equal("column count in supernode", cc_supernode, (/2, 2, 2, 2, 2, 2, 0/))
+  call make_supernodal_ccs(check_cc_supernode)
+  call assert_equal("column count in supernode", cc_supernode, check_cc_supernode)
 
   
 end program fundamental_supernode_test

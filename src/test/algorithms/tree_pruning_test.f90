@@ -2,6 +2,7 @@ program tree_pruning_test
   use jagged_array_m
   use contiguous_sets_m
   use tree_pruning_m
+  use sparse_matrix_maker_m
   use tree_maker_m
   use test_util
 
@@ -12,9 +13,8 @@ program tree_pruning_test
   type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: num_child(:), child(:), node_length(:)
 
-  allocate(cc(7), num_child(7), child(6), node_length(7))
-  
-  cc = (/2, 2, 2, 2, 2, 2, 0/)
+  allocate(node_length(7))
+  call make_supernodal_ccs(cc)
   call make_supernodal_tree(num_child, child)
   node_length = (/1, 1, 2, 1, 1, 1, 2/)
   

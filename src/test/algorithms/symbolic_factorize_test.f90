@@ -17,8 +17,7 @@ program symbolic_factorize_test
   ccs_a => create_jagged_array(num_row, row)
   node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
 
-  allocate(cc(7))
-  cc = (/2, 2, 2, 2, 2, 2, 0/)
+  call make_supernodal_ccs(cc)
 
   call make_supernodal_tree(num_child, child_val)
   tree_child => create_jagged_array(num_child, child_val)

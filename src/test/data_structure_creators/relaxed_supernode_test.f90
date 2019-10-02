@@ -3,6 +3,7 @@ program relaxed_supernode_test
   use doubly_linked_lists_m
   use contiguous_sets_m
   use relaxed_supernode_m
+  use sparse_matrix_maker_m
   use test_util
   implicit none
 
@@ -35,7 +36,7 @@ program relaxed_supernode_test
   call assert_equal("max_zero=1:perm", perm, (/1, 2, 3, 4, 5, 6, 7, 8, 9/))
 
   allocate(cc_fundamental(7))
-  cc_fundamental = (/2, 2, 2, 2, 2, 2, 0/)
+  call make_supernodal_ccs(cc_fundamental)
   cc_relaxed => build_cc(cc_fundamental, map)
   call assert_equal("max_zero=2:cc", cc_relaxed, (/2, 2, 2, 0/))
 

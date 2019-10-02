@@ -15,9 +15,7 @@ program relax_supernode_test
   integer, pointer, contiguous :: cc(:), num_child(:), child_val(:)
   type(contiguous_sets_c), pointer :: node_sets
 
-  allocate(cc(7))
-  
-  cc = (/2, 2, 2, 2, 2, 2, 0/)
+  call make_supernodal_ccs(cc)
   call make_supernodal_tree(num_child, child_val)
 
   tree_child => create_jagged_array(num_child, child_val)
