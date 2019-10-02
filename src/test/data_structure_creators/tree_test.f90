@@ -15,12 +15,8 @@ program tree_test
   call make_original_tree(parent=parent)
   tree_child => create_tree_child(num_child, parent)
   
-  call assert_equal("tree_child by parent and num_child:array(4)", tree_child%get_array(4), (/2/))
-  call assert_equal("tree_child by parent and num_child:array(5)", tree_child%get_array(5), (/3/))
-  call assert_equal("tree_child by parent and num_child:array(6)", tree_child%get_array(6), (/4, 5/))
-  call assert_equal("tree_child by parent and num_child:array(7)", tree_child%get_array(7), (/1/))
-  call assert_equal("tree_child by parent and num_child:array(8)", tree_child%get_array(8), (/6, 7/))
-  call assert_equal("tree_child by parent and num_child:array(9)", tree_child%get_array(9), (/8/))
+
+  call assert_equal("tree_child by parent and num_child", tree_child%get_val(), (/2, 3, 4, 5, 1, 6, 7, 8/))
 
   subtree_size => count_subtree_size(tree_child)
   call assert_equal("subtree size", subtree_size, (/1, 1, 1, 2, 2, 5, 2, 8, 9/))
@@ -29,12 +25,7 @@ program tree_test
 
   tree_child => create_tree_child(parent)
 
-  call assert_equal("tree_child by parent:array(4)", tree_child%get_array(4), (/2/))
-  call assert_equal("tree_child by parent:array(5)", tree_child%get_array(5), (/3/))
-  call assert_equal("tree_child by parent:array(6)", tree_child%get_array(6), (/4, 5/))
-  call assert_equal("tree_child by parent:array(7)", tree_child%get_array(7), (/1/))
-  call assert_equal("tree_child by parent:array(8)", tree_child%get_array(8), (/6, 7/))
-  call assert_equal("tree_child by parent:array(9)", tree_child%get_array(9), (/8/))
+  call assert_equal("tree_child by parent:array(4)", tree_child%get_val(), (/2, 3, 4, 5, 1, 6, 7, 8/))
 
   deallocate(num_child)
   call make_postordering_tree(parent=check_postordering_parent, num_child=num_child)

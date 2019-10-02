@@ -12,6 +12,9 @@ module jagged_array_m
     procedure :: get_array_length
     procedure :: get_num_vals
     procedure :: get_num_arrays
+    ! NOTE: テスト用
+    procedure :: get_val
+    procedure :: get_array_lengths
   end type
 
   interface create_jagged_array
@@ -66,4 +69,22 @@ contains
     num_arrays = this%set%get_num_sets()
   end function
 
+  function get_val(this) result(val)
+    class(jagged_array_c) :: this
+    integer :: val(size(this%val))
+
+    val = this%val
+
+  end function
+
+  function get_array_lengths(this) result(set)
+    class(jagged_array_c) :: this
+    integer :: set(this%set%get_num_sets())
+    integer :: i
+
+    do i=1, this%set%get_num_sets()
+      set(i) = this%get_array_length(i)
+    enddo
+
+  end function
 end module

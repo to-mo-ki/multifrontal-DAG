@@ -20,6 +20,8 @@ program jagged_array_test
   call assert_equal("get_array(7)", ccs%get_array(7), (/7, 9/))
   call assert_equal("get_array(8)", ccs%get_array(8), (/8/))
   call assert_equal("get_array(9)", ccs%get_array(9), (/9/))
+  call assert_equal("get_array_lengths", ccs%get_array_lengths(), (/3, 4, 3, 2, 3, 2, 2, 1, 1/))
+  call assert_equal("get_val", ccs%get_val(), row)
   
   
 end program

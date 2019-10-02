@@ -24,18 +24,7 @@ program reordering_test
   ccs_origin => create_jagged_array(col, row)
   ccs_reordered => reordering_ccs(ccs_origin, perm, iperm)
 
-  call assert_equal("reordering_ccs(1)", ccs_reordered%get_array(1), (/1, 2, 8/))
-  call assert_equal("reordering_ccs(2)", ccs_reordered%get_array(2), (/2, 9/))
-  call assert_equal("reordering_ccs(3)", ccs_reordered%get_array(3), (/3, 4, 7, 9/))
-  call assert_equal("reordering_ccs(4)", ccs_reordered%get_array(4), (/4, 9/))
-  call assert_equal("reordering_ccs(5)", ccs_reordered%get_array(5), (/5, 6, 8/))
-  call assert_equal("reordering_ccs(6)", ccs_reordered%get_array(6), (/6, 7, 8/))
-  call assert_equal("reordering_ccs(7)", ccs_reordered%get_array(7), (/7, 9/))
-  call assert_equal("reordering_ccs(8)", ccs_reordered%get_array(8), (/8/))
-  call assert_equal("reordering_ccs(9)", ccs_reordered%get_array(9), (/9/))
-  
-
-
-
+  call assert_equal("reordering_ccs num_row", ccs_reordered%get_array_lengths(), (/3, 2, 4, 2, 3, 3, 2, 1, 1/))
+  call assert_equal("reordering_ccs row", ccs_reordered%get_val(), (/1, 2, 8, 2, 9, 3, 4, 7, 9, 4, 9, 5, 6, 8, 6, 7, 8, 7, 9, 8, 9/))
   
 end program reordering_test

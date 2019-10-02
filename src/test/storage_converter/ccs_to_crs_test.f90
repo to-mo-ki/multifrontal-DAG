@@ -12,15 +12,7 @@ program ccs_to_crs_test
   call make_ccs(num_row, row)
   ccs => create_jagged_array(num_row, row)
   call ccs_to_crs(ccs, crs)
-
-  call assert_equal("crs_row(1)", crs%get_array(1), (/1/))
-  call assert_equal("crs_row(2)", crs%get_array(2), (/2/))
-  call assert_equal("crs_row(3)", crs%get_array(3), (/3/))
-  call assert_equal("crs_row(4)", crs%get_array(4), (/2, 4/))
-  call assert_equal("crs_row(5)", crs%get_array(5), (/3, 5/))
-  call assert_equal("crs_row(6)", crs%get_array(6), (/2, 5, 6/))
-  call assert_equal("crs_row(7)", crs%get_array(7), (/1, 7/))
-  call assert_equal("crs_row(8)", crs%get_array(8), (/1, 3, 5, 8/))
-  call assert_equal("crs_row(9)", crs%get_array(9), (/2, 4, 6, 7, 9/))
+  call assert_equal("crs row", crs%get_array_lengths(), (/1, 1, 1, 2, 2, 3, 2, 4, 5/))
+  call assert_equal("crs col", crs%get_val(), (/1, 2, 3, 2, 4, 3, 5, 2, 5, 6, 1, 7, 1, 3, 5, 8, 2, 4, 6, 7, 9/))
   
 end program ccs_to_crs_test

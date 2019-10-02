@@ -24,13 +24,8 @@ program symbolic_factorize_test
   tree_child => create_jagged_array(num_child, child_val)
 
   ccs_l => symbolic_factorize(ccs_a, node_sets, cc, tree_child)
+  
 
-  call assert_equal("col(1)", ccs_l%get_array(1), (/2, 8/))
-  call assert_equal("col(2)", ccs_l%get_array(2), (/8, 9/))
-  call assert_equal("col(3)", ccs_l%get_array(3), (/7, 9/))
-  call assert_equal("col(4)", ccs_l%get_array(4), (/6, 8/))
-  call assert_equal("col(5)", ccs_l%get_array(5), (/7, 8/))
-  call assert_equal("col(6)", ccs_l%get_array(6), (/8, 9/))
-  call assert_equal("col(7)", ccs_l%get_array_length(7), 0)
+  call assert_equal("col", ccs_l%get_val(), (/2, 8, 8, 9, 7, 9, 6, 8, 7, 8, 8, 9/))
   
 end program symbolic_factorize_test

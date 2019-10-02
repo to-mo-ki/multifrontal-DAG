@@ -22,14 +22,7 @@ program generate_local_index_test
 
   local_index => generate_local_index(row_index, node_sets, tree_child)
 
-  call assert_equal("1th local index", local_index%get_array(1), (/1, 2/))
-  call assert_equal("2th local index", local_index%get_array(2), (/1, 2/))
-  call assert_equal("3th local index", local_index%get_array(3), (/1, 3/))
-  call assert_equal("4th local index", local_index%get_array(4), (/1, 3/))
-  call assert_equal("5th local index", local_index%get_array(5), (/1, 2/))
-  call assert_equal("6th local index", local_index%get_array(6), (/1, 2/))
-  call assert_equal("7th local index", local_index%get_array_length(7), 0)
-  
+  call assert_equal("local index", local_index%get_val(), (/1, 2, 1, 2, 1, 3, 1, 3, 1, 2, 1, 2/))  
 
   
 end program generate_local_index_test

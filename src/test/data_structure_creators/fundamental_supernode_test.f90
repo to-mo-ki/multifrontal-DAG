@@ -35,14 +35,9 @@ program fundamental_supernode_test
   call assert_equal("supernodal tree", num_child_supernode, num_child_check)
 
   ccs_supernode => create_supernodal_ccs(node_sets, ccs)
+  call assert_equal("supernodal ccs num_row", ccs_supernode%get_array_lengths(), (/2, 1, 2, 2, 2, 1, 0/))
+  call assert_equal("supernodal ccs row", ccs_supernode%get_val(), (/2, 8, 9, 7, 9, 6, 8, 7, 8, 9/))
   
-  call assert_equal("supernodal ccs(1)", ccs_supernode%get_array(1), (/2, 8/))
-  call assert_equal("supernodal ccs(2)", ccs_supernode%get_array(2), (/9/))
-  call assert_equal("supernodal ccs(3)", ccs_supernode%get_array(3), (/7, 9/))
-  call assert_equal("supernodal ccs(4)", ccs_supernode%get_array(4), (/6, 8/))
-  call assert_equal("supernodal ccs(5)", ccs_supernode%get_array(5), (/7, 8/))
-  call assert_equal("supernodal ccs(6)", ccs_supernode%get_array(6), (/9/))
-
   allocate(cc_node(9))
   cc_node = (/3, 3, 4, 3, 3, 3, 3, 2, 1/)
   cc_supernode => create_supernodal_column_count(node_sets, cc_node)
