@@ -12,14 +12,14 @@ program relax_supernode_test
   
   type(doubly_linked_lists_c), pointer :: merge_lists, sons
   type(jagged_array_c), pointer :: tree_child
-  integer, pointer, contiguous :: cc(:), num_child(:), child_val(:)
+  integer, pointer, contiguous :: cc(:), num_child(:), child_val(:), node_size(:)
   type(contiguous_sets_c), pointer :: node_sets
 
-  call make_supernodal_ccs(cc)
+  call make_supernodal_ccs(cc, node_size=node_size)
   call make_supernodal_tree(num_child, child_val)
 
   tree_child => create_jagged_array(num_child, child_val)
-  node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  node_sets => create_contiguous_sets(node_size)
   merge_lists => compute_merge_lists(cc, tree_child, node_sets, 0, sons)
   call assert_equal("max_zero=0:1", get_merge_nodes(1), (/1/))
   call assert_equal("max_zero=0:2", get_merge_nodes(2), (/2/))

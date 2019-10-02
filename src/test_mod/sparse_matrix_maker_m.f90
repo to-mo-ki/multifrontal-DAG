@@ -71,7 +71,7 @@ contains
 
   end subroutine
 
-  subroutine make_supernodal_ccs(num_row, row)
+  subroutine make_supernodal_ccs(num_row, row, node_size)
     ! [ 1                 ]
     ! [   2               ]
     ! [     3             ]
@@ -81,7 +81,7 @@ contains
     ! [ *           7     ]
     ! [ *   *   *     8   ]
     ! [   *   *   * *   9 ]
-    integer, pointer, contiguous, optional :: num_row(:), row(:)
+    integer, pointer, contiguous, optional :: num_row(:), row(:), node_size(:)
 
     if(present(num_row))then
       allocate(num_row(7))
@@ -91,5 +91,10 @@ contains
       allocate(row(12))
       row = (/2, 8, 8, 9, 7, 9, 6, 8, 7, 8, 8, 9/)
     endif
+    if(present(node_size))then
+      allocate(node_size(7))
+      node_size = (/1, 1, 2, 1, 1, 1, 2/)
+    endif
   end subroutine
+
 end module

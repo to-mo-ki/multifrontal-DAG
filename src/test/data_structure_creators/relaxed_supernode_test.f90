@@ -10,7 +10,7 @@ program relaxed_supernode_test
   type(doubly_linked_lists_c), pointer :: merge_lists, sons
   integer, pointer, contiguous :: map(:), first_node(:), perm(:), num_child(:)
   type(contiguous_sets_c), pointer :: node_sets_relaxed, node_sets_fundamental
-  integer, pointer, contiguous :: cc_fundamental(:), cc_relaxed(:)
+  integer, pointer, contiguous :: cc_fundamental(:), cc_relaxed(:), node_size(:)
   integer :: i
 
   merge_lists => create_doubly_linked_lists(7)
@@ -23,8 +23,8 @@ program relaxed_supernode_test
 
   map => build_map(merge_lists)
   call assert_equal("max_zero=1:build map", map, (/2, 3, 5, 7/))
-
-  node_sets_fundamental => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  call make_supernodal_ccs(node_size=node_size)
+  node_sets_fundamental => create_contiguous_sets(node_size)
   node_sets_relaxed => create_node_sets(node_sets_fundamental, map, merge_lists)
   allocate(first_node(5))
   do i=1, 5

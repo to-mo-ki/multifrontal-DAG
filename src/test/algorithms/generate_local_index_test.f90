@@ -9,15 +9,15 @@ program generate_local_index_test
   type(jagged_array_c), pointer :: row_index, local_index, tree_child
   type(contiguous_sets_c), pointer :: node_sets
   integer, pointer, contiguous :: num_child(:), child_val(:)
-  integer, pointer, contiguous :: row(:), num_row(:)
+  integer, pointer, contiguous :: row(:), num_row(:), node_size(:)
 
   call make_supernodal_tree(num_child, child_val)
   tree_child => create_jagged_array(num_child, child_val)
 
-  call make_supernodal_ccs(num_row, row)
+  call make_supernodal_ccs(num_row, row, node_size)
   row_index => create_jagged_array(num_row, row)
 
-  node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
+  node_sets => create_contiguous_sets(node_size)
 
   local_index => generate_local_index(row_index, node_sets, tree_child)
 

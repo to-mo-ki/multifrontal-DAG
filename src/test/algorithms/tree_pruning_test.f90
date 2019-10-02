@@ -11,15 +11,14 @@ program tree_pruning_test
   integer, pointer, contiguous :: cc(:), subtree(:)
   type(jagged_array_c), pointer :: tree_child
   type(contiguous_sets_c), pointer :: node_sets
-  integer, pointer, contiguous :: num_child(:), child(:), node_length(:)
+  integer, pointer, contiguous :: num_child(:), child(:), node_size(:)
 
-  allocate(node_length(7))
-  call make_supernodal_ccs(cc)
+  allocate(node_size(7))
+  call make_supernodal_ccs(cc, node_size=node_size)
   call make_supernodal_tree(num_child, child)
-  node_length = (/1, 1, 2, 1, 1, 1, 2/)
   
   tree_child => create_jagged_array(num_child, child)
-  node_sets => create_contiguous_sets(node_length)
+  node_sets => create_contiguous_sets(node_size)
   
   subtree => tree_pruning(cc, node_sets, tree_child, 0d0, 1)
   call assert_equal("tol=0, p=1", subtree, (/7/))
