@@ -2,8 +2,8 @@ module tree_maker_m
   implicit none
   
 contains
-  subroutine make_original_tree(parent, num_child)
-    integer, pointer, contiguous, optional :: parent(:), num_child(:)
+  subroutine make_original_tree(parent, num_child, child_val)
+    integer, pointer, contiguous, optional :: parent(:), num_child(:), child_val(:)
     if(present(parent))then
       allocate(parent(9))
       parent = (/7, 4, 5, 6, 6, 8, 8, 9, 0/)
@@ -11,6 +11,10 @@ contains
     if(present(num_child))then
       allocate(num_child(9))
       num_child = (/0, 0, 0, 1, 1, 2, 1, 2, 1/)
+    endif
+    if(present(child_val))then
+      allocate(child_val(8))
+      child_val = (/2, 3, 4, 5, 1, 6, 7, 8/)
     endif
     
   end subroutine

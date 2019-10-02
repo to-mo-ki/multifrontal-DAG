@@ -6,17 +6,15 @@ program tree_test
   implicit none
 
   integer, pointer, contiguous :: num_child(:), parent(:), perm(:), subtree_size(:)
-  integer, pointer, contiguous :: check_postordering_parent(:)
+  integer, pointer, contiguous :: check_postordering_parent(:), check_child_val(:)
   type(jagged_array_c), pointer :: tree_child
   integer :: n
 
   n = 9
-  call make_original_tree(num_child=num_child)
-  call make_original_tree(parent=parent)
+  call make_original_tree(parent, num_child, check_child_val)
   tree_child => create_tree_child(num_child, parent)
   
-
-  call assert_equal("tree_child by parent and num_child", tree_child%get_val(), (/2, 3, 4, 5, 1, 6, 7, 8/))
+  call assert_equal("tree_child by parent and num_child", tree_child%get_val(), check_child_val)
 
   subtree_size => count_subtree_size(tree_child)
   call assert_equal("subtree size", subtree_size, (/1, 1, 1, 2, 2, 5, 2, 8, 9/))
@@ -25,7 +23,7 @@ program tree_test
 
   tree_child => create_tree_child(parent)
 
-  call assert_equal("tree_child by parent:array(4)", tree_child%get_val(), (/2, 3, 4, 5, 1, 6, 7, 8/))
+  call assert_equal("tree_child by parent", tree_child%get_val(), check_child_val)
 
   deallocate(num_child)
   call make_postordering_tree(parent=check_postordering_parent, num_child=num_child)
