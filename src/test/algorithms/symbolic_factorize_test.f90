@@ -11,9 +11,9 @@ program symbolic_factorize_test
   integer, pointer, contiguous :: num_row(:), row(:), cc(:), num_child(:), child_val(:)
   type(contiguous_sets_c), pointer :: node_sets
 
-  allocate(num_row(7), row(11))
-  num_row = (/2, 1, 2, 2, 2, 2, 0/)
-  row = (/2, 8, 9, 7, 9, 6, 8, 7, 8, 8, 9/)
+  allocate(num_row(7), row(10))
+  num_row = (/2, 1, 2, 2, 2, 1, 0/)
+  row = (/2, 8, 9, 7, 9, 6, 8, 7, 8, 9/)
   ccs_a => create_jagged_array(num_row, row)
   node_sets => create_contiguous_sets((/1, 1, 2, 1, 1, 1, 2/))
 
