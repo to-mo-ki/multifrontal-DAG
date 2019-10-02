@@ -3,6 +3,7 @@ program reordering_test
   use reordering_m
   use sparse_matrix_maker_m
   use tree_maker_m
+  use perm_maker_m
   use test_util
   implicit none
 
@@ -10,10 +11,8 @@ program reordering_test
   integer, pointer, contiguous :: perm(:), iperm(:), col(:), row(:), parent_origin(:), parent_reordered(:)
   integer, pointer, contiguous :: check_parent(:)
   
-  allocate(perm(9), iperm(9))
-  perm = (/1, 7, 2, 4, 3, 5, 6, 8, 9/)
-  iperm = (/1, 3, 5, 4, 6, 7, 2, 8, 9/)
-
+  call make_postordering_perm(perm, iperm)
+  
   allocate(parent_origin(9))
   call make_original_tree(parent_origin)
   parent_reordered => reordering_tree(parent_origin, perm, iperm)
