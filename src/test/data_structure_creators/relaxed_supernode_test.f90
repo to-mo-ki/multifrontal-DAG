@@ -33,7 +33,7 @@ program relaxed_supernode_test
   call assert_equal("max_zero=1:create node sets", first_node, (/1, 3, 5, 7, 10/))
   
   perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
-  call assert_equal("max_zero=1:perm", perm, (/1, 2, 3, 4, 5, 6, 7, 8, 9/))
+  call assert_equal("max_zero=1:perm", perm, (/(i, i=1,9)/))
 
   allocate(cc_fundamental(7))
   call make_supernodal_ccs(cc_fundamental)
