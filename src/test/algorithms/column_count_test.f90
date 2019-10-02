@@ -12,10 +12,7 @@ program column_count_test
   call make_ccs_postordering(num_row, row)
   ccs => create_jagged_array(num_row, row)
 
-  allocate(parent(9))
-  parent = (/2, 8, 4, 7, 6, 7, 8, 9, 0/)
-  
-  call make_postordering_tree(num_child, child_val)
+  call make_postordering_tree(parent, num_child, child_val)
   tree_child => create_jagged_array(num_child, child_val)
   
   cc => column_count(ccs, tree_child, parent)

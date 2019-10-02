@@ -16,7 +16,7 @@ program fundamental_supernode_test
 
   call make_ccs_postordering(col, row)
   ccs => create_jagged_array(col, row)
-  call make_postordering_tree(num_child, child_val)
+  call make_postordering_tree(num_child=num_child, child_val=child_val)
   tree_child => create_jagged_array(num_child, child_val)
   
   allocate(isleaf(9))

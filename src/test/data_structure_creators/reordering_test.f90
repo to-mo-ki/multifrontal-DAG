@@ -8,6 +8,7 @@ program reordering_test
 
   type(jagged_array_c), pointer :: ccs_origin, ccs_reordered
   integer, pointer, contiguous :: perm(:), iperm(:), col(:), row(:), parent_origin(:), parent_reordered(:)
+  integer, pointer, contiguous :: check_parent(:)
   
   allocate(perm(9), iperm(9))
   perm = (/1, 7, 2, 4, 3, 5, 6, 8, 9/)
@@ -16,7 +17,8 @@ program reordering_test
   allocate(parent_origin(9))
   call make_original_tree(parent_origin)
   parent_reordered => reordering_tree(parent_origin, perm, iperm)
-  call assert_equal("reordering_tree", parent_reordered, (/2, 8, 4, 7, 6, 7, 8, 9, 0/))
+  call make_postordering_tree(check_parent)
+  call assert_equal("reordering_tree", parent_reordered, check_parent)
 
   call make_ccs(col, row)
   ccs_origin => create_jagged_array(col, row)
