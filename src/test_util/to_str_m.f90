@@ -16,6 +16,7 @@ function to_str_int(i) result(res)
   ! TODO: 二桁以上の対策
   write(digit, "(i1)") calc_digit(i)
   write(str, "(I"//digit//".1)") i
+  ! TODO:trimされない(STR_LENGTH分は確保してしまっている)
   res = trim(str)
 end function
 

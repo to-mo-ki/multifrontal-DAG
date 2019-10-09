@@ -9,5 +9,10 @@ program partial_sum_test
   call assert_equal("2 to 6", partial_sum(2, 6), 20)
   call assert_equal("3 to 6", partial_sum(3, 6), 18)
   call assert_equal("1 to -1", partial_sum(1, -1), 0)
+  call assert_equal("1 to 0", partial_sum(1, 0), 0)
+  call assert_equal("2 to 1", partial_sum(2, 1), 0)
+  call assert_equal("3 to 2", partial_sum(3, 2), 0)
+  call assert_equal("3 to 1", partial_sum(3, 1), 0)
+  call assert_equal("5 to 5", partial_sum(5, 5), 5)
   
 end program partial_sum_test
