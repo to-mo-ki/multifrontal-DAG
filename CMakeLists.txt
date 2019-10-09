@@ -29,6 +29,7 @@ add_library(test_util STATIC ${test_utils})
 
 file(GLOB_RECURSE test_mods RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/test_mod/*.f90")
 add_library(test_mod STATIC ${test_mods})
+add_dependencies(test_mod mysolver test_util)
 
 file(GLOB_RECURSE test_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/test/*.f90")
 set(test_lists)
@@ -38,7 +39,8 @@ foreach(test_source ${test_files})
   add_executable(${test_object} ${test_source})
   target_include_directories(${test_object} PRIVATE ${STARPU_INCLUDE_DIRS})
   target_link_libraries(${test_object} PRIVATE ${STARPU_LIBRARIES})
-  target_link_libraries(${test_object} PRIVATE mysolver test_util test_mod)
+  # NOTE: リンクの順番は大事
+  target_link_libraries(${test_object} PRIVATE test_mod mysolver test_util)
   add_dependencies(${test_object} mysolver test_util test_mod)
   list (APPEND test_lists ${test_object})
 endforeach()
