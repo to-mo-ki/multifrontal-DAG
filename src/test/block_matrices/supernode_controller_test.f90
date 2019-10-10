@@ -42,6 +42,8 @@ program supernode_controller_test
   call check_ptr(4, 2, 7, 2, 1, 9, 8)
   call check_ptr(4, 2, 7, 3, 1, 17, 2)
 
+  call check_estimate(3, 1, 4, 5)
+
 contains
   
   subroutine check_estimate(nb, nc, nr, ans_size)
