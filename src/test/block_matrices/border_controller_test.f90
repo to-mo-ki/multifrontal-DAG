@@ -26,6 +26,10 @@ program supernode_controller_test
   call check_ptr(4, 2, 7, 1, 1, 1, 16)
   call check_ptr(4, 2, 7, 2, 1, 17, 16)
   call check_ptr(4, 2, 7, 3, 1, 33, 4)
+
+  ! NOTE: nr < nb
+  call check_estimate(4, 5, 2, 9)
+  call check_ptr(4, 5, 2, 2, 2, 1, 9)
   
 contains
   
