@@ -16,7 +16,7 @@ module factors_m
     integer :: nb
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
-    procedure :: get_num_block, get_work_start_index, exist_border
+    procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
   end type
 
   public :: create_factors
@@ -136,6 +136,11 @@ contains
     nc = this%node_sets%get_length(node)
     exist_border = mod(nc, nb) /= 0
   
+  end function
+
+  integer function get_num_node(this) result(num_node)
+    class(factors_c) :: this
+    num_node = this%node_sets%get_num_sets()
   end function
 
 end module

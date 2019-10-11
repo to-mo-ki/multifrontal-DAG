@@ -16,6 +16,7 @@ program factors_test
   ccs => create_jagged_array((/4, 5, 0/))
   factors => create_factors(node_sets, ccs, nb)
 
+  call assert_equal("num_node", factors%get_num_node(), 3)
   call check_num_blocks(3, (/2, 4, 2/))
 
   call check_work_start_indices(3, (/1, 3/))
@@ -30,6 +31,7 @@ program factors_test
   ccs => create_jagged_array((/5, 4, 4, 4, 6, 0/))
   factors => create_factors(node_sets, ccs, nb)
 
+  call assert_equal("num_node", factors%get_num_node(), 6)
   call check_num_blocks(6, (/4, 4, 4, 3, 3, 2/))
   call check_work_start_indices(6, (/2, 3, 3, 2, 2/))
   call check_exist_border(6, (/.true., .false., .true., .true., .false., .false./))
