@@ -1,6 +1,5 @@
 module check_matrix_ptr_m
   use factors_m
-  use test_util
   use action_m
   use extract_matrix_m
   implicit none
@@ -29,7 +28,7 @@ contains
     do j=jstart, jend
       do i=j, iend
         matrix => extract_matrix(factors, node, i, j)
-        call action(matrix)
+        call action(matrix, node, i, j)
       enddo
     enddo
 
@@ -77,16 +76,21 @@ contains
     work_start_index = factors%get_work_start_index(node)
     num_node = factors%get_num_node()
     if(factors%exist_border(node))then
+      print *, "check supernode"
       call search(factors, node, 1, work_start_index-1, num_block, extract_supernode, a_check_mark)
-      call search(factors, node, work_start_index, work_start_index, num_block, extract_border, a_check_mark)
-      call search(factors, node, work_start_index+1, num_block, num_block, extract_work, a_check_mark)
       call search(factors, node, work_start_index, work_start_index, num_block, extract_supernode, a_check_no_mark)
+      print *, "check border"
+      call search(factors, node, work_start_index, work_start_index, num_block, extract_border, a_check_mark)
       if(node /= num_node)then
+        print *, "check work"
+        call search(factors, node, work_start_index+1, num_block, num_block, extract_work, a_check_mark)
         call search(factors, node, work_start_index, work_start_index, num_block, extract_work, a_check_no_mark)
       endif
     else
+      print *, "check supernode"
       call search(factors, node, 1, work_start_index-1, num_block, extract_supernode, a_check_mark)
       if(node /= num_node)then
+        print *, "check work"
         call search(factors, node, work_start_index, num_block, num_block, extract_work, a_check_mark)
       endif
     endif
