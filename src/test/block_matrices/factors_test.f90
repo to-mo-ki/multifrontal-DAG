@@ -17,10 +17,10 @@ program factors_test
   factors => create_factors(node_sets, ccs, nb)
 
   call assert_equal("num_node", factors%get_num_node(), 3)
-  call check_num_blocks(3, (/2, 4, 2/))
+  call check_num_blocks((/2, 4, 2/))
 
-  call check_work_start_indices(3, (/1, 3/))
-  call check_exist_border(3, (/.true., .false., .true./))
+  call check_work_start_indices((/1, 3/))
+  call check_exist_border((/.true., .false., .true./))
   call check_matrix_size(1, (/9, 6, 4/))
   call check_matrix_size(2, (/9, 9, 9, 6, 9, 9, 6, 9, 6, 4/))
   call check_matrix_size(3, (/9, 3, 1/))
@@ -32,9 +32,9 @@ program factors_test
   factors => create_factors(node_sets, ccs, nb)
 
   call assert_equal("num_node", factors%get_num_node(), 6)
-  call check_num_blocks(6, (/4, 4, 4, 3, 3, 2/))
-  call check_work_start_indices(6, (/2, 3, 3, 2, 2/))
-  call check_exist_border(6, (/.true., .false., .true., .true., .false., .false./))
+  call check_num_blocks((/4, 4, 4, 3, 3, 2/))
+  call check_work_start_indices((/2, 3, 3, 2, 2/))
+  call check_exist_border((/.true., .false., .true., .true., .false., .false./))
   call check_matrix_size(1, (/9, 9, 9, 3, 9, 9, 3, 9, 3, 1/))
   call check_matrix_size(2, (/9, 9, 9, 3, 9, 9, 3, 9, 3, 1/))
   call check_matrix_size(3, (/9, 9, 9, 6, 9, 9, 6, 9, 6, 4/))
@@ -44,32 +44,30 @@ program factors_test
   call check_matrix_ptr(factors)
 
 contains
-
-  subroutine check_num_blocks(num_node, check)
-    integer, intent(in) :: num_node, check(*)
+  subroutine check_num_blocks(check)
+    integer, intent(in) :: check(*)
     integer :: i
-    do i=1, num_node
+    do i=1, factors%get_num_node()
       call assert_equal("num_block:node="//trim(to_str(i)), factors%get_num_block(i), check(i))
     enddo
   end subroutine
-
-  subroutine check_work_start_indices(num_node, check)
-    integer, intent(in) :: num_node, check(*)
+  
+  subroutine check_work_start_indices(check)
+    integer, intent(in) :: check(*)
     integer :: i
-    do i=1, num_node-1
+    do i=1, factors%get_num_node()-1
       call assert_equal("work_start_index:node="//trim(to_str(i)), factors%get_work_start_index(i), check(i))
     enddo
   end subroutine
-
-  subroutine check_exist_border(num_node, check)
-    integer, intent(in) :: num_node
+  
+  subroutine check_exist_border(check)
     logical, intent(in) :: check(*)
     integer :: i
-    do i=1, num_node
+    do i=1, factors%get_num_node()
       call assert_equal("exist_border:node="//trim(to_str(i)), factors%exist_border(i), check(i))
     enddo
   end subroutine
-
+  
   subroutine check_matrix_size(node, check)
     use partial_sum_m
     integer, intent(in) :: node, check(*)
@@ -84,7 +82,8 @@ contains
         ptr = ptr + 1
       enddo
     enddo
-
+  
   end subroutine
 
 end program factors_test
+
