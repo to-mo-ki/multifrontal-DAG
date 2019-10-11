@@ -24,20 +24,20 @@ contains
     n = nc + nr
     matrix => controller%get_ptr(array, nb, nc, nr, i, j)
 
-    call assert_equal("n="//trim(to_str(n))//&
-      &", nb="//trim(to_str(nb))//&
-      &", nc="//trim(to_str(nc))//&
-      &", nr="//trim(to_str(nr))//&
-      &", i="//trim(to_str(i))//&
-      &", j="//trim(to_str(j))//&
+    call assert_equal("n="//to_str(n)//&
+      &", nb="//to_str(nb)//&
+      &", nc="//to_str(nc)//&
+      &", nr="//to_str(nr)//&
+      &", i="//to_str(i)//&
+      &", j="//to_str(j)//&
       &":pos", nint(matrix(1)), ans_pos)
-
-    call assert_equal("n="//trim(to_str(n))//&
-      &", nb="//trim(to_str(nb))//&
-      &", nc="//trim(to_str(nc))//&
-      &", nr="//trim(to_str(nr))//&
-      &", i="//trim(to_str(i))//&
-      &", j="//trim(to_str(j))//&
+    
+    call assert_equal("n="//to_str(n)//&
+      &", nb="//to_str(nb)//&
+      &", nc="//to_str(nc)//&
+      &", nr="//to_str(nr)//&
+      &", i="//to_str(i)//&
+      &", j="//to_str(j)//&
       &":size", size(matrix), ans_size)
 
     deallocate(array)
@@ -52,10 +52,10 @@ contains
 
     n = nr + nc
 
-    call assert_equal("n="//trim(to_str(n))//&
-      &", nb="//trim(to_str(nb))//&
-      &", nc="//trim(to_str(nc))//&
-      &", nr="//trim(to_str(nr))//&
+    call assert_equal("n="//to_str(n)//&
+      &", nb="//to_str(nb)//&
+      &", nc="//to_str(nc)//&
+      &", nr="//to_str(nr)//&
       &":size", controller%estimate_size(nb, nc, nr), ans_size)
 
   end subroutine

@@ -1,5 +1,6 @@
 module action_m
   use test_util
+  use to_str_m
   implicit none
   
   interface
@@ -28,7 +29,7 @@ contains
     double precision, allocatable :: check(:)
     allocate(check(size(matrix)))
     check = 1d0
-    call assert_equal("passed: node="//trim(to_str(node))//", i="//trim(to_str(i))//", j="//trim(to_str(j)), matrix, check)
+    call assert_equal("passed: node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), matrix, check)
   end subroutine
 
   subroutine a_check_no_mark(matrix, i, j, node)
@@ -37,7 +38,7 @@ contains
     double precision, allocatable :: check(:)
     allocate(check(size(matrix)))
     check = 0d0
-    call assert_equal("no passed: node="//trim(to_str(node))//", i="//trim(to_str(i))//", j="//trim(to_str(j)), matrix, check)
+    call assert_equal("no passed: node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), matrix, check)
   end subroutine
 
 end module

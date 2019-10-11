@@ -2,13 +2,40 @@ module to_str_m
   implicit none
   private
   integer :: STR_LENGTH = 20
-  interface to_str
-    module procedure to_str_int
-    module procedure to_str_logical
-    module procedure to_str_DP
-  end interface
   public :: to_str
 contains
+
+function to_str(a) result(res)
+  class(*), intent(in) :: a
+  character(:), pointer :: res
+  integer :: length
+  length = get_len(a)
+  allocate(character(len=length)::res)
+
+  select type (p => a)
+  type is (integer)
+    res = trim(to_str_int(p))
+  type is (double precision)
+    res = trim(to_str_DP(p))
+  type is (logical)
+    res = trim(to_str_logical(p))
+  end select
+  
+end function
+
+function get_len(a) result(length)
+  class(*), intent(in) :: a
+  integer :: length
+  length = 20
+  select type (a)
+  type is (integer)
+    length = len_trim(to_str_int(a))
+  type is (double precision)
+    length = len_trim(to_str_DP(a))
+  type is (logical)
+    length = len_trim(to_str_logical(a))
+  end select
+end function
 
 function to_str_int(i) result(res)
   character(STR_LENGTH) :: str, res, digit

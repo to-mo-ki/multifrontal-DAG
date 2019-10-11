@@ -108,7 +108,7 @@ contains
     do j=jstart, jend
       do i=j, num_row
         matrix => block_matrices%get_ptr(node, i, j)
-        call assert_equal(trim(message)//" size:node="//trim(to_str(node))//", i="//trim(to_str(i))//", j="//trim(to_str(j)), size(matrix), ans_sizes(ptr))
+        call assert_equal(message//" size:node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), size(matrix), ans_sizes(ptr))
         ptr = ptr + 1
       enddo
     enddo
@@ -152,18 +152,18 @@ contains
       enddo
     enddo
 
-    call success_message(trim(message)//" double access:node="//trim(to_str(node)))
+    call success_message(message//" double access:node="//to_str(node))
 
   end subroutine
 
   subroutine fail_access_check(i, j, k, ans, check)
     integer, intent(in) :: i, j, k, ans, check
-    call fail(trim(message)//" double access. "//&
-      &"i="//trim(to_str(i))//&
-      &", j="//trim(to_str(j))//&
-      &", k="//trim(to_str(k))//&
-      &", ans="//trim(to_str(ans))//&
-      &", check="//trim(to_str(check)))
+    call fail(message//" double access. "//&
+      &"i="//to_str(i)//&
+      &", j="//to_str(j)//&
+      &", k="//to_str(k)//&
+      &", ans="//to_str(ans)//&
+      &", check="//to_str(check))
 
   end subroutine
 

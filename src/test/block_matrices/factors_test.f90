@@ -48,7 +48,7 @@ contains
     integer, intent(in) :: check(*)
     integer :: i
     do i=1, factors%get_num_node()
-      call assert_equal("num_block:node="//trim(to_str(i)), factors%get_num_block(i), check(i))
+      call assert_equal("num_block:node="//to_str(i), factors%get_num_block(i), check(i))
     enddo
   end subroutine
   
@@ -56,7 +56,7 @@ contains
     integer, intent(in) :: check(*)
     integer :: i
     do i=1, factors%get_num_node()-1
-      call assert_equal("work_start_index:node="//trim(to_str(i)), factors%get_work_start_index(i), check(i))
+      call assert_equal("work_start_index:node="//to_str(i), factors%get_work_start_index(i), check(i))
     enddo
   end subroutine
   
@@ -64,7 +64,7 @@ contains
     logical, intent(in) :: check(*)
     integer :: i
     do i=1, factors%get_num_node()
-      call assert_equal("exist_border:node="//trim(to_str(i)), factors%exist_border(i), check(i))
+      call assert_equal("exist_border:node="//to_str(i), factors%exist_border(i), check(i))
     enddo
   end subroutine
   
@@ -78,7 +78,7 @@ contains
     do j=1, factors%get_num_block(node)
       do i=j, factors%get_num_block(node)
         matrix => factors%get_matrix_ptr(node, i, j)
-        call assert_equal("matrix size:node="//trim(to_str(node))//", i="//trim(to_str(i))//", j="//trim(to_str(j)), size(matrix), check(ptr))
+        call assert_equal("matrix size:node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), size(matrix), check(ptr))
         ptr = ptr + 1
       enddo
     enddo
