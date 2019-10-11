@@ -24,7 +24,7 @@ program factors_test
   call check_matrix_size(1, (/9, 6, 4/))
   call check_matrix_size(2, (/9, 9, 9, 6, 9, 9, 6, 9, 6, 4/))
   call check_matrix_size(3, (/9, 3, 1/))
-  call check_matrix_ptr(3, factors)
+  call check_matrix_ptr(factors)
   
   nb = 3
   node_sets => create_contiguous_sets((/5, 6, 7, 5, 3, 6/))
@@ -41,7 +41,7 @@ program factors_test
   call check_matrix_size(4, (/9, 9, 9, 9, 9, 9/))
   call check_matrix_size(5, (/9, 9, 9, 9, 9, 9/))
   call check_matrix_size(6, (/9, 9, 9/))
-  call check_matrix_ptr(6, factors)
+  call check_matrix_ptr(factors)
 
 contains
 
