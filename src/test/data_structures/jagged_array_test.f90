@@ -34,6 +34,12 @@ program jagged_array_test
   call assert_equal("get_set(7)", set%get_length(7), 2)
   call assert_equal("get_set(8)", set%get_length(8), 1)
   call assert_equal("get_set(9)", set%get_length(9), 1)
+
+  ccs => create_jagged_array(set)
+  call assert_equal("get_num_arrays2", ccs%get_num_arrays(), 9)
+  call assert_equal("get_num_vals2", ccs%get_num_vals(), 21)
+
+  
   
   
 end program
