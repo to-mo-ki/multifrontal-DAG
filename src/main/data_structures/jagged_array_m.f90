@@ -12,6 +12,7 @@ module jagged_array_m
     procedure :: get_array_length
     procedure :: get_num_vals
     procedure :: get_num_arrays
+    procedure :: get_set
     ! NOTE: テスト用
     procedure :: get_val
     procedure :: get_array_lengths
@@ -85,6 +86,14 @@ contains
     do i=1, this%set%get_num_sets()
       set(i) = this%get_array_length(i)
     enddo
+
+  end function
+
+  function get_set(this) result(set)
+    class(jagged_array_c) :: this
+    type(contiguous_sets_c), pointer :: set
+
+    set => this%set
 
   end function
 end module
