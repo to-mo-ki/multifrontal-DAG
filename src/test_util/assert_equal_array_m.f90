@@ -87,7 +87,7 @@ contains
 
   end subroutine
 
-  subroutine assert_equal_partial_array(message, answer, pos, check, precision, n)
+  subroutine assert_equal_partial_array(message, answer, pos, n, check, precision)
     character(*), intent(in) :: message
     double precision, intent(in) :: answer(*), check(n)
     integer, intent(in) :: n, pos(*)
