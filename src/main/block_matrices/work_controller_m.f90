@@ -1,6 +1,7 @@
 module work_controller_m
   use matrix_controller_m
   use partial_sum_m
+  use block_size_calculator_m
   implicit none
   private
   type, extends(matrix_controller_c), public :: work_controller_c
@@ -24,7 +25,7 @@ contains
     wn = max((j-1)-(nc+fw)/nb, 0)
     
     if(j == nc/nb+1)then
-      up = get_block_size2(j-sn, fw, nb, nr) * max((nb*(i-1)-nc), 0)
+      up = get_block_size(j-sn, nb, nr, fw) * max((nb*(i-1)-nc), 0)
       left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(1, nb-1)*wn
     else
       up = (i-j)*nb*nb
@@ -42,7 +43,7 @@ contains
     sr = mod(nc, nb)
     fw = mod(nb-sr, nb)
 
-    work_size = get_block_size2(i-sn, fw, nb, nr) * get_block_size2(j-sn, fw, nb, nr)
+    work_size = get_block_size(i-sn, nb, nr, fw) * get_block_size(j-sn, nb, nr, fw)
     
   end function
 

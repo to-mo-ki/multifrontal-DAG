@@ -20,13 +20,17 @@ contains
 
   end function
 
-  integer function get_block_size2(idx, nb, n, offset) result(block_size)
-    integer, intent(in) :: idx, nb, n, offset
+  integer function get_block_size2(idx, nb, n, first_block) result(block_size)
+    integer, intent(in) :: idx, nb, n, first_block
     
+    if(first_block == 0)then
+      block_size = get_block_size(idx, nb, n)
+      return
+    endif
     if(idx == 1)then
-      block_size = nb-offset
+      block_size = first_block
     else
-      block_size = get_block_size(idx-1, nb, n-(nb-offset))
+      block_size = get_block_size(idx-1, nb, n-first_block)
     endif
 
   end function

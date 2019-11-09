@@ -1,6 +1,7 @@
 module supernode_controller_m
   use matrix_controller_m
   use partial_sum_m
+  use block_size_calculator_m
   implicit none
   private
   type, extends(matrix_controller_c), public :: supernode_controller_c

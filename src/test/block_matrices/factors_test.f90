@@ -78,7 +78,6 @@ contains
   end subroutine
   
   subroutine check_matrix_size(node, check)
-    use partial_sum_m
     integer, intent(in) :: node, check(*)
     double precision, pointer, contiguous :: matrix(:)
     integer :: i, j, ptr
