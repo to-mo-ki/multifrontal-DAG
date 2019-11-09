@@ -17,6 +17,7 @@ module factors_m
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
+    procedure :: get_block_size
   end type
 
   public :: create_factors
@@ -141,6 +142,23 @@ contains
   integer function get_num_node(this) result(num_node)
     class(factors_c) :: this
     num_node = this%node_sets%get_num_sets()
+  end function
+
+  function get_block_size(this, idx, node) result(block_size)
+    class(factors_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, n
+    
+    n = this%node_sets%get_length(node) + this%ccs%get_array_length(node)
+    nb = this%nb
+    
+    if(idx*nb > n)then
+      block_size = mod(n, nb)
+    else
+      block_size = nb
+    endif
+    
   end function
 
 end module

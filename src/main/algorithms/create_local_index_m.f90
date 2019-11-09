@@ -21,7 +21,7 @@ contains
     ptr => ccs%get_set()
     local_index => create_jagged_array(ptr)
     do node=1, ccs%get_num_arrays()
-      if(tree_child%get_array_length(k) == 0) cycle
+      if(tree_child%get_array_length(node) == 0) cycle
       num_col = node_sets%get_length(node)
       offset = node_sets%get_first(node)-1
       do i=1, num_col

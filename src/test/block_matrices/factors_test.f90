@@ -24,6 +24,9 @@ program factors_test
   call check_matrix_size(1, (/9, 6, 4/))
   call check_matrix_size(2, (/9, 9, 9, 6, 9, 9, 6, 9, 6, 4/))
   call check_matrix_size(3, (/9, 3, 1/))
+  call check_block_size(1, (/3, 2/))
+  call check_block_size(2, (/3, 3, 3, 2/))
+  call check_block_size(3, (/3, 1/))
   call check_matrix_ptr(factors)
   
   nb = 3
@@ -41,6 +44,12 @@ program factors_test
   call check_matrix_size(4, (/9, 9, 9, 9, 9, 9/))
   call check_matrix_size(5, (/9, 9, 9, 9, 9, 9/))
   call check_matrix_size(6, (/9, 9, 9/))
+  call check_block_size(1, (/3, 3, 3, 1/))
+  call check_block_size(2, (/3, 3, 3, 1/))
+  call check_block_size(3, (/3, 3, 3, 2/))
+  call check_block_size(4, (/3, 3, 3/))
+  call check_block_size(5, (/3, 3, 3/))
+  call check_block_size(6, (/3, 3/))
   call check_matrix_ptr(factors)
 
 contains
@@ -83,6 +92,15 @@ contains
       enddo
     enddo
   
+  end subroutine
+
+  subroutine check_block_size(node, check)
+    integer, intent(in) :: node, check(:)
+    integer :: i
+    
+    do i=1, size(check)
+      call assert_equal("get_block_size:"//to_str(i)//", "//to_str(node), factors%get_block_size(i, node), check(i))
+    enddo
   end subroutine
 
 end program factors_test
