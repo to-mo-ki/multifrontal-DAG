@@ -2,45 +2,45 @@ module matrix_splitter_m
   implicit none
   
 contains
-  subroutine split_tri_matrix(border, supernode, work, ssize, wsize, n)
-    integer, intent(in) :: ssize, wsize, n
-    double precision :: border(n, n), supernode(ssize, n), work(wsize, n)
+  subroutine split_tri_matrix(origin, left, right, lsize, rsize, n)
+    integer, intent(in) :: lsize, rsize, n
+    double precision :: origin(n, n), left(lsize, n), right(rsize, n)
     integer :: i, j
 
-    do i=1, ssize
+    do i=1, lsize
       do j=1, i
-        supernode(j, i) = border(j, i)
+        left(j, i) = origin(j, i)
       enddo
     enddo
 
-    do i=ssize+1, n
-      do j=1, ssize
-        supernode(j, i) = border(j, i)
+    do i=lsize+1, n
+      do j=1, lsize
+        left(j, i) = origin(j, i)
       enddo
     enddo
 
-    do i=1, wsize
-      do j=1, wsize
-        work(j, i) = border(j+ssize, i+ssize)
+    do i=1, rsize
+      do j=1, rsize
+        right(j, i) = origin(j+lsize, i+lsize)
       enddo
     enddo
 
   end subroutine
 
-  subroutine split_rect_matrix(border, supernode, work, ssize, wsize, nrow, ncol)
-    integer, intent(in) :: ssize, wsize, nrow, ncol
-    double precision :: border(ncol, nrow), supernode(ssize, nrow), work(wsize, nrow)
+  subroutine split_rect_matrix(origin, left, right, lsize, rsize, nrow, ncol)
+    integer, intent(in) :: lsize, rsize, nrow, ncol
+    double precision :: origin(ncol, nrow), left(lsize, nrow), right(rsize, nrow)
     integer :: i, j
 
     do i=1, nrow
-      do j=1, ssize
-        supernode(j, i) = border(j, i)
+      do j=1, lsize
+        left(j, i) = origin(j, i)
       enddo
     enddo
 
     do i=1, nrow
-      do j=1, wsize
-        work(j, i) = border(ssize+j, i)
+      do j=1, rsize
+        right(j, i) = origin(lsize+j, i)
       enddo
     enddo
   end subroutine
