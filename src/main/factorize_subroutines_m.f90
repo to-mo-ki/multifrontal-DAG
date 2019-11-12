@@ -1,5 +1,6 @@
-module seq_factorize_kernel_m
+module factorize_subroutines_m
   use factors_m
+  use factorize_kernel_m
   implicit none
   
 contains
@@ -26,7 +27,7 @@ contains
     m = factors%get_block_size(i, node)
     diag => factors%get_matrix_ptr(node, j, j)
     lower => factors%get_matrix_ptr(node, i, j)
-    call mydtrsm(m, n, diag, solve)
+    call mydtrsm(n, m, diag, lower)
 
   end subroutine
 
@@ -40,22 +41,22 @@ contains
     m = factors%get_block_size(i, node)
     off_diag => factors%get_matrix_ptr(node, i, j)
     update_matrix => factors%get_matrix_ptr(node, i, i)
-    call mydsyrk(n, m, off_diag, update_matrix)
+    call mydsyrk(m, n, off_diag, update_matrix)
 
   end subroutine
 
-  subroutine update(factors, node, i, j, k)
+  subroutine update(factors, node, upper_idx, lower_idx, col_idx)
     type(factors_c), pointer :: factors
-    integer, intent(in) :: node, i, j, k
+    integer, intent(in) :: node, upper_idx, lower_idx, col_idx
     double precision, pointer, contiguous :: lower(:), upper(:), update_matrix(:)
-    integer :: n, m
+    integer :: upper_n, lower_n
 
-    n = factors%get_block_size(j, node)
-    m = factors%get_block_size(k, node)
-    upper => factors%get_matrix_ptr(node, i, j)
-    lower => factors%get_matrix_ptr(node, k, j)
-    update_matrix => factors%get_matrix_ptr(node, k, i)
-    call mydgemm(m, n, lower, upper, update)
+    upper_n = factors%get_block_size(upper_idx, node)
+    lower_n = factors%get_block_size(lower_idx, node)
+    upper => factors%get_matrix_ptr(node, upper_idx, col_idx)
+    lower => factors%get_matrix_ptr(node, lower_idx, col_idx)
+    update_matrix => factors%get_matrix_ptr(node, lower_idx, upper_idx)
+    call mydgemm(upper_n, upper_n, lower_n, upper, lower, update_matrix)
 
   end subroutine
 end module
