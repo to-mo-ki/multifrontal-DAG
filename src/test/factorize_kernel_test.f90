@@ -63,18 +63,19 @@ contains
     !  [1  2  3] [1  4  7]     [14  32  50]
     !  [4  5  6] [2  5  8]  =  [32  77 122]
     !            [3  6  9]
-    ! [1 2 3] [1 4]   [14  32]
-    ! [4 5 6] [2 5] = [32  77]
-    ! [7 8 9] [3 6]   [50 122]
-    double precision :: a(9), b(6), c(6), check(6)
+    ! [ 1  2  3] [1 4]   [14  32]
+    ! [ 4  5  6] [2 5] = [32  77]
+    ! [ 7  8  9] [3 6]   [50 122]
+    ! [10 11 12]         [68 167]
+    double precision :: upper(12), lower(6), update(8), check(8)
     integer :: i
 
-    a = (/ (dble(i),i=1,9) /)
-    b = (/ (dble(i),i=1,6) /)
-    c = 1.0d0
-    call mydgemm(3, 2, a, b, c)
-    check = (/-13d0, -31d0, -49d0, -31d0, -76d0, -121d0/)
-    call assert_equal("dgemm", c, check)
+    upper = (/ (dble(i),i=1,12) /)
+    lower = (/ (dble(i),i=1,6) /)
+    update = 1.0d0
+    call mydgemm(3, 4, 2, upper, lower, update)
+    check = (/-13d0, -31d0, -49d0, -67d0, -31d0, -76d0, -121d0, -166d0/)
+    call assert_equal("dgemm", update, check)
 
   end subroutine
 end program

@@ -8,28 +8,28 @@ contains
     call DPOTRF("U", n, a, n, info)
   end subroutine
 
-  subroutine mydtrsm(m, n, a, b)
-    integer, intent(in) :: m, n
-    double precision, intent(in) :: a(:)
-    double precision :: b(:)
-    call DTRSM("L", "U", "T", "N", m, n, 1.0d0, a, m, b, m)
+  subroutine mydtrsm(ld, nrows, diag, rect)
+    integer, intent(in) :: nrows, ld
+    double precision, intent(in) :: diag(:)
+    double precision :: rect(:)
+    call DTRSM("L", "U", "T", "N", ld, nrows, 1.0d0, diag, ld, rect, ld)
   end subroutine
 
-  subroutine mydsyrk(n, k, a, c)
-    integer, intent(in) :: n, k
-    double precision, intent(in) :: a(:)
-    double precision :: c(:)
-    call dsyrk("U", "T", n, k, -1.0d0, a, k, 1.0d0, c, n)
+  subroutine mydsyrk(ld_diag, ld_rect, rect, diag)
+    integer, intent(in) :: ld_diag, ld_rect
+    double precision, intent(in) :: rect(:)
+    double precision :: diag(:)
+    call dsyrk("U", "T", ld_diag, ld_rect, -1.0d0, rect, ld_rect, 1.0d0, diag, ld_diag)
   end subroutine
 
-  subroutine mydgemm(m, n, a, b, c)
+  subroutine mydgemm(ld, upper_n, lower_n, upper, lower, update)
     ! C = C - B*A^T
     ! C^T = C^T-A^T*B
-    ! A:n*n, B:n*m, C:n*m 
-    integer, intent(in) :: m, n
-    double precision, intent(in) :: a(:), b(:)
-    double precision :: c(:)
-    call dgemm("T", "N", m, n, m, -1.0d0, a, m, b, m, 1.0d0, c, m)
+    ! A(ld, upper_n), B(ld, lower_n), C(upper_n, lower_n)
+    integer, intent(in) :: ld, upper_n, lower_n
+    double precision, intent(in) :: upper(:), lower(:)
+    double precision :: update(:)
+    call dgemm("T", "N", upper_n, lower_n, ld, -1.0d0, upper, ld, lower, ld, 1.0d0, update, upper_n)
   end subroutine
 
 end module

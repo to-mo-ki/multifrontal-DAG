@@ -57,7 +57,7 @@ function to_str_DP(a) result(res)
   character(STR_LENGTH) :: res
   double precision, intent(in) :: a
   ! TODO: 大きすぎる数字への対応
-  write(res, '(f6.3)') a
+  write(res, '(f10.3)') a
 end function
 
 integer function calc_digit(num) result(digit)
