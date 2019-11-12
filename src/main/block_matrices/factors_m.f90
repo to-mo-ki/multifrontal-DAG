@@ -17,7 +17,7 @@ module factors_m
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
-    procedure :: get_block_size
+    procedure :: get_block_size, get_border_info
   end type
 
   public :: create_factors
@@ -129,6 +129,7 @@ contains
   end function
 
   logical function exist_border(this, node)
+    !TODO: 最後のノード判定
     class(factors_c) :: this
     integer, intent(in) :: node
     integer :: nb, nc
@@ -160,5 +161,20 @@ contains
     endif
     
   end function
+
+  subroutine get_border_info(this, node, ssize, wsize)
+    class(factors_c) :: this
+    integer, intent(in) :: node
+    integer, intent(out) :: ssize, wsize
+    integer :: order, block_size, j
+
+    j = this%get_work_start_index(node)
+    block_size = this%get_block_size(j, node)
+    order = this%node_sets%get_length(node)
+    print *, node, j, block_size, order, this%nb
+    ssize = mod(order, this%nb)
+    wsize = block_size - ssize
+
+  end subroutine
 
 end module

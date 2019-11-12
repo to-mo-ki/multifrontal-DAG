@@ -9,7 +9,7 @@ program factors_test
   type(factors_c), pointer :: factors
   type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: ccs
-  integer :: nb
+  integer :: nb, ssize, wsize
 
   nb = 3
   node_sets => create_contiguous_sets((/1, 6, 4/))
@@ -28,6 +28,9 @@ program factors_test
   call check_block_size(2, (/3, 3, 3, 2/))
   call check_block_size(3, (/3, 1/))
   call check_matrix_ptr(factors)
+  
+  call factors%get_border_info(1, ssize, wsize)
+  call assert_equal("border_info:1", (/ssize, wsize/), (/1, 2/))
   
   nb = 3
   node_sets => create_contiguous_sets((/5, 6, 7, 5, 3, 6/))
@@ -51,6 +54,13 @@ program factors_test
   call check_block_size(5, (/3, 3, 3/))
   call check_block_size(6, (/3, 3/))
   call check_matrix_ptr(factors)
+
+  call factors%get_border_info(1, ssize, wsize)
+  call assert_equal("border_info:1", (/ssize, wsize/), (/2, 1/))
+  call factors%get_border_info(3, ssize, wsize)
+  call assert_equal("border_info:3", (/ssize, wsize/), (/1, 2/))
+  call factors%get_border_info(4, ssize, wsize)
+  call assert_equal("border_info:4", (/ssize, wsize/), (/2, 1/))
 
 contains
   subroutine check_num_blocks(check)
