@@ -56,7 +56,7 @@ contains
     upper => factors%get_matrix_ptr(node, upper_idx, col_idx)
     lower => factors%get_matrix_ptr(node, lower_idx, col_idx)
     update_matrix => factors%get_matrix_ptr(node, lower_idx, upper_idx)
-    call mydgemm(upper_n, upper_n, lower_n, upper, lower, update_matrix)
+    call mydgemm(upper_n, lower_n, upper_n, lower, upper, update_matrix)
 
   end subroutine
 end module

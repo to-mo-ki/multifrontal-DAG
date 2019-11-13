@@ -1,6 +1,7 @@
 module border_subroutines_m
   use factors_m
   use border_kernel_m
+  use factorize_kernel_m
   implicit none
   
 contains
@@ -42,23 +43,23 @@ contains
     call factors%get_border_info(node, ssize, wsize)
     rect => factors%get_supernode_ptr(node, i, j)
     diag => factors%get_matrix_ptr(node, i, i)
-    call mydsyrk(ssize, nrow, rect, diag)
+    call mydsyrk(nrow, ssize, rect, diag)
 
   end subroutine
 
-  subroutine border_update(factors, node, i, j, k)
+  subroutine border_update(factors, node, upper_idx, lower_idx, col_idx)
     type(factors_c), pointer :: factors
-    integer, intent(in) :: node, i, j, k
+    integer, intent(in) :: node, upper_idx, lower_idx, col_idx
     double precision, pointer, contiguous :: lower(:), upper(:), update(:)
     integer :: upper_n, lower_n, ssize, wsize
 
-    upper_n = factors%get_block_size(i, node)
-    lower_n = factors%get_block_size(k, node)
+    upper_n = factors%get_block_size(upper_idx, node)
+    lower_n = factors%get_block_size(lower_idx, node)
     call factors%get_border_info(node, ssize, wsize)
-    upper => factors%get_supernode_ptr(node, i, j)
-    lower => factors%get_supernode_ptr(node, k, j)
-    update => factors%get_matrix_ptr(node, k, i)
-    call mydgemm(ssize, upper_n, lower_n, upper, lower, update)
+    upper => factors%get_supernode_ptr(node, upper_idx, col_idx)
+    lower => factors%get_supernode_ptr(node, lower_idx, col_idx)
+    update => factors%get_matrix_ptr(node, lower_idx, upper_idx)
+    call mydgemm(ssize, lower_n, upper_n, lower, upper, update)
 
   end subroutine
 end module

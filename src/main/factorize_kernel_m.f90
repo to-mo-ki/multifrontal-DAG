@@ -22,9 +22,9 @@ contains
     call dsyrk("U", "T", ld_diag, ld_rect, -1.0d0, rect, ld_rect, 1.0d0, diag, ld_diag)
   end subroutine
 
-  subroutine mydgemm(ld, upper_n, lower_n, upper, lower, update)
+  subroutine mydgemm(ld, lower_n, upper_n, lower, upper, update)
     ! C = C - B*A^T
-    ! C^T = C^T-A^T*B
+    ! C^T = C^T-A*B^T
     ! A(ld, upper_n), B(ld, lower_n), C(upper_n, lower_n)
     integer, intent(in) :: ld, upper_n, lower_n
     double precision, intent(in) :: upper(:), lower(:)

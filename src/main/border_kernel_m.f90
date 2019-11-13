@@ -24,8 +24,8 @@ contains
     integer :: diag_size
 
     diag_size = supernode_size*supernode_size
-    call mydtrsm(supernode_size, work_size, diag_supernode(1:diag_size), solve_supernode)
-    call mydgemm(supernode_size, work_size, nrow, solve_supernode, diag_supernode(diag_size+1:), solve_work)
+    call mydtrsm(supernode_size, nrow, diag_supernode(1:diag_size), solve_supernode)
+    call mydgemm(supernode_size, nrow, work_size, solve_supernode, diag_supernode(diag_size+1:), solve_work)
 
   end subroutine
 

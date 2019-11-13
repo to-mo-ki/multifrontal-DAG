@@ -5,6 +5,7 @@ program border_kernel_test
 
   call potrf_test()
   call trsm_test()
+  call trsm_test2()
 contains
 
   subroutine potrf_test()
@@ -38,8 +39,8 @@ contains
     !     [1            ]  LOWER=[1   6  18  0  0] 
     !     [2  2         ]        [4  18  45  0  0] 
     !DIAG=[3  3  3      ]  
-    !     [4  4  4  *   ]  ANSWER= [1  2  3  -24  -60] 
-    !     [5  5  5  *  *]          [4  5  6  -30  -75] 
+    !     [4  4  4  *   ]  ANSWER= [1  2  3  -24  -30] 
+    !     [5  5  5  *  *]          [4  5  6  -60  -75] 
 
     double precision, pointer, contiguous :: diag_a(:), lower_a(:), lower_b(:)
     
@@ -51,10 +52,30 @@ contains
     call border_trsm(diag_a, lower_a, lower_b, 3, 2, 2)
 
     call assert_equal("a", lower_a, (/1d0, 2d0, 3d0, 4d0, 5d0, 6d0/))
-    call assert_equal("b", lower_b, (/-24d0, -60d0, -30d0, -75d0/))
+    call assert_equal("b", lower_b, (/-24d0, -30d0, -60d0, -75d0/))
     
   end subroutine
 
+  subroutine trsm_test2()
+    !     [1            ]  LOWER=[1   6  0  0  0] 
+    !     [2  2         ]        [4  18  0  0  0] 
+    !DIAG=[3  3  *      ]  
+    !     [4  4  *  *   ]  ANSWER= [1  2 -21 -28   -35] 
+    !     [5  5  *  *  *]          [4  5 -66 -88  -110] 
 
+    double precision, pointer, contiguous :: diag_a(:), lower_a(:), lower_b(:)
+    
+    
+    allocate(diag_a(10), lower_a(4), lower_b(6))
+    diag_a = (/1d0, 0d0, 2d0, 2d0,3d0, 3d0, 4d0, 4d0, 5d0, 5d0/)
+    !ここまで
+    lower_a = (/1d0, 6d0, 4d0, 18d0/)
+    lower_b = 0d0
+    call border_trsm(diag_a, lower_a, lower_b, 2, 3, 2)
+
+    call assert_equal("a", lower_a, (/1d0, 2d0, 4d0, 5d0 /))
+    call assert_equal("b", lower_b, (/-9d0, -12d0, -15d0, -27d0, -36d0, -45d0/))
+    
+  end subroutine
   
 end program border_kernel_test

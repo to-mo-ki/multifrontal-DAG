@@ -171,7 +171,6 @@ contains
     j = this%get_work_start_index(node)
     block_size = this%get_block_size(j, node)
     order = this%node_sets%get_length(node)
-    print *, node, j, block_size, order, this%nb
     ssize = mod(order, this%nb)
     wsize = block_size - ssize
 
