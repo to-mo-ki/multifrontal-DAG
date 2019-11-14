@@ -12,6 +12,7 @@ module test_util
     module procedure assert_equal_DP
     module procedure assert_equal_array_DP
     module procedure assert_equal_array_int
+    module procedure assert_equal_array_logical
   end interface
 
 contains
