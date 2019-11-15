@@ -93,6 +93,7 @@ contains
     do node=1, num_node-1
       local => local_index%get_array(node)
       plocal => parent_block_ptr%get_array(node)
+      ptr = 0
       do i=1, size(local)
         block_num = (local(i)-1)/nb + 1
         if(marker(block_num) /= node)then
