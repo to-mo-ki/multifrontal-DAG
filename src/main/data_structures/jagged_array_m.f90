@@ -40,7 +40,7 @@ contains
   function create_jagged_array2(num_length, val) result(this)
     type(jagged_array_c), pointer :: this
     integer :: num_length(:)
-    integer, pointer, contiguous :: val(:)
+    integer, target, contiguous :: val(:)
 
     allocate(this)
     this%set => create_contiguous_sets(num_length)

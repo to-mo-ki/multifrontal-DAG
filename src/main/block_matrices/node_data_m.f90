@@ -2,7 +2,7 @@ module node_data_m
   implicit none
   private
   type, public :: node_data_c
-    integer, public :: nb
+    integer, public :: nb, num_node, max_num_block
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, allocatable :: num_supernode_block(:), num_work_block(:)
     integer, allocatable :: border_supernode_size(:)
@@ -20,7 +20,7 @@ module node_data_m
 contains
   function create_node_data(supernode_size, work_size, nb) result(this)
     type(node_data_c), pointer :: this
-    integer, pointer, contiguous :: supernode_size(:), work_size(:)
+    integer, target, contiguous :: supernode_size(:), work_size(:)
     integer, intent(in) :: nb
     integer :: num_node, i, r
 
@@ -29,6 +29,8 @@ contains
     this%work_size => work_size
     this%nb = nb
     num_node = size(supernode_size)
+    this%num_node = num_node
+    this%max_num_block = maxval(supernode_size+work_size)/nb+1
 
     allocate(this%border_supernode_size(num_node))
     do i=1, num_node
