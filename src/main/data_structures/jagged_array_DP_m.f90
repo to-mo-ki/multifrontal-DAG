@@ -16,7 +16,7 @@ contains
   function create_jagged_array_DP(set, val) result(this)
     type(jagged_array_DP_c), pointer :: this
     type(contiguous_sets_c), pointer :: set
-    double precision, pointer, contiguous :: val(:)
+    double precision, target, contiguous :: val(:)
 
     allocate(this)
     this%set => set
