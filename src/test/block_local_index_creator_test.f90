@@ -12,6 +12,7 @@ program block_local_index_creator_test
 
   call test1
   call test2
+  call test3
   
 contains
   subroutine test1()
@@ -49,6 +50,29 @@ contains
     call assert_equal("parent_block_ptr:2", parent_block_ptr%get_array(2), (/4, 5/))
     call assert_equal("parent_block_ptr:3", parent_block_ptr%get_array(3), (/6, 7/))
     call assert_equal("parent_block_ptr:4", parent_block_ptr%get_array(4), (/8/))
+  end subroutine
+
+  subroutine test3()
+    local_index => create_jagged_array((/3, 2, 3, 1, 0/), (/2, 4, 6, 1, 6, 1, 2, 3, 1/))
+    node_data => create_node_data((/3, 2, 4, 1, 3/), (/3, 2, 3, 1, 0/), 2)
+
+    parent_ptr => create_parent_ptr(node_data, local_index)
+    call assert_equal("parent_ptr:1", parent_ptr%get_length(1), 3)
+    call assert_equal("parent_ptr:2", parent_ptr%get_length(2), 2)
+    call assert_equal("parent_ptr:3", parent_ptr%get_length(3), 2)
+    call assert_equal("parent_ptr:4", parent_ptr%get_length(4), 1)
+
+    parent_block_num => create_parent_block_num(node_data, local_index, parent_ptr)
+    call assert_equal("parent_block_num:1", parent_block_num%get_array(1), (/1, 2, 3/))
+    call assert_equal("parent_block_num:2", parent_block_num%get_array(2), (/1, 3/))
+    call assert_equal("parent_block_num:3", parent_block_num%get_array(3), (/1, 2/))
+    call assert_equal("parent_block_num:4", parent_block_num%get_array(4), (/1/))
+
+    parent_block_ptr => create_parent_block_ptr(node_data, local_index, parent_ptr)
+    call assert_equal("parent_block_ptr:1", parent_block_ptr%get_array(1), (/1, 2, 3/))
+    call assert_equal("parent_block_ptr:2", parent_block_ptr%get_array(2), (/4, 5/))
+    call assert_equal("parent_block_ptr:3", parent_block_ptr%get_array(3), (/6, 8/))
+    call assert_equal("parent_block_ptr:4", parent_block_ptr%get_array(4), (/9/))
   end subroutine
 
   
