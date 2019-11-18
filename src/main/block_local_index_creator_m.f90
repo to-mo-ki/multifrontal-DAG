@@ -5,7 +5,7 @@ module block_local_index_creator_m
   implicit none
   private
 
-  public :: create_parent_ptr, create_parent_block_num, create_parent_block_ptr
+  public :: create_parent_ptr, create_parent_block_num, create_parent_block_ptr, rebuild_val
 contains
 
   function create_parent_ptr(node_data, local_index) result(parent_ptr)
@@ -106,5 +106,21 @@ contains
     enddo
 
   end function
+
+  subroutine rebuild_val(local_index, parent_block_ptr, parent_block_num, num_node, nb)
+    integer, contiguous, intent(inout) :: local_index(:)
+    type(jagged_array_c), pointer :: parent_block_ptr, parent_block_num
+    integer, intent(in) :: num_node, nb
+    integer :: node, i, j
+    integer, pointer, contiguous :: ptr(:), num(:)
+
+    do i=1, size(local_index)
+      local_index(i) = mod(local_index(i), nb)
+      if(local_index(i) == 0)then
+        local_index(i) = nb
+      endif
+    enddo
+
+  end subroutine
 
 end module

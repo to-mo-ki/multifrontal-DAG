@@ -6,7 +6,7 @@ program jagged_array_test
   implicit none
   type(jagged_array_c), pointer :: ccs
   type(contiguous_sets_c), pointer :: set
-  integer, pointer, contiguous :: col(:), row(:)
+  integer, pointer, contiguous :: col(:), row(:), val(:)
 
   call make_ccs(col, row)
   ccs => create_jagged_array(col, row)
@@ -24,6 +24,8 @@ program jagged_array_test
   call assert_equal("get_array(9)", ccs%get_array(9), (/9/))
   call assert_equal("get_array_lengths", ccs%get_array_lengths(), (/3, 4, 3, 2, 3, 2, 2, 1, 1/))
   call assert_equal("get_val", ccs%get_val(), row)
+  val => ccs%get_raw_val()
+  call assert_equal("get_raw_val", ccs%get_raw_val(), row)
   set => ccs%get_set()
   call assert_equal("get_set(1)", set%get_length(1), 3)
   call assert_equal("get_set(2)", set%get_length(2), 4)

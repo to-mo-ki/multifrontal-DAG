@@ -12,6 +12,8 @@ module jagged_array_m
     procedure :: get_array_length
     procedure :: get_num_vals
     procedure :: get_num_arrays
+    ! HACK: get_valとあわせて名前変更
+    procedure :: get_raw_val
     procedure :: get_set
     ! NOTE: テスト用
     procedure :: get_val
@@ -86,6 +88,14 @@ contains
     integer :: val(size(this%val))
 
     val = this%val
+
+  end function
+
+  function get_raw_val(this) result(val)
+    class(jagged_array_c) :: this
+    integer, pointer, contiguous :: val(:)
+
+    val => this%val
 
   end function
 
