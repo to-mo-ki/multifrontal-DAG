@@ -1,6 +1,7 @@
 module block_local_index_creator_m
   use contiguous_sets_m
   use jagged_array_m
+  use jagged_array_3D_m
   use node_data_m
   implicit none
   private
@@ -8,20 +9,19 @@ module block_local_index_creator_m
   public :: create_parent_ptr, create_parent_block_num, create_parent_block_ptr, rebuild_val
 contains
 
-  function create_parent_ptr(node_data, local_index) result(parent_ptr)
+  function create_parent_ptr(local_index, nb, max_num_block) result(parent_ptr)
     type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: parent_ptr
-    integer:: nb, num_node
+    integer, intent(in) :: nb, max_num_block
     integer, pointer, contiguous :: local(:)
-    integer :: node, i, block_num, wsize
+    integer :: num_node, node, i, block_num, wsize
     integer, allocatable :: marker(:)
     integer, allocatable :: lengths(:)
 
-    nb = node_data%nb
-    num_node = node_data%num_node
+    num_node = local_index%get_num_arrays()
 
-    allocate(marker(node_data%max_num_block), lengths(num_node))
+    allocate(marker(max_num_block), lengths(num_node))
     marker = 0
     lengths = 0
     do node=1, num_node-1
@@ -39,21 +39,19 @@ contains
 
   end function
 
-  function create_parent_block_num(node_data, local_index, set) result(parent_block_num)
-    type(node_data_c), pointer :: node_data
+  function create_parent_block_num(local_index, set, nb, max_num_block) result(parent_block_num)
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
-    integer :: nb, num_node
+    integer, intent(in) :: nb, max_num_block
     type(jagged_array_c), pointer :: parent_block_num
     integer, pointer, contiguous :: local(:), plocal(:)
-    integer :: node, i, block_num, wsize, ptr
+    integer :: num_node, node, i, block_num, wsize, ptr
     integer, allocatable :: marker(:)
 
-    nb = node_data%nb
-    num_node = node_data%num_node
+    num_node = local_index%get_num_arrays()
 
     parent_block_num => create_jagged_array(set)
-    allocate(marker(node_data%max_num_block))
+    allocate(marker(max_num_block))
     marker = 0
     do node=1, num_node-1
       local => local_index%get_array(node)
@@ -71,21 +69,19 @@ contains
 
   end function
 
-  function create_parent_block_ptr(node_data, local_index, set) result(parent_block_ptr)
-    type(node_data_c), pointer :: node_data
+  function create_parent_block_ptr(local_index, set, nb, max_num_block) result(parent_block_ptr)
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
-    integer :: nb, num_node
+    integer, intent(in) :: nb, max_num_block
     type(jagged_array_c), pointer :: parent_block_ptr
     integer, pointer, contiguous :: local(:), plocal(:)
-    integer :: node, i, block_num, wsize, offset, ptr
+    integer :: num_node, node, i, block_num, wsize, offset, ptr
     integer, allocatable :: marker(:)
 
-    nb = node_data%nb
-    num_node = node_data%num_node
+    num_node = local_index%get_num_arrays()
 
     parent_block_ptr => create_jagged_array(set)
-    allocate(marker(node_data%max_num_block))
+    allocate(marker(max_num_block))
 
     marker = 0
     ptr = 0
@@ -107,13 +103,11 @@ contains
 
   end function
 
-  subroutine rebuild_val(local_index, parent_block_ptr, parent_block_num, num_node, nb)
+  subroutine rebuild_val(local_index, nb)
     integer, contiguous, intent(inout) :: local_index(:)
-    type(jagged_array_c), pointer :: parent_block_ptr, parent_block_num
-    integer, intent(in) :: num_node, nb
-    integer :: node, i, j
-    integer, pointer, contiguous :: ptr(:), num(:)
-
+    integer, intent(in) :: nb
+    integer :: i
+    
     do i=1, size(local_index)
       local_index(i) = mod(local_index(i), nb)
       if(local_index(i) == 0)then
