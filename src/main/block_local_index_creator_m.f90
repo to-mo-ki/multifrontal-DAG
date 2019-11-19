@@ -6,10 +6,10 @@ module block_local_index_creator_m
   implicit none
   private
 
-  public :: create_parent_ptr, create_parent_block_num, create_parent_block_ptr, rebuild_val
+  public :: create_num_blocks, create_block_num, create_num_indices, rebuild_val
 contains
 
-  function create_parent_ptr(local_index, nb) result(parent_ptr)
+  function create_num_blocks(local_index, nb) result(parent_ptr)
     type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: parent_ptr
@@ -38,20 +38,18 @@ contains
 
   end function
 
-  function create_parent_block_num(local_index, set, nb) result(parent_block_num)
+  function create_block_num(local_index, set, nb) result(parent_block_num)
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
     integer, intent(in) :: nb
     type(jagged_array_c), pointer :: parent_block_num
     integer, pointer, contiguous :: local(:), plocal(:)
-    integer :: num_node, node, i, block_num, wsize, ptr, marker
-
-    num_node = local_index%get_num_arrays()
+    integer :: node, i, block_num, wsize, ptr, marker
 
     parent_block_num => create_jagged_array(set)
 
     marker = 0
-    do node=1, num_node-1
+    do node=1, local_index%get_num_arrays()-1
       local => local_index%get_array(node)
       plocal => parent_block_num%get_array(node)
       ptr = 0
@@ -67,35 +65,34 @@ contains
 
   end function
 
-  function create_parent_block_ptr(local_index, set, nb) result(parent_block_ptr)
+  function create_num_indices(local_index, set, nb) result(num_indices)
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
     integer, intent(in) :: nb
-    type(jagged_array_c), pointer :: parent_block_ptr
-    integer, pointer, contiguous :: local(:), plocal(:)
-    integer :: num_node, node, i, block_num, wsize, offset, ptr, marker
+    type(contiguous_sets_c), pointer :: num_indices
+    integer, pointer, contiguous :: local(:), array(:)
+    integer :: num_node, node, i, block_num, ptr, marker, prev_block_pos
 
-    num_node = local_index%get_num_arrays()
-
-    parent_block_ptr => create_jagged_array(set)
-    
+    allocate(array(set%get_num_elements()))
     ptr = 0
-    offset = 0
-    do node=1, num_node-1
+    do node=1, local_index%get_num_arrays()-1
       local => local_index%get_array(node)
-      plocal => parent_block_ptr%get_array(node)
-      ptr = 0
-      marker = 0
-      do i=1, size(local)
-        block_num = (local(i)-1)/nb + 1
+      marker = 1
+      prev_block_pos = 0
+      do i=1, size(local)-1
+        block_num = (local(i+1)-1)/nb + 1
         if(marker /= block_num)then
           marker = block_num
           ptr = ptr+1
-          plocal(ptr) = offset + i
+          array(ptr) = i-prev_block_pos
+          prev_block_pos = i
         endif
       enddo
-      offset = offset + size(local)
+      ptr = ptr+1
+      array(ptr) = size(local)-prev_block_pos
     enddo
+
+    num_indices => create_contiguous_sets(array)
 
   end function
 

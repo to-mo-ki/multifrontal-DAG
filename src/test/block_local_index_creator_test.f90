@@ -7,9 +7,8 @@ program block_local_index_creator_test
   use test_util
   implicit none
   type(jagged_array_c), pointer :: local_index
-  type(node_data_c), pointer :: node_data
-  type(jagged_array_c), pointer :: parent_block_num, parent_block_ptr
-  type(contiguous_sets_c), pointer :: parent_ptr
+  type(jagged_array_c), pointer :: block_num
+  type(contiguous_sets_c), pointer :: num_blocks, num_indices
   type(jagged_array_3D_c), pointer :: block_local_index
   integer, pointer, contiguous :: local_index_val(:)
 
@@ -21,14 +20,15 @@ contains
   subroutine test1()
     local_index => create_jagged_array((/4, 0/), (/2, 3, 7, 8/))
     
-    parent_ptr => create_parent_ptr(local_index, 3)
-    call assert_equal("parent_ptr:1", parent_ptr%get_length(1), 2)
+    num_blocks => create_num_blocks(local_index, 3)
+    call assert_equal("num_blocks:1", num_blocks%get_length(1), 2)
 
-    parent_block_num => create_parent_block_num(local_index, parent_ptr, 3)
-    call assert_equal("parent_block_num", parent_block_num%get_array(1), (/1, 3/))
+    block_num => create_block_num(local_index, num_blocks, 3)
+    call assert_equal("block_num", block_num%get_array(1), (/1, 3/))
 
-    parent_block_ptr => create_parent_block_ptr(local_index, parent_ptr, 3)
-    call assert_equal("parent_block_ptr", parent_block_ptr%get_array(1), (/1, 3/))
+    num_indices => create_num_indices(local_index, num_blocks, 3)
+    call assert_equal("num_indices:1", num_indices%get_length(1), 2)
+    call assert_equal("num_indices:2", num_indices%get_length(2), 2)
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 3)
@@ -39,23 +39,27 @@ contains
   subroutine test2()
     local_index => create_jagged_array((/3, 2, 2, 1, 0/), (/2, 4, 6, 1, 5, 2, 3, 1/))
 
-    parent_ptr => create_parent_ptr(local_index, 2)
-    call assert_equal("parent_ptr:1", parent_ptr%get_length(1), 3)
-    call assert_equal("parent_ptr:2", parent_ptr%get_length(2), 2)
-    call assert_equal("parent_ptr:3", parent_ptr%get_length(3), 2)
-    call assert_equal("parent_ptr:4", parent_ptr%get_length(4), 1)
+    num_blocks => create_num_blocks(local_index, 2)
+    call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
+    call assert_equal("num_blocks:2", num_blocks%get_length(2), 2)
+    call assert_equal("num_blocks:3", num_blocks%get_length(3), 2)
+    call assert_equal("num_blocks:4", num_blocks%get_length(4), 1)
 
-    parent_block_num => create_parent_block_num(local_index, parent_ptr, 2)
-    call assert_equal("parent_block_num:1", parent_block_num%get_array(1), (/1, 2, 3/))
-    call assert_equal("parent_block_num:2", parent_block_num%get_array(2), (/1, 3/))
-    call assert_equal("parent_block_num:3", parent_block_num%get_array(3), (/1, 2/))
-    call assert_equal("parent_block_num:4", parent_block_num%get_array(4), (/1/))
+    block_num => create_block_num(local_index, num_blocks, 2)
+    call assert_equal("block_num:1", block_num%get_array(1), (/1, 2, 3/))
+    call assert_equal("block_num:2", block_num%get_array(2), (/1, 3/))
+    call assert_equal("block_num:3", block_num%get_array(3), (/1, 2/))
+    call assert_equal("block_num:4", block_num%get_array(4), (/1/))
 
-    parent_block_ptr => create_parent_block_ptr(local_index, parent_ptr, 2)
-    call assert_equal("parent_block_ptr:1", parent_block_ptr%get_array(1), (/1, 2, 3/))
-    call assert_equal("parent_block_ptr:2", parent_block_ptr%get_array(2), (/4, 5/))
-    call assert_equal("parent_block_ptr:3", parent_block_ptr%get_array(3), (/6, 7/))
-    call assert_equal("parent_block_ptr:4", parent_block_ptr%get_array(4), (/8/))
+    num_indices => create_num_indices(local_index, num_blocks, 2)
+    call assert_equal("num_indices:1", num_indices%get_length(1), 1)
+    call assert_equal("num_indices:2", num_indices%get_length(2), 1)
+    call assert_equal("num_indices:3", num_indices%get_length(3), 1)
+    call assert_equal("num_indices:4", num_indices%get_length(4), 1)
+    call assert_equal("num_indices:5", num_indices%get_length(5), 1)
+    call assert_equal("num_indices:6", num_indices%get_length(6), 1)
+    call assert_equal("num_indices:7", num_indices%get_length(7), 1)
+    call assert_equal("num_indices:8", num_indices%get_length(8), 1)
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
@@ -66,23 +70,27 @@ contains
   subroutine test3()
     local_index => create_jagged_array((/3, 2, 3, 1, 0/), (/2, 4, 7, 1, 6, 1, 2, 3, 1/))
 
-    parent_ptr => create_parent_ptr(local_index, 2)
-    call assert_equal("parent_ptr:1", parent_ptr%get_length(1), 3)
-    call assert_equal("parent_ptr:2", parent_ptr%get_length(2), 2)
-    call assert_equal("parent_ptr:3", parent_ptr%get_length(3), 2)
-    call assert_equal("parent_ptr:4", parent_ptr%get_length(4), 1)
+    num_blocks => create_num_blocks(local_index, 2)
+    call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
+    call assert_equal("num_blocks:2", num_blocks%get_length(2), 2)
+    call assert_equal("num_blocks:3", num_blocks%get_length(3), 2)
+    call assert_equal("num_blocks:4", num_blocks%get_length(4), 1)
 
-    parent_block_num => create_parent_block_num(local_index, parent_ptr, 2)
-    call assert_equal("parent_block_num:1", parent_block_num%get_array(1), (/1, 2, 4/))
-    call assert_equal("parent_block_num:2", parent_block_num%get_array(2), (/1, 3/))
-    call assert_equal("parent_block_num:3", parent_block_num%get_array(3), (/1, 2/))
-    call assert_equal("parent_block_num:4", parent_block_num%get_array(4), (/1/))
+    block_num => create_block_num(local_index, num_blocks, 2)
+    call assert_equal("block_num:1", block_num%get_array(1), (/1, 2, 4/))
+    call assert_equal("block_num:2", block_num%get_array(2), (/1, 3/))
+    call assert_equal("block_num:3", block_num%get_array(3), (/1, 2/))
+    call assert_equal("block_num:4", block_num%get_array(4), (/1/))
 
-    parent_block_ptr => create_parent_block_ptr(local_index, parent_ptr, 2)
-    call assert_equal("parent_block_ptr:1", parent_block_ptr%get_array(1), (/1, 2, 3/))
-    call assert_equal("parent_block_ptr:2", parent_block_ptr%get_array(2), (/4, 5/))
-    call assert_equal("parent_block_ptr:3", parent_block_ptr%get_array(3), (/6, 8/))
-    call assert_equal("parent_block_ptr:4", parent_block_ptr%get_array(4), (/9/))
+    num_indices => create_num_indices(local_index, num_blocks, 2)
+    call assert_equal("num_indices:1", num_indices%get_length(1), 1)
+    call assert_equal("num_indices:2", num_indices%get_length(2), 1)
+    call assert_equal("num_indices:3", num_indices%get_length(3), 1)
+    call assert_equal("num_indices:4", num_indices%get_length(4), 1)
+    call assert_equal("num_indices:5", num_indices%get_length(5), 1)
+    call assert_equal("num_indices:6", num_indices%get_length(6), 2)
+    call assert_equal("num_indices:7", num_indices%get_length(7), 1)
+    call assert_equal("num_indices:8", num_indices%get_length(8), 1)
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
