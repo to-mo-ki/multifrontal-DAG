@@ -6,9 +6,9 @@ program block_local_index_creator_test
   use node_data_m
   use test_util
   implicit none
-  type(jagged_array_c), pointer :: local_index
-  type(jagged_array_c), pointer :: block_num
-  type(contiguous_sets_c), pointer :: num_blocks, num_indices
+  type(jagged_array_c), pointer :: local_index, jag_2d
+  type(jagged_array_c), pointer :: block_num, state
+  type(contiguous_sets_c), pointer :: num_blocks, num_indices, node_set
   type(jagged_array_3D_c), pointer :: block_local_index
   integer, pointer, contiguous :: local_index_val(:)
 
@@ -19,6 +19,7 @@ program block_local_index_creator_test
 contains
   subroutine test1()
     local_index => create_jagged_array((/4, 0/), (/2, 3, 7, 8/))
+    node_set => create_contiguous_sets((/5, 8/))
     
     num_blocks => create_num_blocks(local_index, 3)
     call assert_equal("num_blocks:1", num_blocks%get_length(1), 2)
@@ -34,10 +35,16 @@ contains
     call rebuild_val(local_index_val, 3)
     call assert_equal("rebuild_val", local_index_val, (/2, 3, 1, 2/))
 
+    jag_2d => create_jagged_array(num_indices, local_index_val)
+    block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
+    state => create_state(node_set, num_blocks, block_local_index, 3)
+    call assert_equal("state", state%get_val(), (/1, 2/))
+
   end subroutine
 
   subroutine test2()
     local_index => create_jagged_array((/3, 2, 2, 1, 0/), (/2, 4, 6, 1, 5, 2, 3, 1/))
+    node_set => create_contiguous_sets((/3, 2, 4, 1, 3/))
 
     num_blocks => create_num_blocks(local_index, 2)
     call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
@@ -65,10 +72,16 @@ contains
     call rebuild_val(local_index_val, 2)
     call assert_equal("rebuild_val", local_index_val, (/2, 2, 2, 1, 1, 2, 1, 1/))
 
+    jag_2d => create_jagged_array(num_indices, local_index_val)
+    block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
+    state => create_state(node_set, num_blocks, block_local_index, 2)
+    call assert_equal("state", state%get_val(), (/2, 0, 2, 0, 2, 0, 2, 2/))
+
   end subroutine
 
   subroutine test3()
     local_index => create_jagged_array((/3, 2, 3, 1, 0/), (/2, 4, 7, 1, 6, 1, 2, 3, 1/))
+    node_set => create_contiguous_sets((/3, 2, 4, 1, 3/))
 
     num_blocks => create_num_blocks(local_index, 2)
     call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
@@ -95,6 +108,11 @@ contains
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
     call assert_equal("rebuild_val", local_index_val, (/2, 2, 1, 1, 2, 1, 2, 1, 1/))
+
+    jag_2d => create_jagged_array(num_indices, local_index_val)
+    block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
+    state => create_state(node_set, num_blocks, block_local_index, 2)
+    call assert_equal("state", state%get_val(), (/2, 0, 2, 0, 2, 2, 0, 2/))
 
   end subroutine
 

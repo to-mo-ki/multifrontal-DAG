@@ -24,6 +24,7 @@ module jagged_array_m
     module procedure :: create_jagged_array1
     module procedure :: create_jagged_array2
     module procedure :: create_jagged_array3
+    module procedure :: create_jagged_array4
   end interface
 
   public :: create_jagged_array
@@ -57,6 +58,17 @@ contains
     allocate(this)
     this%set => set
     allocate(this%val(set%get_num_elements()))
+
+  end function
+
+  function create_jagged_array4(set, val) result(this)
+    type(jagged_array_c), pointer :: this
+    type(contiguous_sets_c), pointer :: set
+    integer, target, contiguous :: val(:)
+
+    allocate(this)
+    this%set => set
+    this%val => val
 
   end function
 
