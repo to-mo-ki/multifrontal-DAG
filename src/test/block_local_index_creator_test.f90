@@ -11,6 +11,8 @@ program block_local_index_creator_test
   type(contiguous_sets_c), pointer :: num_blocks, num_indices, node_set
   type(jagged_array_3D_c), pointer :: block_local_index
   integer, pointer, contiguous :: local_index_val(:)
+  integer, pointer, contiguous :: ans(:)
+  integer :: i
 
   call test1
   call test2
@@ -47,10 +49,12 @@ contains
     node_set => create_contiguous_sets((/3, 2, 4, 1, 3/))
 
     num_blocks => create_num_blocks(local_index, 2)
-    call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
-    call assert_equal("num_blocks:2", num_blocks%get_length(2), 2)
-    call assert_equal("num_blocks:3", num_blocks%get_length(3), 2)
-    call assert_equal("num_blocks:4", num_blocks%get_length(4), 1)
+    call start_tests("num_blocks")
+    allocate(ans(4), source=(/3, 2, 2, 1/))
+    do i=1, 4
+      call add_test(i, num_blocks%get_length(i), ans(i)) 
+    enddo
+    call end_tests()
 
     block_num => create_block_num(local_index, num_blocks, 2)
     call assert_equal("block_num:1", block_num%get_array(1), (/1, 2, 3/))
@@ -59,14 +63,13 @@ contains
     call assert_equal("block_num:4", block_num%get_array(4), (/1/))
 
     num_indices => create_num_indices(local_index, num_blocks, 2)
-    call assert_equal("num_indices:1", num_indices%get_length(1), 1)
-    call assert_equal("num_indices:2", num_indices%get_length(2), 1)
-    call assert_equal("num_indices:3", num_indices%get_length(3), 1)
-    call assert_equal("num_indices:4", num_indices%get_length(4), 1)
-    call assert_equal("num_indices:5", num_indices%get_length(5), 1)
-    call assert_equal("num_indices:6", num_indices%get_length(6), 1)
-    call assert_equal("num_indices:7", num_indices%get_length(7), 1)
-    call assert_equal("num_indices:8", num_indices%get_length(8), 1)
+    
+    allocate(ans(8), source=(/1, 1, 1, 1, 1, 1, 1, 1/))
+    call start_tests("num_indices")
+    do i=1, 8
+      call add_test(i, num_indices%get_length(i), ans(i))
+    enddo
+    call end_tests()
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
@@ -84,10 +87,13 @@ contains
     node_set => create_contiguous_sets((/3, 2, 4, 1, 3/))
 
     num_blocks => create_num_blocks(local_index, 2)
-    call assert_equal("num_blocks:1", num_blocks%get_length(1), 3)
-    call assert_equal("num_blocks:2", num_blocks%get_length(2), 2)
-    call assert_equal("num_blocks:3", num_blocks%get_length(3), 2)
-    call assert_equal("num_blocks:4", num_blocks%get_length(4), 1)
+    
+    call start_tests("num_blocks")
+    allocate(ans(4), source=(/3, 2, 2, 1/))
+    do i=1, 4
+      call add_test(i, num_blocks%get_length(i), ans(i))
+    enddo
+    call end_tests
 
     block_num => create_block_num(local_index, num_blocks, 2)
     call assert_equal("block_num:1", block_num%get_array(1), (/1, 2, 4/))
@@ -96,14 +102,12 @@ contains
     call assert_equal("block_num:4", block_num%get_array(4), (/1/))
 
     num_indices => create_num_indices(local_index, num_blocks, 2)
-    call assert_equal("num_indices:1", num_indices%get_length(1), 1)
-    call assert_equal("num_indices:2", num_indices%get_length(2), 1)
-    call assert_equal("num_indices:3", num_indices%get_length(3), 1)
-    call assert_equal("num_indices:4", num_indices%get_length(4), 1)
-    call assert_equal("num_indices:5", num_indices%get_length(5), 1)
-    call assert_equal("num_indices:6", num_indices%get_length(6), 2)
-    call assert_equal("num_indices:7", num_indices%get_length(7), 1)
-    call assert_equal("num_indices:8", num_indices%get_length(8), 1)
+    allocate(ans(8), source=(/1, 1, 1, 1, 1, 2, 1, 1/))
+    call start_tests("num_indices")
+    do i=1, 8
+      call add_test(i, num_indices%get_length(i), ans(i))
+    enddo
+    call end_tests
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)

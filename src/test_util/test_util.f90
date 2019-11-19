@@ -4,6 +4,7 @@ module test_util
   use log_m
   use assert_equal_m
   use assert_equal_array_m
+  use tests_m
   implicit none
   interface assert_equal
     module procedure assert_equal_int
