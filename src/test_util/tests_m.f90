@@ -9,6 +9,7 @@ module tests_m
   interface add_test
     procedure :: add_test1
     procedure :: add_test2
+    procedure :: add_test3
   end interface
 
 contains
@@ -24,7 +25,7 @@ contains
     character(*) :: message
     integer :: answer, check
     if(answer /= check)then
-      call add_node(message, answer, check)
+      call add_node(message, to_str(answer), to_str(check))
     endif
   end subroutine
 
@@ -33,6 +34,16 @@ contains
     integer :: answer, check
     call add_test1(to_str(idx)//"-th element", answer, check)
   end subroutine
+
+  subroutine add_test3(message, answer, check)
+    character(*) :: message
+    logical :: answer, check
+    if(answer /= check)then
+      call add_node(message, to_str(answer), to_str(check))
+    endif
+  end subroutine
+
+
 
   subroutine end_tests()
     if(exist_node())then

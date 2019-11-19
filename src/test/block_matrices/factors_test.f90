@@ -66,25 +66,37 @@ contains
   subroutine check_num_blocks(check)
     integer, intent(in) :: check(*)
     integer :: i
+
+    call start_tests("num_block")
     do i=1, factors%get_num_node()
-      call assert_equal("num_block:node="//to_str(i), factors%get_num_block(i), check(i))
+      call add_test("node="//to_str(i), factors%get_num_block(i), check(i))
     enddo
+    call end_tests()
+
   end subroutine
   
   subroutine check_work_start_indices(check)
     integer, intent(in) :: check(*)
     integer :: i
+
+    call start_tests("work_start_index")
     do i=1, factors%get_num_node()-1
-      call assert_equal("work_start_index:node="//to_str(i), factors%get_work_start_index(i), check(i))
+      call add_test("node="//to_str(i), factors%get_work_start_index(i), check(i))
     enddo
+    call end_tests()
+
   end subroutine
   
   subroutine check_exist_border(check)
     logical, intent(in) :: check(*)
     integer :: i
+    
+    call start_tests("exist_border")
     do i=1, factors%get_num_node()
-      call assert_equal("exist_border:node="//to_str(i), factors%exist_border(i), check(i))
+      call add_test("node="//to_str(i), factors%exist_border(i), check(i))
     enddo
+    call end_tests()
+
   end subroutine
   
   subroutine check_matrix_size(node, check)
@@ -92,14 +104,16 @@ contains
     double precision, pointer, contiguous :: matrix(:)
     integer :: i, j, ptr
     
+    call start_tests("matrix size")
     ptr = 1
     do j=1, factors%get_num_block(node)
       do i=j, factors%get_num_block(node)
         matrix => factors%get_matrix_ptr(node, i, j)
-        call assert_equal("matrix size:node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), size(matrix), check(ptr))
+        call add_test("node="//to_str(node)//", i="//to_str(i)//", j="//to_str(j), size(matrix), check(ptr))
         ptr = ptr + 1
       enddo
     enddo
+    call end_tests()
   
   end subroutine
 
@@ -107,9 +121,12 @@ contains
     integer, intent(in) :: node, check(:)
     integer :: i
     
+    call start_tests("get_block_size")
     do i=1, size(check)
-      call assert_equal("get_block_size:"//to_str(i)//", "//to_str(node), factors%get_block_size(i, node), check(i))
+      call add_test(to_str(i)//", "//to_str(node), factors%get_block_size(i, node), check(i))
     enddo
+    call end_tests()
+
   end subroutine
 
 end program factors_test

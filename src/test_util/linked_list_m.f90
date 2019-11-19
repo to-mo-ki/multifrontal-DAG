@@ -3,8 +3,7 @@ module linked_list_m
   private
   type, public :: node_c
     type(node_c), pointer :: next
-    character(:), allocatable :: message
-    integer :: answer, check
+    character(:), allocatable :: message, answer, check
   end type
   type(node_c), pointer :: first_node => null()
 
@@ -13,14 +12,14 @@ module linked_list_m
 contains
 
   subroutine add_node(message, answer, check)
-    character(*) :: message
-    integer, intent(in) :: answer, check
+    character(*), intent(in) :: message
+    character(*), intent(in) :: answer, check
     type(node_c), pointer :: new_node, node
 
     allocate(new_node)
     allocate(new_node%message, source=message)
-    new_node%answer = answer
-    new_node%check = check
+    allocate(new_node%answer, source=answer)
+    allocate(new_node%check, source=check)
     if(.not. associated(first_node))then
       first_node => new_node
       return
