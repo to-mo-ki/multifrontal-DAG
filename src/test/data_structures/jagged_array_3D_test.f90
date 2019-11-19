@@ -27,6 +27,25 @@ program jagged_array_3D_test
   call assert_equal("(3, 3)", jag_3d%get_array(3, 3), (/331, 332/))
   call assert_equal("(1, 4)", jag_3d%get_array(1, 4), (/411, 412, 413/))
   call assert_equal("(3, 4)", jag_3d%get_array(3, 4), (/431, 432, 433, 434/))
+  call assert_equal("get_num_1d", jag_3d%get_num_1d(), 5)
+  call assert_equal("get_num_2d:1", jag_3d%get_num_2d(1), 4)
+  call assert_equal("get_num_2d:2", jag_3d%get_num_2d(2), 2)
+  call assert_equal("get_num_2d:3", jag_3d%get_num_2d(3), 3)
+  call assert_equal("get_num_2d:4", jag_3d%get_num_2d(4), 3)
+  call assert_equal("get_num_2d:5", jag_3d%get_num_2d(5), 0)
+
+  call assert_equal("length:(1, 1)", jag_3d%get_num_3d(1, 1), 3)
+  call assert_equal("length:(2, 1)", jag_3d%get_num_3d(2, 1), 3)
+  call assert_equal("length:(3, 1)", jag_3d%get_num_3d(3, 1), 1)
+  call assert_equal("length:(4, 1)", jag_3d%get_num_3d(4, 1), 2)
+  call assert_equal("length:(1, 2)", jag_3d%get_num_3d(1, 2), 2)
+  call assert_equal("length:(2, 2)", jag_3d%get_num_3d(2, 2), 2)
+  call assert_equal("length:(1, 3)", jag_3d%get_num_3d(1, 3), 3)
+  call assert_equal("length:(2, 3)", jag_3d%get_num_3d(2, 3), 3)
+  call assert_equal("length:(3, 3)", jag_3d%get_num_3d(3, 3), 2)
+  call assert_equal("length:(1, 4)", jag_3d%get_num_3d(1, 4), 3)
+  call assert_equal("length:(2, 4)", jag_3d%get_num_3d(2, 4), 0)
+  call assert_equal("length:(3, 4)", jag_3d%get_num_3d(3, 4), 4)
 
   !array[1][1] = new string[] { "111", "112", "113" };
   !array[1][2] = new string[] { "121", "122", "123" };
