@@ -12,6 +12,8 @@ module jagged_array_m
     procedure :: get_array_length
     procedure :: get_num_vals
     procedure :: get_num_arrays
+    ! HACK: get_valとあわせて名前変更
+    procedure :: get_raw_val
     procedure :: get_set
     ! NOTE: テスト用
     procedure :: get_val
@@ -22,6 +24,7 @@ module jagged_array_m
     module procedure :: create_jagged_array1
     module procedure :: create_jagged_array2
     module procedure :: create_jagged_array3
+    module procedure :: create_jagged_array4
   end interface
 
   public :: create_jagged_array
@@ -40,7 +43,7 @@ contains
   function create_jagged_array2(num_length, val) result(this)
     type(jagged_array_c), pointer :: this
     integer :: num_length(:)
-    integer, pointer, contiguous :: val(:)
+    integer, target, contiguous :: val(:)
 
     allocate(this)
     this%set => create_contiguous_sets(num_length)
@@ -55,6 +58,17 @@ contains
     allocate(this)
     this%set => set
     allocate(this%val(set%get_num_elements()))
+
+  end function
+
+  function create_jagged_array4(set, val) result(this)
+    type(jagged_array_c), pointer :: this
+    type(contiguous_sets_c), pointer :: set
+    integer, target, contiguous :: val(:)
+
+    allocate(this)
+    this%set => set
+    this%val => val
 
   end function
 
@@ -86,6 +100,14 @@ contains
     integer :: val(size(this%val))
 
     val = this%val
+
+  end function
+
+  function get_raw_val(this) result(val)
+    class(jagged_array_c) :: this
+    integer, pointer, contiguous :: val(:)
+
+    val => this%val
 
   end function
 
