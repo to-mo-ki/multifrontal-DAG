@@ -7,7 +7,7 @@ program block_local_index_creator_test
   use test_util
   implicit none
   type(jagged_array_c), pointer :: local_index, jag_2d
-  type(jagged_array_c), pointer :: block_num, state
+  type(jagged_array_c), pointer :: block_num, over
   type(contiguous_sets_c), pointer :: num_blocks, num_indices, node_set
   type(jagged_array_3D_c), pointer :: block_local_index
   integer, pointer, contiguous :: local_index_val(:)
@@ -39,8 +39,8 @@ contains
 
     jag_2d => create_jagged_array(num_indices, local_index_val)
     block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
-    state => create_state(node_set, num_blocks, block_local_index, 3)
-    call assert_equal("state", state%get_val(), (/1, 2/))
+    over => create_over(node_set, num_blocks, block_local_index, 3)
+    call assert_equal("over", over%get_val(), (/1, 0/))
 
   end subroutine
 
@@ -77,8 +77,8 @@ contains
 
     jag_2d => create_jagged_array(num_indices, local_index_val)
     block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
-    state => create_state(node_set, num_blocks, block_local_index, 2)
-    call assert_equal("state", state%get_val(), (/2, 0, 2, 0, 2, 0, 2, 2/))
+    over => create_over(node_set, num_blocks, block_local_index, 2)
+    call assert_equal("over", over%get_val(), (/0, -1, 0, -1, 0, -1, 0, 0/))
 
   end subroutine
 
@@ -115,8 +115,8 @@ contains
 
     jag_2d => create_jagged_array(num_indices, local_index_val)
     block_local_index => create_jagged_array_3D(num_blocks, jag_2d)
-    state => create_state(node_set, num_blocks, block_local_index, 2)
-    call assert_equal("state", state%get_val(), (/2, 0, 2, 0, 2, 2, 0, 2/))
+    over => create_over(node_set, num_blocks, block_local_index, 2)
+    call assert_equal("over", over%get_val(), (/0, -1, 0, -1, 0, 0, -1, 0/))
 
   end subroutine
 

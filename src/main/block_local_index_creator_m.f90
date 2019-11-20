@@ -6,7 +6,7 @@ module block_local_index_creator_m
   implicit none
   private
 
-  public :: create_num_blocks, create_block_num, create_num_indices, rebuild_val, create_state
+  public :: create_num_blocks, create_block_num, create_num_indices, rebuild_val, create_over
 contains
 
   function create_num_blocks(local_index, nb) result(parent_ptr)
@@ -110,31 +110,28 @@ contains
 
   end subroutine
 
-  function create_state(node_set, set, block_local_index, nb) result(state)
+  function create_over(node_set, set, block_local_index, nb) result(over)
     type(contiguous_sets_c), pointer :: node_set
     type(contiguous_sets_c), pointer :: set
     type(jagged_array_3D_c), pointer :: block_local_index
     integer, intent(in) :: nb
-    type(jagged_array_c), pointer :: state
+    type(jagged_array_c), pointer :: over
     integer, pointer, contiguous :: array(:)
     integer :: offset, block_num, node, num_node, i
 
     num_node = block_local_index%get_num_1d()
-    state => create_jagged_array(set)
+    over => create_jagged_array(set)
     do node=1, num_node
-      array => state%get_array(node)
+      array => over%get_array(node)
       ! supernode_size
       offset = mod(node_set%get_length(node), nb)
       do i=1, block_local_index%get_num_2d(node)
         offset = offset + block_local_index%get_num_3d(i, node)
-        if(offset > nb)then
+        if(offset >= nb)then
           offset = offset - nb
-          array(i) = 1
-        else if(offset == nb)then
-          offset = offset - nb
-          array(i) = 2
+          array(i) = offset
         else
-          array(i) = 0
+          array(i) = -1
         endif
       enddo
     enddo
