@@ -10,6 +10,7 @@ module tests_m
     procedure :: add_test1
     procedure :: add_test2
     procedure :: add_test3
+    procedure :: add_test4
   end interface
 
 contains
@@ -43,7 +44,13 @@ contains
     endif
   end subroutine
 
-
+  subroutine add_test4(message, answer, check)
+    character(*) :: message
+    double precision :: answer, check
+    if(answer /= check)then
+      call add_node(message, to_str(answer), to_str(check))
+    endif
+  end subroutine
 
   subroutine end_tests()
     if(exist_node())then
@@ -59,7 +66,7 @@ contains
     type(node_c), pointer :: node
     node => get_first_node()
     do while(associated(node))
-      write(*,*) node%message, "  ", trim(to_str(node%answer)), ' is NOT EQUAL to ', trim(to_str(node%check))
+      write(*,*) node%message, "  ", trim(node%answer), ' is NOT EQUAL to ', trim(node%check)
       node => node%next
     enddo
   end subroutine
