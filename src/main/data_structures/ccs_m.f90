@@ -18,7 +18,7 @@ contains
   function create_ccs(structure, val) result(this)
     type(ccs_c), pointer :: this
     type(jagged_array_c), pointer, intent(in) :: structure
-    double precision, pointer, contiguous, intent(in) :: val(:)
+    double precision, target, contiguous, intent(in) :: val(:)
     type(contiguous_sets_c), pointer :: ptr
 
     allocate(this)
