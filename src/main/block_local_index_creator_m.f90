@@ -2,7 +2,6 @@ module block_local_index_creator_m
   use contiguous_sets_m
   use jagged_array_m
   use jagged_array_3D_m
-  use node_data_m
   implicit none
   private
 
@@ -10,7 +9,6 @@ module block_local_index_creator_m
 contains
 
   function create_num_blocks(local_index, nb) result(parent_ptr)
-    type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: parent_ptr
     integer, intent(in) :: nb

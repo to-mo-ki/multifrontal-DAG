@@ -3,7 +3,6 @@ program block_local_index_creator_test
   use jagged_array_m
   use jagged_array_3D_m
   use block_local_index_creator_m
-  use node_data_m
   use test_util
   implicit none
   type(jagged_array_c), pointer :: local_index, jag_2d

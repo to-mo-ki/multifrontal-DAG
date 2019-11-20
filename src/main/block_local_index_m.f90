@@ -68,39 +68,3 @@ contains
   end function
 
 end module
-
-
-
-  !function get_local_index(this, block_num, node_num, parent_block) result(ptr)
-  !  type(block_local_index_c), pointer :: this
-  !  integer, intent(in) :: block_num, node_num, parent_block
-  !  integer, pointer, contiguous :: ptr_array
-  !  integer :: block_start, block_end, first_block_size, nb, ptr_start, ptr_end
-  !  
-  !  first_block_size = this%node_data%get_border_work_size(node_num)
-  !  nb = this%node_data%nb
-  !  ptr_array => this%parent_block_ptr%get_array(node_num)
-  !  offset = ptr_array(1)-1
-!
-  !  if(block_num == 1)then
-  !    block_start = 1 + offset
-  !    block_end = first_block_size + offset
-  !  else
-  !    block_start = (block_num-2)*nb+first_block_size + offset
-  !    block_end = (block_num-1)*nb+first_block_size + offset
-  !  endif
-!
-  !  if(block_num == 1)then
-  !    ptr_start = block_start
-  !  else
-  !    ptr_start = ptr_array(block_num)
-  !  endif
-  !  
-  !  if(block_num == size(ptr_array))then
-  !    ptr_end = block_end
-  !  else
-  !    ptr_end = ptr_array(block_num+1)-1
-  !  endif
-  !  ptr => this%local_index(ptr_start, ptr_end)
-!
-  !end function
