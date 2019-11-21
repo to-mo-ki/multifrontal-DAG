@@ -9,7 +9,8 @@ program factors_test
   type(factors_c), pointer :: factors
   type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: ccs
-  integer :: nb, ssize, wsize
+  integer :: nb, ssize, wsize, i
+  integer, allocatable :: ans(:)
 
   nb = 3
   node_sets => create_contiguous_sets((/1, 6, 4/))
@@ -31,6 +32,22 @@ program factors_test
   
   call factors%get_border_info(1, ssize, wsize)
   call assert_equal("border_info:1", (/ssize, wsize/), (/1, 2/))
+
+  call start_tests("get_first")
+  allocate(ans(3), source=[1,2,8])
+  do i=1, 3
+    call add_test(i, factors%get_first(i), ans(i))
+  enddo
+  call end_tests()
+  deallocate(ans)
+
+  call start_tests("get_last")
+  allocate(ans(3), source=[1,7,11])
+  do i=1, 3
+    call add_test(i, factors%get_last(i), ans(i))
+  enddo
+  call end_tests()
+  deallocate(ans)
   
   nb = 3
   node_sets => create_contiguous_sets((/5, 6, 7, 5, 3, 6/))
@@ -61,6 +78,23 @@ program factors_test
   call assert_equal("border_info:3", (/ssize, wsize/), (/1, 2/))
   call factors%get_border_info(4, ssize, wsize)
   call assert_equal("border_info:4", (/ssize, wsize/), (/2, 1/))
+
+  call start_tests("get_first")
+  allocate(ans(6), source=[1,6,12,19,24,27])
+  do i=1, 6
+    call add_test(i, factors%get_first(i), ans(i))
+  enddo
+  call end_tests()
+  deallocate(ans)
+
+  call start_tests("get_last")
+  allocate(ans(6), source=[5,11,18,23,26,32])
+  do i=1, 6
+    call add_test(i, factors%get_last(i), ans(i))
+  enddo
+  call end_tests()
+  deallocate(ans)
+  
 
 contains
   subroutine check_num_blocks(check)
