@@ -18,6 +18,7 @@ module factors_m
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
     procedure :: get_block_size, get_border_info
+    procedure :: get_first, get_last
   end type
 
   public :: create_factors
@@ -175,5 +176,21 @@ contains
     wsize = block_size - ssize
 
   end subroutine
+
+  integer function get_first(this, node)
+    class(factors_c) :: this
+    integer, intent(in) :: node
+
+    get_first = this%node_sets%get_first(node)
+
+  end function
+
+  integer function get_last(this, node)
+    class(factors_c) :: this
+    integer, intent(in) :: node
+
+    get_last = this%node_sets%get_last(node)
+
+  end function
 
 end module
