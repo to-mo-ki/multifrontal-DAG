@@ -81,6 +81,7 @@ contains
 
 
   subroutine test4()
+    ! XXX:本当はlocal_index => create_jagged_array((/5, 3, 0/), (/2, 3, 4, 5, 7, 3, 4/))
     local_index => create_jagged_array((/5, 2, 0/), (/2, 3, 4, 5, 7, 3, 4/))
     node_set => create_contiguous_sets((/4, 5, 4/))
     nb = 3
