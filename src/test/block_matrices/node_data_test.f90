@@ -52,6 +52,27 @@ program node_data_test
   call add_test("node=5, i=1", node_data%get_work_size(1,5), 3)
   call add_test("node=5, i=2", node_data%get_work_size(2,5), 3)
   call end_tests()
-  
+
+
+  call start_tests("get_matrix_num")
+  call add_test("node=1, i=1", node_data%get_matrix_num(1), 1)
+  call add_test("node=1, i=2", node_data%get_matrix_num(2), 1)
+  call add_test("node=1, i=3", node_data%get_matrix_num(3), 1)
+  call add_test("node=1, i=4", node_data%get_matrix_num(4), 2)
+  call add_test("node=1, i=5", node_data%get_matrix_num(5), 2)
+  call add_test("node=1, i=6", node_data%get_matrix_num(6), 2)
+  call add_test("node=1, i=7", node_data%get_matrix_num(7), 3)
+  call add_test("node=1, i=8", node_data%get_matrix_num(8), 3)
+  call add_test("node=1, i=9", node_data%get_matrix_num(9), 3)
+  call add_test("node=1, i=10", node_data%get_matrix_num(10), 4)
+  call end_tests()
+
+  call start_tests("get_work_num")
+  call add_test("node=1, i=1", node_data%get_work_num(1,1), 1)
+  call add_test("node=1, i=2", node_data%get_work_num(2,1), 2)
+  call add_test("node=1, i=3", node_data%get_work_num(3,1), 2)
+  call add_test("node=1, i=4", node_data%get_work_num(4,1), 2)
+  call add_test("node=1, i=5", node_data%get_work_num(5,1), 3)
+  call end_tests()
 
 end program node_data_test
