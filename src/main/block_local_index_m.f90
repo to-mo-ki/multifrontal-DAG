@@ -6,12 +6,14 @@ module block_local_index_m
   private
   type, public :: block_local_index_c
     private
+    type(contiguous_sets_c), pointer :: node_ptr, block_ptr
     type(jagged_array_3D_c), pointer :: block_local_index
     type(jagged_array_c), pointer :: block_num, over
   contains
     procedure :: get_local_index
     procedure :: get_block_nums
     procedure :: get_overs
+    procedure :: get_start_row_num
   end type
 
   public :: create_block_local_index
@@ -37,6 +39,9 @@ contains
     val => local_index%get_raw_val()
     call rebuild_val(val, nb)
     this%over => create_over(node_sets, set, this%block_local_index, nb)
+
+    this%node_ptr => set
+    this%block_ptr => set2
 
   end function
   
@@ -64,6 +69,19 @@ contains
     integer, pointer, contiguous :: overs(:)
 
     overs => this%over%get_array(node)
+
+  end function
+
+  integer function get_start_row_num(this, node, idx) result(row_num)
+    class(block_local_index_c) :: this
+    integer, intent(in) :: node, idx
+    integer :: first_block_idx, block_idx, first_block_pos, block_pos
+
+    first_block_idx = this%node_ptr%get_first(node)
+    block_idx = first_block_idx - 1 + idx
+    first_block_pos = this%block_ptr%get_first(first_block_idx)
+    block_pos = this%block_ptr%get_first(block_idx)
+    row_num = block_pos - first_block_pos+1
 
   end function
 

@@ -25,6 +25,11 @@ contains
     call assert_equal("over:node=1", block_local_index%get_overs(1), [1, 0]) 
     call assert_equal("local_index:node=1, block_num=1", block_local_index%get_local_index(1, 1), [2, 3])
     call assert_equal("local_index:node=1, block_num=2", block_local_index%get_local_index(1, 2), [1, 2])
+
+    call start_tests("start_row_num")
+    call add_test(1, block_local_index%get_start_row_num(1, 1), 1)
+    call add_test(2, block_local_index%get_start_row_num(1, 2), 3)
+    call end_tests()
     
   end subroutine
 
@@ -50,6 +55,17 @@ contains
     call assert_equal("local_index:node=3, block_num=1", block_local_index%get_local_index(3, 1), [2])
     call assert_equal("local_index:node=3, block_num=2", block_local_index%get_local_index(3, 2), [1])
     call assert_equal("local_index:node=4, block_num=1", block_local_index%get_local_index(4, 1), [1])
+
+    call start_tests("start_row_num")
+    call add_test("node=1, block_num=1", block_local_index%get_start_row_num(1, 1), 1)
+    call add_test("node=1, block_num=2", block_local_index%get_start_row_num(1, 2), 2)
+    call add_test("node=1, block_num=3", block_local_index%get_start_row_num(1, 3), 3)
+    call add_test("node=2, block_num=1", block_local_index%get_start_row_num(2, 1), 1)
+    call add_test("node=2, block_num=2", block_local_index%get_start_row_num(2, 2), 2)
+    call add_test("node=3, block_num=1", block_local_index%get_start_row_num(3, 1), 1)
+    call add_test("node=3, block_num=2", block_local_index%get_start_row_num(3, 2), 2)
+    call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
+    call end_tests()
     
   end subroutine
 
@@ -76,6 +92,17 @@ contains
     call assert_equal("local_index:node=3, block_num=1", block_local_index%get_local_index(3, 1), [1, 2])
     call assert_equal("local_index:node=3, block_num=2", block_local_index%get_local_index(3, 2), [1])
     call assert_equal("local_index:node=4, block_num=1", block_local_index%get_local_index(4, 1), [1])
+
+    call start_tests("start_row_num")
+    call add_test("node=1, block_num=1", block_local_index%get_start_row_num(1, 1), 1)
+    call add_test("node=1, block_num=2", block_local_index%get_start_row_num(1, 2), 2)
+    call add_test("node=1, block_num=3", block_local_index%get_start_row_num(1, 3), 3)
+    call add_test("node=2, block_num=1", block_local_index%get_start_row_num(2, 1), 1)
+    call add_test("node=2, block_num=2", block_local_index%get_start_row_num(2, 2), 2)
+    call add_test("node=3, block_num=1", block_local_index%get_start_row_num(3, 1), 1)
+    call add_test("node=3, block_num=2", block_local_index%get_start_row_num(3, 2), 3)
+    call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
+    call end_tests()
     
   end subroutine
 
@@ -98,6 +125,7 @@ contains
     call assert_equal("local_index:node=2, block_num=1", block_local_index%get_local_index(2, 1), [3])
     call assert_equal("local_index:node=2, block_num=2", block_local_index%get_local_index(2, 2), [1])
     
+    !TODO: バグを修正したのちにget_start_row_numのテスト作成
   end subroutine
 
   
