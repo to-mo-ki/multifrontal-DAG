@@ -13,6 +13,8 @@ module node_data_m
     procedure :: get_num_supernode_block
     procedure :: get_num_work_block
     procedure :: get_work_size
+    procedure :: get_matrix_num
+    procedure :: get_work_num
   end type
 
   public :: create_node_data
@@ -117,6 +119,28 @@ contains
       endif
     endif
     
+  end function
+
+  integer function get_matrix_num(this, idx) result(num)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx
+    
+    num = (idx-1)/this%nb + 1
+    
+  end function
+
+  integer function get_work_num(this, idx, node) result(num)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: tmp, wsize
+
+    wsize = this%get_border_work_size(node)
+    if(idx <= wsize)then
+      num = 1
+    else
+      tmp = idx - wsize
+      num = this%get_matrix_num(tmp) + 1
+    endif
   end function
 
 
