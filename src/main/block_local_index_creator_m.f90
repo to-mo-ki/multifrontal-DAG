@@ -2,95 +2,85 @@ module block_local_index_creator_m
   use contiguous_sets_m
   use jagged_array_m
   use jagged_array_3D_m
+  use node_data_m
   implicit none
   private
 
-  public :: create_num_blocks, create_block_num, create_num_indices, rebuild_val, create_over
+  public :: create_num_blocks, create_num_indices, rebuild_val, create_over
 contains
 
-  function create_num_blocks(local_index, nb) result(parent_ptr)
+  function create_num_blocks(node_data, local_index) result(set)
+    type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
-    type(contiguous_sets_c), pointer :: parent_ptr
-    integer, intent(in) :: nb
+    type(contiguous_sets_c), pointer :: set
     integer, pointer, contiguous :: local(:)
-    integer :: num_node, node, i, block_num, wsize, marker
     integer, allocatable :: num_blocks(:)
+    integer :: nb, node, num_node, parent_num, child_num, prev_parent, prev_child, i
 
-    num_node = local_index%get_num_arrays()
-
+    nb = node_data%nb
+    num_node = node_data%num_node
     allocate(num_blocks(num_node))
+
     num_blocks = 0
     do node=1, num_node-1
-      marker = 0
+      prev_parent = 0
       local => local_index%get_array(node)
+      prev_child = 0
+      prev_parent = 0
       do i=1, size(local)
-        block_num = (local(i)-1)/nb + 1
-        if(marker /= block_num)then
-          marker = block_num
+        parent_num = node_data%get_matrix_num(local(i))
+        child_num = node_data%get_work_num(i, node)
+        if(prev_parent /= parent_num .or. prev_child /= child_num)then
+          if(prev_parent /= parent_num)then
+            prev_parent = parent_num
+          endif
+          if(prev_child /= child_num)then
+            prev_child = child_num
+          endif
           num_blocks(node) = num_blocks(node)+1
         endif
       enddo
     enddo
 
-    parent_ptr => create_contiguous_sets(num_blocks)
+    set => create_contiguous_sets(num_blocks)
 
   end function
 
-  function create_block_num(local_index, set, nb) result(parent_block_num)
+  function create_num_indices(node_data, local_index, sum_blocks) result(set)
+    type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
-    integer, intent(in) :: nb
-    type(jagged_array_c), pointer :: parent_block_num
-    integer, pointer, contiguous :: local(:), plocal(:)
-    integer :: node, i, block_num, wsize, ptr, marker
-
-    parent_block_num => create_jagged_array(set)
-
-    marker = 0
-    do node=1, local_index%get_num_arrays()-1
-      local => local_index%get_array(node)
-      plocal => parent_block_num%get_array(node)
-      ptr = 0
-      do i=1, size(local)
-        block_num = (local(i)-1)/nb + 1
-        if(marker /= block_num)then
-          marker = block_num
-          ptr = ptr+1
-          plocal(ptr) = block_num
-        endif
-      enddo
-    enddo
-
-  end function
-
-  function create_num_indices(local_index, set, nb) result(num_indices)
-    type(jagged_array_c), pointer :: local_index
-    type(contiguous_sets_c), pointer :: set
-    integer, intent(in) :: nb
-    type(contiguous_sets_c), pointer :: num_indices
+    integer, intent(in) :: sum_blocks
     integer, pointer, contiguous :: local(:), array(:)
-    integer :: num_node, node, i, block_num, ptr, marker, prev_block_pos
+    integer, allocatable :: num_indices(:)
+    integer :: node, num_node, array_ptr, parent_num, child_num, prev_parent, prev_child, i
 
-    allocate(array(set%get_num_elements()))
-    ptr = 0
-    do node=1, local_index%get_num_arrays()-1
+    num_node = local_index%get_num_arrays()
+
+    allocate(num_indices(sum_blocks))
+    num_indices = 0
+    array_ptr = 0
+    do node=1, num_node-1
       local => local_index%get_array(node)
-      marker = 1
-      prev_block_pos = 0
-      do i=1, size(local)-1
-        block_num = (local(i+1)-1)/nb + 1
-        if(marker /= block_num)then
-          marker = block_num
-          ptr = ptr+1
-          array(ptr) = i-prev_block_pos
-          prev_block_pos = i
+      prev_child = 0
+      prev_parent = 0
+      do i=1, size(local)
+        parent_num = node_data%get_matrix_num(local(i))
+        child_num = node_data%get_work_num(i, node)
+        if(prev_parent /= parent_num .or. prev_child /= child_num)then
+          if(prev_parent /= parent_num)then
+            prev_parent = parent_num
+          endif
+          if(prev_child /= child_num)then
+            prev_child = child_num
+          endif
+          array_ptr = array_ptr + 1
         endif
+        num_indices(array_ptr) = num_indices(array_ptr) + 1
       enddo
-      ptr = ptr+1
-      array(ptr) = size(local)-prev_block_pos
     enddo
 
-    num_indices => create_contiguous_sets(array)
+    set => create_contiguous_sets(num_indices)
 
   end function
 
@@ -115,7 +105,7 @@ contains
     integer, intent(in) :: nb
     type(jagged_array_c), pointer :: over
     integer, pointer, contiguous :: array(:)
-    integer :: offset, block_num, node, num_node, i
+    integer :: offset, node, num_node, i
 
     num_node = block_local_index%get_num_1d()
     over => create_jagged_array(set)
