@@ -98,32 +98,4 @@ contains
 
   end subroutine
 
-  function create_over(node_set, set, block_local_index, nb) result(over)
-    type(contiguous_sets_c), pointer :: node_set
-    type(contiguous_sets_c), pointer :: set
-    type(jagged_array_3D_c), pointer :: block_local_index
-    integer, intent(in) :: nb
-    type(jagged_array_c), pointer :: over
-    integer, pointer, contiguous :: array(:)
-    integer :: offset, node, num_node, i
-
-    num_node = block_local_index%get_num_1d()
-    over => create_jagged_array(set)
-    do node=1, num_node
-      array => over%get_array(node)
-      ! supernode_size
-      offset = mod(node_set%get_length(node), nb)
-      do i=1, block_local_index%get_num_2d(node)
-        offset = offset + block_local_index%get_num_3d(i, node)
-        if(offset >= nb)then
-          offset = offset - nb
-          array(i) = offset
-        else
-          array(i) = -1
-        endif
-      enddo
-    enddo
-
-  end function
-
 end module
