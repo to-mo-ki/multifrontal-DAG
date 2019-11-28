@@ -9,9 +9,11 @@ module block_local_index_m
     private
     type(contiguous_sets_c), pointer :: node_ptr, block_ptr
     type(jagged_array_3D_c), pointer :: block_local_index
+    type(node_data_c), pointer :: node_data
   contains
     procedure :: get_local_index
     procedure :: get_start_row_num
+    procedure :: get_block_offset
   end type
 
   public :: create_block_local_index
@@ -37,7 +39,8 @@ contains
     
     this%node_ptr => set
     this%block_ptr => set2
-
+    this%node_data => node_data
+    
   end function
 
   function get_local_index(this, node, block_num) result(ptr)
@@ -62,4 +65,20 @@ contains
 
   end function
 
+  ! TODO:TEST
+  integer function get_block_offset(this, node, idx) result(offset)
+    class(block_local_index_c) :: this
+    integer, intent(in) :: node, idx
+    integer :: ssize, wsize
+
+    ssize = this%node_data%get_border_supernode_size(node)
+    wsize = this%node_data%get_border_work_size(node)
+
+    if(ssize+this%get_start_row_num(node, idx)-1 <= wsize)then
+      offset = this%get_start_row_num(node, idx)-1
+    else
+      offset = mod(ssize+this%get_start_row_num(node, idx)-1, this%node_data%nb)
+    endif
+
+  end function
 end module

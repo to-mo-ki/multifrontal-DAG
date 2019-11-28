@@ -9,7 +9,6 @@ module extend_add_subroutines_m
 
 contains
 
-  ! OPTIMIZE: get_matrix_ptr => get_work_ptr, get_block_sizeも変更
   subroutine extend_add_ndiag(factors, block_local_index, block_index, i, j, cnode, pnode)
     type(factors_c), pointer :: factors
     type(block_local_index_c), pointer :: block_local_index
@@ -17,7 +16,7 @@ contains
     integer, intent(in) :: i, j, cnode, pnode
     integer, pointer, contiguous :: ilocal(:), jlocal(:), array(:)
     double precision, pointer, contiguous :: parent_block(:), child_block(:)
-    integer :: ldp, ldc, roffset, coffset, pi, pj, ci, cj, wsize, ssize
+    integer :: ldp, ldc, roffset, coffset, pi, pj, ci, cj
 
     array => block_index%get_parent_array(cnode)
     pi = array(i)
@@ -26,16 +25,8 @@ contains
     ci = array(i)
     cj = array(j)
     call factors%get_border_info(cnode, ssize, wsize)
-    if(ssize+block_local_index%get_start_row_num(cnode, i)-1 <= wsize)then
-      roffset = block_local_index%get_start_row_num(cnode, i)-1
-    else
-      roffset = mod(ssize+block_local_index%get_start_row_num(cnode, i)-1, ssize+wsize)
-    endif
-    if(ssize+block_local_index%get_start_row_num(cnode, j)-1 <= wsize)then
-      coffset = block_local_index%get_start_row_num(cnode, j)-1
-    else
-      coffset = mod(ssize+block_local_index%get_start_row_num(cnode, j)-1, ssize+wsize)
-    endif
+    roffset = block_local_index%get_block_offset(cnode, i)
+    coffset = block_local_index%get_block_offset(cnode, j)
     ilocal => block_local_index%get_local_index(cnode, i)
     jlocal => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, ci, cj)
@@ -52,7 +43,7 @@ contains
     type(block_index_c), pointer :: block_index
     integer, intent(in) :: j, cnode, pnode
     double precision, pointer, contiguous :: parent_block(:), child_block(:)
-    integer :: ldc, ldp, cj, pj, offset, wsize, ssize
+    integer :: ldc, ldp, cj, pj, offset
     integer, pointer, contiguous :: array(:), local(:)
     
     array => block_index%get_child_array(cnode)
@@ -60,11 +51,7 @@ contains
     array => block_index%get_parent_array(cnode)
     pj = array(j)
     call factors%get_border_info(cnode, ssize, wsize)
-    if(ssize+block_local_index%get_start_row_num(cnode, j)-1 <= wsize)then
-      offset = block_local_index%get_start_row_num(cnode, j)-1
-    else
-      offset = mod(ssize+block_local_index%get_start_row_num(cnode, j)-1, ssize+wsize)
-    endif
+    offset = block_local_index%get_block_offset(cnode, j)
     local => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, cj, cj)
     parent_block => factors%get_matrix_ptr(pnode, pj, pj)
