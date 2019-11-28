@@ -8,8 +8,8 @@ module block_index_m
   type, public :: block_index_c
     type(jagged_array_c), pointer :: parent, child
   contains
-    procedure :: get_parent_array
-    procedure :: get_child_array
+    procedure :: get_parent_num
+    procedure :: get_child_num
   end type
 
   public :: create_block_index
@@ -84,22 +84,24 @@ contains
 
   end function
 
-  function get_parent_array(this, node) result(ptr)
+  integer function get_parent_num(this, node, idx) result(parent_num)
     class(block_index_c) :: this
-    integer, intent(in) :: node
+    integer, intent(in) :: node, idx
     integer, pointer, contiguous :: ptr(:)
 
     ptr => this%parent%get_array(node)
+    parent_num = ptr(idx)
 
   end function
 
-  function get_child_array(this, node) result(ptr)
+  integer function get_child_num(this, node, idx) result(child_num)
     class(block_index_c) :: this
-    integer, intent(in) :: node
+    integer, intent(in) :: node, idx
     integer, pointer, contiguous :: ptr(:)
 
     ptr => this%child%get_array(node)
-    
+    child_num = ptr(idx)
+
   end function
 
 end module

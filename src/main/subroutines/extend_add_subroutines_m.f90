@@ -14,16 +14,14 @@ contains
     type(block_local_index_c), pointer :: block_local_index
     type(block_index_c), pointer :: block_index
     integer, intent(in) :: i, j, cnode, pnode
-    integer, pointer, contiguous :: ilocal(:), jlocal(:), array(:)
+    integer, pointer, contiguous :: ilocal(:), jlocal(:)
     double precision, pointer, contiguous :: parent_block(:), child_block(:)
     integer :: ldp, ldc, roffset, coffset, pi, pj, ci, cj
 
-    array => block_index%get_parent_array(cnode)
-    pi = array(i)
-    pj = array(j)
-    array => block_index%get_child_array(cnode)
-    ci = array(i)
-    cj = array(j)
+    ci = block_index%get_child_num(cnode, i)
+    cj = block_index%get_child_num(cnode, j)
+    pi = block_index%get_parent_num(cnode, i)
+    pj = block_index%get_parent_num(cnode, j)
     roffset = block_local_index%get_block_offset(cnode, i)
     coffset = block_local_index%get_block_offset(cnode, j)
     ilocal => block_local_index%get_local_index(cnode, i)
@@ -43,12 +41,10 @@ contains
     integer, intent(in) :: j, cnode, pnode
     double precision, pointer, contiguous :: parent_block(:), child_block(:)
     integer :: ldc, ldp, cj, pj, offset
-    integer, pointer, contiguous :: array(:), local(:)
+    integer, pointer, contiguous :: local(:)
     
-    array => block_index%get_child_array(cnode)
-    cj = array(j)
-    array => block_index%get_parent_array(cnode)
-    pj = array(j)
+    cj = block_index%get_child_num(cnode, j)
+    pj = block_index%get_parent_num(cnode, j)
     offset = block_local_index%get_block_offset(cnode, j)
     local => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, cj, cj)
