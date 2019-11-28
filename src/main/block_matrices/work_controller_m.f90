@@ -56,11 +56,8 @@ contains
     wn = (nr-fw)/nb
     wr = mod(nr-fw, nb)
     work_size = partial_sum(1, nr) + partial_sum(1, nb-1)*wn
-    !print *, partial_sum(1, nr), partial_sum(1, nb-1)*wn, wn
     work_size = work_size + partial_sum(1, fw-1)
-    !print *, partial_sum(1, nb-sr-1)
     work_size = work_size + partial_sum(1, wr-1)
-    !print *, partial_sum(1, wr-1), wr
     
   end function
 end module

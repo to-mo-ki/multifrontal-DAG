@@ -26,7 +26,6 @@ contains
         block_j = mod(col_num-1, nb)+1
         do i=1, size(rows)
           block_row_num = (rows(i)-1)/nb + 1
-          print *, node, block_row_num, block_col_num
           block_matrix => factors%get_supernode_ptr(node, block_row_num, block_col_num)
           block_i = mod(rows(i)-1, nb)+1
           ld = factors%get_block_size(block_col_num, node)
