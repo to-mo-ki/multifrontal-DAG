@@ -68,11 +68,11 @@ program node_data_test
   call end_tests()
 
   call start_tests("get_work_num")
-  call add_test("node=1, i=1", node_data%get_work_num(1,1), 1)
-  call add_test("node=1, i=2", node_data%get_work_num(2,1), 2)
-  call add_test("node=1, i=3", node_data%get_work_num(3,1), 2)
-  call add_test("node=1, i=4", node_data%get_work_num(4,1), 2)
-  call add_test("node=1, i=5", node_data%get_work_num(5,1), 3)
+  call add_test("node=1, i=1", node_data%get_work_num(1,1), 2)
+  call add_test("node=1, i=2", node_data%get_work_num(2,1), 3)
+  call add_test("node=1, i=3", node_data%get_work_num(3,1), 3)
+  call add_test("node=1, i=4", node_data%get_work_num(4,1), 3)
+  call add_test("node=1, i=5", node_data%get_work_num(5,1), 4)
   call end_tests()
 
 end program node_data_test

@@ -17,7 +17,7 @@ module factors_m
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
-    procedure :: get_block_size, get_border_info
+    procedure :: get_block_size, get_border_info, get_work_size
     procedure :: get_first, get_last
   end type
 
@@ -159,6 +159,29 @@ contains
       block_size = mod(n, nb)
     else
       block_size = nb
+    endif
+    
+  end function
+
+  function get_work_size(this, idx, node) result(block_size)
+    class(factors_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, first_block_size, work_size, work_index
+    
+    nb = this%nb
+    first_block_size = nb - mod(this%node_sets%get_length(node), nb)
+    work_size = this%ccs%get_array_length(node)
+    if(idx == this%get_work_start_index(node))then
+      block_size = first_block_size
+    else
+      !ここがおかしい
+      work_index = idx - this%node_sets%get_length(node)/nb
+      if((work_index-1)*nb + first_block_size > work_size)then
+        block_size = mod(work_size-first_block_size, nb)
+      else
+        block_size = nb
+      endif
     endif
     
   end function
