@@ -15,13 +15,13 @@ program doubly_linked_list_test
   call lists%add(3, 2)
   call lists%add(2, 2)
 
-  call check_list("list after 4 adds", 2, (/1, 5, 3, 2/))
+  call check_list("list after 4 adds", 2, [1, 5, 3, 2])
   call lists%remove(5, 2)
-  call check_list("list after middle remove", 2, (/1, 3, 2/))
+  call check_list("list after middle remove", 2, [1, 3, 2])
   call lists%remove(1, 2)
-  call check_list("list after head remove", 2, (/3, 2/))
+  call check_list("list after head remove", 2, [3, 2])
   call lists%remove(2, 2)
-  call check_list("list after tail remove", 2, (/3/))
+  call check_list("list after tail remove", 2, [3])
   call lists%remove(3, 2)
   
   call lists%merge(2, 4)
@@ -32,20 +32,20 @@ program doubly_linked_list_test
   call lists%merge(1, 3)
   call assert_equal("length after merge from null to non-null(from)", lists%get_length(1), 0)
   call assert_equal("length after merge from null to non-null(to)", lists%get_length(3), 2)
-  call check_list("list after merge from null to non-null list(to)", 3, (/1, 2/))
+  call check_list("list after merge from null to non-null list(to)", 3, [1, 2])
 
 
   call lists%merge(3, 1)
   call assert_equal("length after merge from non-null to null(from)", lists%get_length(3), 0)
   call assert_equal("length after merge from non-null to null(to)", lists%get_length(1), 2)
-  call check_list("list after merge from non-null to null(to)", 1, (/1, 2/))
+  call check_list("list after merge from non-null to null(to)", 1, [1, 2])
 
   call lists%add(3, 3)
   call lists%add(4, 3)
   call lists%merge(3, 1)
   call assert_equal("length after merge from non-null to non-null(from)", lists%get_length(3), 0)
   call assert_equal("length after merge from non-null to non-null(to)", lists%get_length(1), 4)
-  call check_list("list after merge from non-null to non-null(to)", 1, (/1, 2, 3, 4/))
+  call check_list("list after merge from non-null to non-null(to)", 1, [1, 2, 3, 4])
 
 
   

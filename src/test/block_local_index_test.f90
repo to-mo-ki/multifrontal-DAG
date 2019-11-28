@@ -18,7 +18,7 @@ program block_local_index_test
 
 contains
   subroutine test1()
-    local_index => create_jagged_array((/4, 0/), (/2, 3, 7, 8/))
+    local_index => create_jagged_array([4, 0], [2, 3, 7, 8])
     node_data => create_node_data([5, 8], [4,0], 3)
     block_local_index => create_block_local_index(node_data, local_index)
 
@@ -35,7 +35,7 @@ contains
   end subroutine
 
   subroutine test2()
-    local_index => create_jagged_array((/3, 2, 2, 1, 0/), (/2, 4, 6, 1, 5, 2, 3, 1/))
+    local_index => create_jagged_array([3, 2, 2, 1, 0], [2, 4, 6, 1, 5, 2, 3, 1])
     node_data => create_node_data([3, 2, 4, 1, 3], [3, 2, 2, 1, 0], 2)
     block_local_index => create_block_local_index(node_data, local_index)
     
@@ -63,7 +63,7 @@ contains
 
 
   subroutine test3()
-    local_index => create_jagged_array((/3, 2, 3, 1, 0/), (/2, 4, 7, 1, 6, 1, 2, 3, 1/))
+    local_index => create_jagged_array([3, 2, 3, 1, 0], [2, 4, 7, 1, 6, 1, 2, 3, 1])
     node_data => create_node_data([3, 2, 4, 1, 3], [3, 2, 3, 1, 0], 2)
     block_local_index => create_block_local_index(node_data, local_index)
     
@@ -91,10 +91,10 @@ contains
 
 
   subroutine test4()
-    ! XXX:本当はlocal_index => create_jagged_array((/5, 3, 0/), (/2, 3, 4, 5, 7, 3, 4/))
-    local_index => create_jagged_array((/5, 2, 0/), (/2, 3, 4, 5, 7, 3, 4/))
+    ! XXX:本当はlocal_index => create_jagged_array([5, 3, 0], [2, 3, 4, 5, 7, 3, 4])
+    local_index => create_jagged_array([5, 2, 0], [2, 3, 4, 5, 7, 3, 4])
     node_data => create_node_data([4,5,5],[5,2,0],3)
-    node_set => create_contiguous_sets((/4, 5, 4/))
+    node_set => create_contiguous_sets([4, 5, 4])
     block_local_index => create_block_local_index(node_data, local_index)
     
     call assert_equal("local_index:node=1, block_num=1", block_local_index%get_local_index(1, 1), [2, 3])

@@ -17,7 +17,7 @@ program column_count_test
   
   cc => column_count(ccs, tree_child, parent)
 
-  call assert_equal("column count", cc, (/3, 3, 4, 3, 3, 3, 3, 2, 1/))
+  call assert_equal("column count", cc, [3, 3, 4, 3, 3, 3, 3, 2, 1])
 
   
 end program column_count_test

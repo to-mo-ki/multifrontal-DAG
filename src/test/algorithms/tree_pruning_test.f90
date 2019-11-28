@@ -21,16 +21,16 @@ program tree_pruning_test
   node_sets => create_contiguous_sets(node_size)
   
   subtree => tree_pruning(cc, node_sets, tree_child, 0d0, 1)
-  call assert_equal("tol=0, p=1", subtree, (/7/))
+  call assert_equal("tol=0, p=1", subtree, [7])
 
   subtree => tree_pruning(cc, node_sets, tree_child, 0d0, 2)
-  call assert_equal("tol=0, p=2", subtree, (/6, 2/))
+  call assert_equal("tol=0, p=2", subtree, [6, 2])
 
   subtree => tree_pruning(cc, node_sets, tree_child, 0.71d0, 2)
-  call assert_equal("tol=0.71, p=2", subtree, (/5, 3, 2/))
+  call assert_equal("tol=0.71, p=2", subtree, [5, 3, 2])
 
   subtree => tree_pruning(cc, node_sets, tree_child, 0.73d0, 2)
-  call assert_equal("tol=0.73, p=2", subtree, (/5, 3, 2/))
+  call assert_equal("tol=0.73, p=2", subtree, [5, 3, 2])
   
   
 end program tree_pruning_test

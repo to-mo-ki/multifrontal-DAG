@@ -23,7 +23,7 @@ program reordering_test
   ccs_origin => create_jagged_array(col, row)
   ccs_reordered => reordering_ccs(ccs_origin, perm, iperm)
 
-  call assert_equal("reordering_ccs num_row", ccs_reordered%get_array_lengths(), (/3, 2, 4, 2, 3, 3, 2, 1, 1/))
-  call assert_equal("reordering_ccs row", ccs_reordered%get_val(), (/1, 2, 8, 2, 9, 3, 4, 7, 9, 4, 9, 5, 6, 8, 6, 7, 8, 7, 9, 8, 9/))
+  call assert_equal("reordering_ccs num_row", ccs_reordered%get_array_lengths(), [3, 2, 4, 2, 3, 3, 2, 1, 1])
+  call assert_equal("reordering_ccs row", ccs_reordered%get_val(), [1, 2, 8, 2, 9, 3, 4, 7, 9, 4, 9, 5, 6, 8, 6, 7, 8, 7, 9, 8, 9])
   
 end program reordering_test

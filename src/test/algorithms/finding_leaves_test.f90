@@ -10,8 +10,8 @@ program finding_leaves_test
   call make_ccs_postordering(num_row, row)
   ccs => create_jagged_array(num_row, row)
   allocate(subtree_size(9))
-  subtree_size = (/1, 2, 1, 2, 1, 2, 5, 8, 9/)
+  subtree_size = [1, 2, 1, 2, 1, 2, 5, 8, 9]
   isleaf => finding_leaves(subtree_size, ccs)
-  call assert_equal("finding_leaves", isleaf, (/1, 1, 1, 0, 1, 1, 0, 0, 0/))
+  call assert_equal("finding_leaves", isleaf, [1, 1, 1, 0, 1, 1, 0, 0, 0])
   
 end program finding_leaves_test

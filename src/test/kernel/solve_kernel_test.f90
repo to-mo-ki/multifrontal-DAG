@@ -20,7 +20,7 @@ contains
         a((j-1)*n+i) = 1d0
       enddo
     enddo
-    b = (/ (dble(i),i=1,n) /)
+    b = [ (dble(i),i=1,n) ]
     check = 1d0
     call mydtrsv_l(a, n, b)
     call assert_equal("dtrsv_l", b, check)
@@ -40,7 +40,7 @@ contains
         a((j-1)*n+i) = 1d0
       enddo
     enddo
-    b = (/ (dble(n-i+1),i=1,n) /)
+    b = [ (dble(n-i+1),i=1,n) ]
     check = 1d0
     call mydtrsv_u(a, n, b)
     call assert_equal("dtrsv_u", b, check)
@@ -54,10 +54,10 @@ contains
     integer :: i
     double precision :: a(3*2), x(3), y(2), check(2)
 
-    a = (/ (dble(i),i=1,6) /)
+    a = [ (dble(i),i=1,6) ]
     x(1)=1d0; x(2)=2d0; x(3)=3d0
     y = 1d0
-    check = (/ -13d0, -31d0/)
+    check = [ -13d0, -31d0]
     call mydgemv_t(a, 3, 2, x, y)
     call assert_equal("dgemv_t", y, check)
   end subroutine
@@ -69,10 +69,10 @@ contains
     integer :: i
     double precision :: a(3*2), x(2), y(3), check(3)
 
-    a = (/ (dble(i),i=1,6) /)
-    x = (/ 1d0, 2d0/)
+    a = [ (dble(i),i=1,6) ]
+    x = [ 1d0, 2d0]
     y = 1d0
-    check = (/ -8d0, -11d0, -14d0/)
+    check = [ -8d0, -11d0, -14d0]
     call mydgemv_n(a, 3, 2, x, y)
     call assert_equal("dgemv_n", y, check)
   end subroutine

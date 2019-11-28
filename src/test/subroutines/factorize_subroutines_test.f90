@@ -19,11 +19,11 @@ program factorize_subroutines_test
   integer, pointer, contiguous :: ccs_val(:)
   double precision, pointer, contiguous :: a11(:), a21(:), a31(:), a22(:), a32(:), a33(:)
 
-  node_sets => create_contiguous_sets((/3, 5/))
+  node_sets => create_contiguous_sets([3, 5])
   
   allocate(ccs_val(5))
-  ccs_val = (/4, 5, 6, 7, 8/)
-  ccs => create_jagged_array((/5, 0/), ccs_val)
+  ccs_val = [4, 5, 6, 7, 8]
+  ccs => create_jagged_array([5, 0], ccs_val)
 
   factors => create_factors(node_sets, ccs, 3)
 
@@ -45,17 +45,17 @@ program factorize_subroutines_test
   a22=0; a32=0; a33=0
 
   call factorize(factors, 1, 1)
-  call assert_equal_partial_array("factorize:a11", a11, (/1, 4, 5, 7, 8, 9/), 6, (/1d0, 2d0, 2d0, 3d0, 3d0, 3d0/))
+  call assert_equal_partial_array("factorize:a11", a11, [1, 4, 5, 7, 8, 9], 6, [1d0, 2d0, 2d0, 3d0, 3d0, 3d0])
   call solve(factors, 1, 2, 1)
-  call assert_equal("solve:a21", a21, (/1d0, 1d0, 1d0, 2d0, 2d0, 2d0, 3d0, 3d0, 3d0/))
+  call assert_equal("solve:a21", a21, [1d0, 1d0, 1d0, 2d0, 2d0, 2d0, 3d0, 3d0, 3d0])
   call solve(factors, 1, 3, 1)
-  call assert_equal("solve:a31", a31, (/4d0, 4d0, 4d0, 5d0, 5d0, 5d0/))
+  call assert_equal("solve:a31", a31, [4d0, 4d0, 4d0, 5d0, 5d0, 5d0])
   call sym_update(factors, 1, 2, 1)
-  call assert_equal_partial_array("sym_update:a22", a22, (/1, 4, 5, 7, 8, 9/), 6, (/-3d0, -6d0, -12d0, -9d0, -18d0, -27d0/))
+  call assert_equal_partial_array("sym_update:a22", a22, [1, 4, 5, 7, 8, 9], 6, [-3d0, -6d0, -12d0, -9d0, -18d0, -27d0])
   call sym_update(factors, 1, 3, 1)
-  call assert_equal_partial_array("sym_update:a33", a33, (/1, 3, 4/), 3, (/-48d0, -60d0, -75d0/))
+  call assert_equal_partial_array("sym_update:a33", a33, [1, 3, 4], 3, [-48d0, -60d0, -75d0])
   call update(factors, 1, 2, 3, 1)
-  call assert_equal("update:a32", a32, (/-12d0, -24d0, -36d0, -15d0, -30d0, -45d0/))
+  call assert_equal("update:a32", a32, [-12d0, -24d0, -36d0, -15d0, -30d0, -45d0])
 
   
 end program

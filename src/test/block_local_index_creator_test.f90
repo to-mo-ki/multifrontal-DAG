@@ -20,7 +20,7 @@ program block_local_index_creator_test
   
 contains
   subroutine test1()
-    local_index => create_jagged_array((/4, 0/), (/2, 3, 7, 8/))
+    local_index => create_jagged_array([4, 0], [2, 3, 7, 8])
     node_data => create_node_data([5, 8], [4,0], 3)
     
     num_blocks => create_num_blocks(node_data, local_index)
@@ -33,24 +33,24 @@ contains
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 3)
-    call assert_equal("rebuild_val", local_index_val, (/2, 3, 1, 2/))
+    call assert_equal("rebuild_val", local_index_val, [2, 3, 1, 2])
 
   end subroutine
 
   subroutine test2()
-    local_index => create_jagged_array((/3, 2, 2, 1, 0/), (/2, 4, 6, 1, 5, 2, 3, 1/))
+    local_index => create_jagged_array([3, 2, 2, 1, 0], [2, 4, 6, 1, 5, 2, 3, 1])
     node_data => create_node_data([3, 2, 4, 1, 3], [3, 2, 2, 1, 0], 2)
     
     num_blocks => create_num_blocks(node_data, local_index)
     call start_tests("num_blocks")
-    allocate(ans(4), source=(/3, 2, 2, 1/))
+    allocate(ans(4), source=[3, 2, 2, 1])
     do i=1, 4
       call add_test(i, num_blocks%get_length(i), ans(i)) 
     enddo
     call end_tests()
 
     num_indices => create_num_indices(node_data, local_index, num_blocks%get_num_elements())
-    allocate(ans(8), source=(/1, 1, 1, 1, 1, 1, 1, 1/))
+    allocate(ans(8), source=[1, 1, 1, 1, 1, 1, 1, 1])
     call start_tests("num_indices")
     do i=1, 8
       call add_test(i, num_indices%get_length(i), ans(i))
@@ -59,17 +59,17 @@ contains
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
-    call assert_equal("rebuild_val", local_index_val, (/2, 2, 2, 1, 1, 2, 1, 1/))
+    call assert_equal("rebuild_val", local_index_val, [2, 2, 2, 1, 1, 2, 1, 1])
 
   end subroutine
 
   subroutine test3()
-    local_index => create_jagged_array((/3, 2, 3, 1, 0/), (/2, 4, 7, 1, 6, 1, 2, 3, 1/))
+    local_index => create_jagged_array([3, 2, 3, 1, 0], [2, 4, 7, 1, 6, 1, 2, 3, 1])
     node_data => create_node_data([3, 2, 4, 1, 3], [3, 2, 3, 1, 0], 2)
     
     num_blocks => create_num_blocks(node_data, local_index)
     call start_tests("num_blocks")
-    allocate(ans(4), source=(/3, 2, 2, 1/))
+    allocate(ans(4), source=[3, 2, 2, 1])
     do i=1, 4
       call add_test(i, num_blocks%get_length(i), ans(i))
     enddo
@@ -77,7 +77,7 @@ contains
 
 
     num_indices => create_num_indices(node_data, local_index, num_blocks%get_num_elements())
-    allocate(ans(8), source=(/1, 1, 1, 1, 1, 2, 1, 1/))
+    allocate(ans(8), source=[1, 1, 1, 1, 1, 2, 1, 1])
     call start_tests("num_indices")
     do i=1, 8
       call add_test(i, num_indices%get_length(i), ans(i))
@@ -86,7 +86,7 @@ contains
 
     local_index_val => local_index%get_raw_val()
     call rebuild_val(local_index_val, 2)
-    call assert_equal("rebuild_val", local_index_val, (/2, 2, 1, 1, 2, 1, 2, 1, 1/))
+    call assert_equal("rebuild_val", local_index_val, [2, 2, 1, 1, 2, 1, 2, 1, 1])
 
   end subroutine
 

@@ -17,14 +17,14 @@ program jagged_array_test
   set => create_contiguous_sets(col)
   ccs => create_jagged_array_DP(set, row_val)
 
-  call assert_equal("get_array(1)", ccs%get_array(1), (/1d0, 7d0, 8d0/))
-  call assert_equal("get_array(2)", ccs%get_array(2), (/2d0, 4d0, 6d0, 9d0/))
-  call assert_equal("get_array(3)", ccs%get_array(3), (/3d0, 5d0, 8d0/))
-  call assert_equal("get_array(4)", ccs%get_array(4), (/4d0, 9d0/))
-  call assert_equal("get_array(5)", ccs%get_array(5), (/5d0, 6d0, 8d0/))
-  call assert_equal("get_array(6)", ccs%get_array(6), (/6d0, 9d0/))
-  call assert_equal("get_array(7)", ccs%get_array(7), (/7d0, 9d0/))
-  call assert_equal("get_array(8)", ccs%get_array(8), (/8d0/))
-  call assert_equal("get_array(9)", ccs%get_array(9), (/9d0/))
+  call assert_equal("get_array(1)", ccs%get_array(1), [1d0, 7d0, 8d0])
+  call assert_equal("get_array(2)", ccs%get_array(2), [2d0, 4d0, 6d0, 9d0])
+  call assert_equal("get_array(3)", ccs%get_array(3), [3d0, 5d0, 8d0])
+  call assert_equal("get_array(4)", ccs%get_array(4), [4d0, 9d0])
+  call assert_equal("get_array(5)", ccs%get_array(5), [5d0, 6d0, 8d0])
+  call assert_equal("get_array(6)", ccs%get_array(6), [6d0, 9d0])
+  call assert_equal("get_array(7)", ccs%get_array(7), [7d0, 9d0])
+  call assert_equal("get_array(8)", ccs%get_array(8), [8d0])
+  call assert_equal("get_array(9)", ccs%get_array(9), [9d0])
   
 end program

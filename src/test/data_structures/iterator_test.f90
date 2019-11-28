@@ -7,7 +7,7 @@ program iterator_test
 
   allocate(next_node(5))
 
-  next_node = (/3, 5, 0, 2, 1/)
+  next_node = [3, 5, 0, 2, 1]
   iterator => create_iterator(4, next_node)
   call assert_equal("has_next(1)", iterator%has_next(), .true.)
   call assert_equal("next(1)", iterator%next(), 4)

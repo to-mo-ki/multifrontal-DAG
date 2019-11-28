@@ -18,8 +18,8 @@ contains
     a(1) = 1; a(4) = 2; a(5) = 8
     a(7) = 3; a(8) = 12; a(9) = 27
 
-    pos = (/1, 4, 5, 7, 8, 9/)
-    check = (/1d0, 2d0, 2d0, 3d0, 3d0, 3d0/)
+    pos = [1, 4, 5, 7, 8, 9]
+    check = [1d0, 2d0, 2d0, 3d0, 3d0, 3d0]
 
     call mydpotrf(3, a, info)
     call assert_equal_partial_array("dpotrf test", a, pos, 6, check)
@@ -35,8 +35,8 @@ contains
 
     a(1) = 1; a(4) = 2; a(5) = 2
     a(7) = 3; a(8) = 3; a(9) = 3
-    b = (/1d0, 6d0, 18d0, 4d0, 18d0, 45d0/)
-    check = (/1d0, 2d0, 3d0, 4d0, 5d0, 6d0/)
+    b = [1d0, 6d0, 18d0, 4d0, 18d0, 45d0]
+    check = [1d0, 2d0, 3d0, 4d0, 5d0, 6d0]
 
     call mydtrsm(3, 2, a, b)
     call assert_equal("dtrsm", b, check)
@@ -50,11 +50,11 @@ contains
     double precision :: a(6), b(4), check(3)
     integer :: i, pos(3)
 
-    a = (/ (dble(i),i=1,6) /)
+    a = [ (dble(i),i=1,6) ]
     b = 1.0d0
     call mydsyrk(2, 3, a, b)
-    check = (/-13d0, -31d0, -76d0/)
-    pos = (/1, 3, 4/)
+    check = [-13d0, -31d0, -76d0]
+    pos = [1, 3, 4]
     call assert_equal_partial_array("dsyrk", b, pos, 3, check)
 
   end subroutine
@@ -71,11 +71,11 @@ contains
     double precision :: lower(6), upper(12), update(8), check(8)
     integer :: i
 
-    upper = (/ (dble(i),i=1,12) /)
-    lower = (/ (dble(i),i=1,6) /)
+    upper = [ (dble(i),i=1,12) ]
+    lower = [ (dble(i),i=1,6) ]
     update = 1.0d0
     call mydgemm(3, 2, 4, lower, upper, update)
-    check = (/-13d0, -31d0, -49d0, -67d0, -31d0, -76d0, -121d0, -166d0/)
+    check = [-13d0, -31d0, -49d0, -67d0, -31d0, -76d0, -121d0, -166d0]
     call assert_equal("dgemm", update, check)
 
   end subroutine

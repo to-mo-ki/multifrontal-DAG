@@ -20,16 +20,16 @@ contains
     integer :: a_pos(12), b_pos(3)
 
     allocate(a(15), b(4))
-    a = (/1d0, 0d0, 0d0, 2d0, 8d0, 0d0, 3d0, 12d0, 27d0, 4d0, 16d0, 36d0, 5d0, 20d0, 45d0/)
-    b = (/64d0, 0d0, 80d0, 125d0/)
+    a = [1d0, 0d0, 0d0, 2d0, 8d0, 0d0, 3d0, 12d0, 27d0, 4d0, 16d0, 36d0, 5d0, 20d0, 45d0]
+    b = [64d0, 0d0, 80d0, 125d0]
 
     call border_potrf(a, b, 3, 2)
-    a_pos = (/1, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15/)
-    a_check = (/1d0, 2d0, 2d0, 3d0, 3d0, 3d0, 4d0, 4d0, 4d0, 5d0, 5d0, 5d0/)
+    a_pos = [1, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    a_check = [1d0, 2d0, 2d0, 3d0, 3d0, 3d0, 4d0, 4d0, 4d0, 5d0, 5d0, 5d0]
     call assert_equal_partial_array("dpotrf test:a", a, a_pos, 12, a_check)
 
-    b_pos = (/1, 3, 4/)
-    b_check = (/16d0, 20d0, 50d0/)
+    b_pos = [1, 3, 4]
+    b_check = [16d0, 20d0, 50d0]
     call assert_equal_partial_array("dpotrf test:b", b, b_pos, 3, b_check)
 
   end subroutine
@@ -46,13 +46,13 @@ contains
     
     
     allocate(diag_a(15), lower_a(6), lower_b(4))
-    diag_a = (/1d0, 0d0, 0d0, 2d0, 2d0, 0d0, 3d0, 3d0, 3d0, 4d0, 4d0, 4d0, 5d0, 5d0, 5d0/)
-    lower_a = (/1d0, 6d0, 18d0, 4d0, 18d0, 45d0/)
+    diag_a = [1d0, 0d0, 0d0, 2d0, 2d0, 0d0, 3d0, 3d0, 3d0, 4d0, 4d0, 4d0, 5d0, 5d0, 5d0]
+    lower_a = [1d0, 6d0, 18d0, 4d0, 18d0, 45d0]
     lower_b = 0d0
     call border_trsm(diag_a, lower_a, lower_b, 3, 2, 2)
 
-    call assert_equal("a", lower_a, (/1d0, 2d0, 3d0, 4d0, 5d0, 6d0/))
-    call assert_equal("b", lower_b, (/-24d0, -30d0, -60d0, -75d0/))
+    call assert_equal("a", lower_a, [1d0, 2d0, 3d0, 4d0, 5d0, 6d0])
+    call assert_equal("b", lower_b, [-24d0, -30d0, -60d0, -75d0])
     
   end subroutine
 
@@ -67,14 +67,14 @@ contains
     
     
     allocate(diag_a(10), lower_a(4), lower_b(6))
-    diag_a = (/1d0, 0d0, 2d0, 2d0,3d0, 3d0, 4d0, 4d0, 5d0, 5d0/)
+    diag_a = [1d0, 0d0, 2d0, 2d0,3d0, 3d0, 4d0, 4d0, 5d0, 5d0]
     !ここまで
-    lower_a = (/1d0, 6d0, 4d0, 18d0/)
+    lower_a = [1d0, 6d0, 4d0, 18d0]
     lower_b = 0d0
     call border_trsm(diag_a, lower_a, lower_b, 2, 3, 2)
 
-    call assert_equal("a", lower_a, (/1d0, 2d0, 4d0, 5d0 /))
-    call assert_equal("b", lower_b, (/-9d0, -12d0, -15d0, -27d0, -36d0, -45d0/))
+    call assert_equal("a", lower_a, [1d0, 2d0, 4d0, 5d0 ])
+    call assert_equal("b", lower_b, [-9d0, -12d0, -15d0, -27d0, -36d0, -45d0])
     
   end subroutine
   

@@ -7,7 +7,7 @@ program heap_test
   integer :: i
 
   allocate(test(9), answer(9))
-  test = (/19, 36, 25, 1, 3, 17, 7, 2, 100/)
+  test = [19, 36, 25, 1, 3, 17, 7, 2, 100]
 
   min_heap => create_min_heap(10)
   call min_heap%build_heap(test)
@@ -18,7 +18,7 @@ program heap_test
     call min_heap%delete_top_node()
   enddo
   call assert_equal("min_heap:empty", min_heap%is_empty(), .true.)
-  call assert_equal("min_heap", answer, (/1, 2, 3, 7, 17, 19, 25, 36, 100/))
+  call assert_equal("min_heap", answer, [1, 2, 3, 7, 17, 19, 25, 36, 100])
 
   max_heap => create_max_heap(10)
   call max_heap%build_heap(test)
@@ -26,7 +26,7 @@ program heap_test
     answer(i) = max_heap%get_top_node()
     call max_heap%delete_top_node()
   enddo
-  call assert_equal("max_heap", answer, (/100, 36, 25, 19, 17, 7, 3, 2, 1/))
+  call assert_equal("max_heap", answer, [100, 36, 25, 19, 17, 7, 3, 2, 1])
   
   min_heap => create_min_heap(10)
   call min_heap%set_zero(9)
@@ -40,6 +40,6 @@ program heap_test
     answer(i) = min_heap%get_top_node()
     call min_heap%delete_top_node()
   enddo
-  call assert_equal("set_zero and add_top_node", answer, (/3, 7, 12, 17, 19, 25, 36, 100, 102/))
+  call assert_equal("set_zero and add_top_node", answer, [3, 7, 12, 17, 19, 25, 36, 100, 102])
   
 end program heap_test

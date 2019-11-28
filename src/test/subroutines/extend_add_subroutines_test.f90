@@ -21,8 +21,8 @@ program extend_add_subroutines_test
 
 contains
   subroutine test1()
-    local_index => create_jagged_array((/5, 3, 0/), (/2, 3, 4, 5, 7, 3, 4/))
-    node_set => create_contiguous_sets((/4, 5, 4/))
+    local_index => create_jagged_array([5, 3, 0], [2, 3, 4, 5, 7, 3, 4])
+    node_set => create_contiguous_sets([4, 5, 4])
     factors => create_factors(node_set, local_index, 2)
     
     call set_zero(factors)
@@ -57,8 +57,8 @@ contains
   end subroutine
 
   subroutine test2
-    local_index => create_jagged_array((/7, 3, 0/), (/3,4,5,6,8,9,10,1,2,3/))
-    node_set => create_contiguous_sets((/4, 7, 3/))
+    local_index => create_jagged_array([7, 3, 0], [3,4,5,6,8,9,10,1,2,3])
+    node_set => create_contiguous_sets([4, 7, 3])
     factors => create_factors(node_set, local_index, 3)
     node_data => create_node_data([4,7,3], [7,3,0], 3)
     block_index => create_block_index(node_data, local_index)

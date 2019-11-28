@@ -20,7 +20,7 @@ contains
 
     array_size = controller%estimate_size(nb, nc, nr)
     allocate(array(array_size))
-    array = (/(dble(i), i=1,array_size)/)
+    array = [(dble(i), i=1,array_size)]
     n = nc + nr
     matrix => controller%get_ptr(array, nb, nc, nr, i, j)
 

@@ -24,11 +24,11 @@ program border_subroutines_test
   type(jagged_array_c), pointer :: ccs
   integer, pointer, contiguous :: ccs_val(:)
   double precision, pointer, contiguous :: a11_s(:), a11_w(:), a21_s(:), a21_w(:), a31_s(:), a31_w(:), a22(:), a32(:), a33(:)
-  node_sets => create_contiguous_sets((/3, 9/))
+  node_sets => create_contiguous_sets([3, 9])
   
   allocate(ccs_val(9))
-  ccs_val = (/4, 5, 6, 7, 8, 9, 10, 11, 12/)
-  ccs => create_jagged_array((/9, 0/), ccs_val)
+  ccs_val = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+  ccs => create_jagged_array([9, 0], ccs_val)
 
   factors => create_factors(node_sets, ccs, 5)
 
@@ -61,23 +61,23 @@ program border_subroutines_test
 
   call border_factorize(factors, 1, 1)
   call assert_equal_partial_array("factorize:a11_s", a11_s, &
-    &(/1, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15/), 12, &
-    &(/1d0, 2d0, 2d0, 3d0, 3d0, 3d0, 1d0, 1d0, 1d0, 2d0, 2d0, 2d0/))
-  call assert_equal_partial_array("factorize:a11_w", a11_w, (/1, 3, 4/), 3, (/-3d0, -6d0, -12d0/))
+    &[1, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15], 12, &
+    &[1d0, 2d0, 2d0, 3d0, 3d0, 3d0, 1d0, 1d0, 1d0, 2d0, 2d0, 2d0])
+  call assert_equal_partial_array("factorize:a11_w", a11_w, [1, 3, 4], 3, [-3d0, -6d0, -12d0])
 
   call border_solve(factors, 1, 2, 1)
-  call assert_equal("solve:a21_s", a21_s, (/3d0, 3d0, 3d0, 1d0, 1d0, 1d0, 2d0, 2d0, 2d0, 3d0, 3d0, 3d0, 1d0, 1d0, 1d0/))
-  call assert_equal("solve:a21_w", a21_w, (/-9d0, -18d0, -3d0, -6d0, -6d0, -12d0, -9d0, -18d0, -3d0, -6d0/))
+  call assert_equal("solve:a21_s", a21_s, [3d0, 3d0, 3d0, 1d0, 1d0, 1d0, 2d0, 2d0, 2d0, 3d0, 3d0, 3d0, 1d0, 1d0, 1d0])
+  call assert_equal("solve:a21_w", a21_w, [-9d0, -18d0, -3d0, -6d0, -6d0, -12d0, -9d0, -18d0, -3d0, -6d0])
   call border_solve(factors, 1, 3, 1)
-  call assert_equal("solve:a31_s", a31_s, (/2d0, 2d0, 2d0, 3d0, 3d0, 3d0/))
-  call assert_equal("solve:a31_w", a31_w, (/-6d0, -12d0, -9d0, -18d0/))
+  call assert_equal("solve:a31_s", a31_s, [2d0, 2d0, 2d0, 3d0, 3d0, 3d0])
+  call assert_equal("solve:a31_w", a31_w, [-6d0, -12d0, -9d0, -18d0])
   call border_sym_update(factors, 1, 2, 1)
   call assert_equal_partial_array("sym_update:a22", a22, &
-    &(/1, 6, 7, 11, 12, 13, 16, 17, 18, 19, 21, 22, 23, 24, 25/), 10, &
-    &(/-27d0, -9d0, -3d0, -18d0, -6d0, -12d0, -27d0, -9d0, -18d0, -27d0, -9d0, -3d0, -6d0, -9d0, -3d0/))
+    &[1, 6, 7, 11, 12, 13, 16, 17, 18, 19, 21, 22, 23, 24, 25], 10, &
+    &[-27d0, -9d0, -3d0, -18d0, -6d0, -12d0, -27d0, -9d0, -18d0, -27d0, -9d0, -3d0, -6d0, -9d0, -3d0])
   call border_sym_update(factors, 1, 3, 1)
-  call assert_equal_partial_array("sym_update:a33", a33, (/1, 3, 4/), 3, (/-12d0, -18d0, -27d0/))
+  call assert_equal_partial_array("sym_update:a33", a33, [1, 3, 4], 3, [-12d0, -18d0, -27d0])
   call border_update(factors, 1, 2, 3, 1)
-  call assert_equal("update:a32", a32, (/-18d0, -6d0, -12d0, -18d0, -6d0, -27d0, -9d0, -18d0, -27d0, -9d0/))
+  call assert_equal("update:a32", a32, [-18d0, -6d0, -12d0, -18d0, -6d0, -27d0, -9d0, -18d0, -27d0, -9d0])
 
 end program border_subroutines_test
