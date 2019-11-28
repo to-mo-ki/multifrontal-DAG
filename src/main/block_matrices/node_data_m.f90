@@ -132,15 +132,8 @@ contains
   integer function get_work_num(this, idx, node) result(num)
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
-    integer :: tmp, wsize
-
-    wsize = this%get_border_work_size(node)
-    if(idx <= wsize)then
-      num = 1
-    else
-      tmp = idx - wsize
-      num = this%get_matrix_num(tmp) + 1
-    endif
+    
+    num = this%get_matrix_num(this%supernode_size(node) + idx)
   end function
 
 

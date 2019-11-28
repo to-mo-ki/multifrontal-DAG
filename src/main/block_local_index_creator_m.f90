@@ -6,7 +6,7 @@ module block_local_index_creator_m
   implicit none
   private
 
-  public :: create_num_blocks, create_num_indices, rebuild_val, create_over
+  public :: create_num_blocks, create_num_indices, rebuild_val
 contains
 
   function create_num_blocks(node_data, local_index) result(set)
@@ -51,7 +51,7 @@ contains
     type(jagged_array_c), pointer :: local_index
     type(contiguous_sets_c), pointer :: set
     integer, intent(in) :: sum_blocks
-    integer, pointer, contiguous :: local(:), array(:)
+    integer, pointer, contiguous :: local(:)
     integer, allocatable :: num_indices(:)
     integer :: node, num_node, array_ptr, parent_num, child_num, prev_parent, prev_child, i
 

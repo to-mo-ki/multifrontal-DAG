@@ -24,7 +24,7 @@ contains
     block_index => create_block_index(node_data, local_index)
     
     call assert_equal("get_parent", block_index%get_parent_array(1), [1,1,3])
-    call assert_equal("get_child", block_index%get_child_array(1), [1,2,2])
+    call assert_equal("get_child", block_index%get_child_array(1), [2,3,3])
 
   end subroutine
 
@@ -38,9 +38,9 @@ contains
     call assert_equal("get_parent:3", block_index%get_parent_array(3), [1,2])
     call assert_equal("get_parent:4", block_index%get_parent_array(4), [1])
 
-    call assert_equal("get_child:1", block_index%get_child_array(1), [1,2,2])
-    call assert_equal("get_child:2", block_index%get_child_array(2), [1,1])
-    call assert_equal("get_child:3", block_index%get_child_array(3), [1,1])
+    call assert_equal("get_child:1", block_index%get_child_array(1), [2,3,3])
+    call assert_equal("get_child:2", block_index%get_child_array(2), [2,2])
+    call assert_equal("get_child:3", block_index%get_child_array(3), [3,3])
     call assert_equal("get_child:4", block_index%get_child_array(4), [1])
     
     
@@ -56,9 +56,9 @@ contains
     call assert_equal("get_parent:3", block_index%get_parent_array(3), [1,2])
     call assert_equal("get_parent:4", block_index%get_parent_array(4), [1])
 
-    call assert_equal("get_child:1", block_index%get_child_array(1), [1,2,2])
-    call assert_equal("get_child:2", block_index%get_child_array(2), [1,1])
-    call assert_equal("get_child:3", block_index%get_child_array(3), [1,2])
+    call assert_equal("get_child:1", block_index%get_child_array(1), [2,3,3])
+    call assert_equal("get_child:2", block_index%get_child_array(2), [2,2])
+    call assert_equal("get_child:3", block_index%get_child_array(3), [3,4])
     call assert_equal("get_child:4", block_index%get_child_array(4), [1])
 
   end subroutine
