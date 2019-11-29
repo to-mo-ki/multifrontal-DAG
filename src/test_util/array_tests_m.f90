@@ -8,7 +8,7 @@ module array_tests_m
   character(:), allocatable :: message_buffer
 
   public :: start_array_tests, end_array_tests
-  public :: add_test5
+  public :: add_test5, add_test6
 
 contains
 
@@ -22,6 +22,30 @@ contains
   subroutine add_test5(message, answer, check)
     character(*) :: message
     integer, contiguous :: answer(:), check(:)
+    logical :: err_flag
+    integer :: i, n
+
+    if(size(answer) /= size(check))then
+      call add_size_error_node(message, size(answer), size(check))
+      return
+    endif
+    n = size(answer)
+    err_flag = .false.
+    do i=1,n
+      if(answer(i) /= check(i))then
+        if(.not. err_flag)then
+          call add_node(message)
+          err_flag = .true.
+        endif
+        call add_array_err(i, to_str(answer(i)), to_str(check(i)))
+      endif
+    enddo
+
+  end subroutine
+
+  subroutine add_test6(message, answer, check)
+    character(*) :: message
+    double precision, contiguous :: answer(:), check(:)
     logical :: err_flag
     integer :: i, n
 
