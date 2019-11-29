@@ -12,7 +12,7 @@ module tests_m
     procedure :: add_test6
   end interface
 
-  public :: add_test
+  public :: add_test, add_test_tri
   public :: start_tests, end_tests, start_array_tests, end_array_tests
 
 end module

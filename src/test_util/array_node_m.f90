@@ -9,7 +9,7 @@ module array_node_m
     type(node_c), pointer :: first_node=>null()
     type(node_c), pointer :: last_node=>null()
     logical :: size_error = .false.
-    integer :: answer_size, check_size
+    character(:), allocatable :: error_comment
   contains
     procedure :: add
   end type
@@ -21,16 +21,15 @@ module array_node_m
 
 contains
 
-  subroutine add_size_error_node(message, answer_size, check_size)
-    character(*) :: message
+  subroutine add_size_error_node(message, error_comment)
+    character(*) :: message, error_comment
     type(array_node_c), pointer :: new_node
     integer :: answer_size, check_size
 
     allocate(new_node)
     allocate(new_node%message, source=message)
+    allocate(new_node%error_comment, source=error_comment)
     new_node%size_error = .true.
-    new_node%answer_size = answer_size
-    new_node%check_size = check_size
     if(.not. associated(first_node))then
       first_node => new_node
     else
@@ -55,10 +54,9 @@ contains
 
   end subroutine
 
-  subroutine add_array_err(idx, answer, check)
-    integer, intent(in) :: idx
-    character(*), intent(in) :: answer, check
-    call last_node%add(idx, answer, check)
+  subroutine add_array_err(message, answer, check)
+    character(*), intent(in) :: message, answer, check
+    call last_node%add(message, answer, check)
   end subroutine
 
   subroutine reset_node
@@ -70,14 +68,13 @@ contains
     exist_node = associated(first_node)
   end function
 
-  subroutine add(this, idx, answer, check)
+  subroutine add(this, message, answer, check)
     class(array_node_c) :: this
-    integer, intent(in) :: idx
-    character(*), intent(in) :: answer, check
+    character(*), intent(in) :: message, answer, check
     type(node_c), pointer :: new_node, node
 
     allocate(new_node)
-    allocate(new_node%message, source=trim(to_str(idx))//"-th element ")
+    allocate(new_node%message, source=message)
     allocate(new_node%answer, source=answer)
     allocate(new_node%check, source=check)
     if(.not. associated(this%first_node))then
@@ -95,7 +92,7 @@ contains
     array_node => first_node
     do while(associated(array_node))
       if(array_node%size_error)then
-        write(*,*) array_node%message, "  different of array size ", "answer:", trim(to_str(array_node%answer_size)), " check:", trim(to_str(array_node%check_size))
+        write(*,*) array_node%message, array_node%error_comment
         array_node => array_node%next
         cycle
       endif
