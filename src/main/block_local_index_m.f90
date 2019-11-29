@@ -10,10 +10,13 @@ module block_local_index_m
     type(contiguous_sets_c), pointer :: node_ptr, block_ptr
     type(jagged_array_3D_c), pointer :: block_local_index
     type(node_data_c), pointer :: node_data
+    type(jagged_array_c), pointer :: parent, child
   contains
     procedure :: get_local_index
     procedure :: get_start_row_num
     procedure :: get_block_offset
+    procedure :: get_parent_num
+    procedure :: get_child_num
   end type
 
   public :: create_block_local_index
@@ -35,6 +38,7 @@ contains
     jag_2d => create_jagged_array(set2, local_index%get_raw_val())
     this%block_local_index => create_jagged_array_3D(set, jag_2d)
     val => local_index%get_raw_val()
+    call create_block_index(node_data, local_index, this%parent, this%child)
     call rebuild_val(val, node_data%nb)
     
     this%node_ptr => set
@@ -81,4 +85,87 @@ contains
     endif
 
   end function
+
+  integer function get_parent_num(this, node, idx) result(parent_num)
+    class(block_local_index_c) :: this
+    integer, intent(in) :: node, idx
+    integer, pointer, contiguous :: ptr(:)
+
+    ptr => this%parent%get_array(node)
+    parent_num = ptr(idx)
+
+  end function
+
+  integer function get_child_num(this, node, idx) result(child_num)
+    class(block_local_index_c) :: this
+    integer, intent(in) :: node, idx
+    integer, pointer, contiguous :: ptr(:)
+
+    ptr => this%child%get_array(node)
+    child_num = ptr(idx)
+
+  end function
+
+  subroutine create_block_index(node_data, local_index, parent, child)
+    type(node_data_c), pointer :: node_data
+    type(jagged_array_c), pointer :: local_index
+    type(contiguous_sets_c), pointer :: set
+    type(jagged_array_c), pointer :: parent, child
+    integer, pointer, contiguous :: local(:), parent_array(:), child_array(:)
+    integer, allocatable :: lengths(:)
+    integer :: node, num_node, array_ptr, parent_num, child_num, prev_parent, prev_child, i
+
+    num_node = node_data%num_node
+    allocate(lengths(num_node))
+
+    lengths = 0
+    do node=1, num_node-1
+      prev_parent = 0
+      local => local_index%get_array(node)
+      prev_child = 0
+      prev_parent = 0
+      do i=1, size(local)
+        parent_num = node_data%get_matrix_num(local(i))
+        child_num = node_data%get_work_num(i, node)
+        if(prev_parent /= parent_num .or. prev_child /= child_num)then
+          if(prev_parent /= parent_num)then
+            prev_parent = parent_num
+          endif
+          if(prev_child /= child_num)then
+            prev_child = child_num
+          endif
+          lengths(node) = lengths(node)+1
+        endif
+      enddo
+    enddo
+
+    set => create_contiguous_sets(lengths)
+    parent => create_jagged_array(set)
+    child => create_jagged_array(set)
+
+    do node=1, num_node-1
+      parent_array => parent%get_array(node)
+      child_array => child%get_array(node)
+      local => local_index%get_array(node)
+      prev_child = 0
+      prev_parent = 0
+      array_ptr = 1
+      do i=1, size(local)
+        parent_num = node_data%get_matrix_num(local(i))
+        child_num = node_data%get_work_num(i, node)
+        if(prev_parent /= parent_num .or. prev_child /= child_num)then
+          if(prev_parent /= parent_num)then
+            prev_parent = parent_num
+          endif
+          if(prev_child /= child_num)then
+            prev_child = child_num
+          endif
+          parent_array(array_ptr) = parent_num
+          child_array(array_ptr) = child_num
+          array_ptr = array_ptr + 1
+        endif
+      enddo
+    enddo
+
+  end subroutine
 end module

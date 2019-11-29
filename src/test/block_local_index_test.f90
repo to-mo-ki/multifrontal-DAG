@@ -3,7 +3,6 @@ program block_local_index_test
   use contiguous_sets_m
   use block_local_index_m
   use node_data_m
-  use block_index_m
   use test_util
   implicit none
   type(contiguous_sets_c), pointer :: node_set
@@ -30,6 +29,18 @@ contains
     call add_test(1, block_local_index%get_start_row_num(1, 1), 1)
     call add_test(2, block_local_index%get_start_row_num(1, 2), 2)
     call add_test(3, block_local_index%get_start_row_num(1, 3), 3)
+    call end_tests()
+
+    call start_tests("parent")
+    call add_test("node=1,idx=1", block_local_index%get_parent_num(1, 1), 1)
+    call add_test("node=1,idx=2", block_local_index%get_parent_num(1, 2), 1)
+    call add_test("node=1,idx=3", block_local_index%get_parent_num(1, 3), 3)
+    call end_tests()
+
+    call start_tests("child")
+    call add_test("node=1,idx=1", block_local_index%get_child_num(1, 1), 2)
+    call add_test("node=1,idx=2", block_local_index%get_child_num(1, 2), 3)
+    call add_test("node=1,idx=3", block_local_index%get_child_num(1, 3), 3)
     call end_tests()
     
   end subroutine
@@ -58,6 +69,28 @@ contains
     call add_test("node=3, block_num=2", block_local_index%get_start_row_num(3, 2), 2)
     call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
     call end_tests()
+
+    call start_tests("parent")
+    call add_test("node=1,idx=1", block_local_index%get_parent_num(1, 1), 1)
+    call add_test("node=1,idx=2", block_local_index%get_parent_num(1, 2), 2)
+    call add_test("node=1,idx=3", block_local_index%get_parent_num(1, 3), 3)
+    call add_test("node=2,idx=1", block_local_index%get_parent_num(2, 1), 1)
+    call add_test("node=2,idx=2", block_local_index%get_parent_num(2, 2), 3)
+    call add_test("node=3,idx=1", block_local_index%get_parent_num(3, 1), 1)
+    call add_test("node=3,idx=2", block_local_index%get_parent_num(3, 2), 2)
+    call add_test("node=4,idx=1", block_local_index%get_parent_num(4, 1), 1)
+    call end_tests()
+
+    call start_tests("child")
+    call add_test("node=1,idx=1", block_local_index%get_child_num(1, 1), 2)
+    call add_test("node=1,idx=2", block_local_index%get_child_num(1, 2), 3)
+    call add_test("node=1,idx=3", block_local_index%get_child_num(1, 3), 3)
+    call add_test("node=2,idx=1", block_local_index%get_child_num(2, 1), 2)
+    call add_test("node=2,idx=2", block_local_index%get_child_num(2, 2), 2)
+    call add_test("node=3,idx=1", block_local_index%get_child_num(3, 1), 3)
+    call add_test("node=3,idx=2", block_local_index%get_child_num(3, 2), 3)
+    call add_test("node=4,idx=1", block_local_index%get_child_num(4, 1), 1)
+    call end_tests()
     
   end subroutine
 
@@ -85,6 +118,28 @@ contains
     call add_test("node=3, block_num=1", block_local_index%get_start_row_num(3, 1), 1)
     call add_test("node=3, block_num=2", block_local_index%get_start_row_num(3, 2), 3)
     call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
+    call end_tests()
+
+    call start_tests("parent")
+    call add_test("node=1,idx=1", block_local_index%get_parent_num(1, 1), 1)
+    call add_test("node=1,idx=2", block_local_index%get_parent_num(1, 2), 2)
+    call add_test("node=1,idx=3", block_local_index%get_parent_num(1, 3), 4)
+    call add_test("node=2,idx=1", block_local_index%get_parent_num(2, 1), 1)
+    call add_test("node=2,idx=2", block_local_index%get_parent_num(2, 2), 3)
+    call add_test("node=3,idx=1", block_local_index%get_parent_num(3, 1), 1)
+    call add_test("node=3,idx=2", block_local_index%get_parent_num(3, 2), 2)
+    call add_test("node=4,idx=1", block_local_index%get_parent_num(4, 1), 1)
+    call end_tests()
+
+    call start_tests("child")
+    call add_test("node=1,idx=1", block_local_index%get_child_num(1, 1), 2)
+    call add_test("node=1,idx=2", block_local_index%get_child_num(1, 2), 3)
+    call add_test("node=1,idx=3", block_local_index%get_child_num(1, 3), 3)
+    call add_test("node=2,idx=1", block_local_index%get_child_num(2, 1), 2)
+    call add_test("node=2,idx=2", block_local_index%get_child_num(2, 2), 2)
+    call add_test("node=3,idx=1", block_local_index%get_child_num(3, 1), 3)
+    call add_test("node=3,idx=2", block_local_index%get_child_num(3, 2), 4)
+    call add_test("node=4,idx=1", block_local_index%get_child_num(4, 1), 1)
     call end_tests()
     
   end subroutine
