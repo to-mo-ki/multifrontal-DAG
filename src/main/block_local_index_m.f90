@@ -17,6 +17,7 @@ module block_local_index_m
     procedure :: get_block_offset
     procedure :: get_parent_num
     procedure :: get_child_num
+    procedure :: get_num_block
   end type
 
   public :: create_block_local_index
@@ -103,6 +104,14 @@ contains
 
     ptr => this%child%get_array(node)
     child_num = ptr(idx)
+
+  end function
+
+  integer function get_num_block(this, node) result(num_block)
+    class(block_local_index_c) :: this
+    integer :: node
+
+    num_block = this%child%get_array_length(node)
 
   end function
 

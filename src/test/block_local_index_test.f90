@@ -44,6 +44,11 @@ contains
     call add_test("node=1,idx=2", block_local_index%get_child_num(1, 2), 3)
     call add_test("node=1,idx=3", block_local_index%get_child_num(1, 3), 3)
     call end_tests()
+
+    call start_tests("num_blocks")
+    call add_test("node=1", block_local_index%get_num_block(1), 3)
+    call add_test("node=2", block_local_index%get_num_block(2), 0)
+    call end_tests()
     
   end subroutine
 
@@ -94,6 +99,14 @@ contains
     call add_test("node=3,idx=1", block_local_index%get_child_num(3, 1), 3)
     call add_test("node=3,idx=2", block_local_index%get_child_num(3, 2), 3)
     call add_test("node=4,idx=1", block_local_index%get_child_num(4, 1), 1)
+    call end_tests()
+
+    call start_tests("num_blocks")
+    call add_test("node=1", block_local_index%get_num_block(1), 3)
+    call add_test("node=2", block_local_index%get_num_block(2), 2)
+    call add_test("node=1", block_local_index%get_num_block(3), 2)
+    call add_test("node=2", block_local_index%get_num_block(4), 1)
+    call add_test("node=2", block_local_index%get_num_block(5), 0)
     call end_tests()
     
   end subroutine
@@ -148,6 +161,14 @@ contains
     call add_test("node=4,idx=1", block_local_index%get_child_num(4, 1), 1)
     call end_tests()
     
+    call start_tests("num_blocks")
+    call add_test("node=1", block_local_index%get_num_block(1), 3)
+    call add_test("node=2", block_local_index%get_num_block(2), 2)
+    call add_test("node=1", block_local_index%get_num_block(3), 2)
+    call add_test("node=2", block_local_index%get_num_block(4), 1)
+    call add_test("node=2", block_local_index%get_num_block(5), 0)
+    call end_tests()
+
   end subroutine
 
 
@@ -166,6 +187,12 @@ contains
     call end_array_tests()
     
     !TODO: バグを修正したのちにget_start_row_numのテスト作成
+
+    call start_tests("num_blocks")
+    call add_test("node=1", block_local_index%get_num_block(1), 3)
+    call add_test("node=2", block_local_index%get_num_block(2), 2)
+    call add_test("node=1", block_local_index%get_num_block(3), 0)
+    call end_tests()
   end subroutine
 
   
