@@ -21,9 +21,11 @@ contains
     node_data => create_node_data([5, 8], [4,0], 3)
     block_local_index => create_block_local_index(node_data, local_index)
 
-    call assert_equal("local_index:node=1, block_num=1", block_local_index%get_local_index(1, 1), [2])
-    call assert_equal("local_index:node=1, block_num=2", block_local_index%get_local_index(1, 2), [3])
-    call assert_equal("local_index:node=1, block_num=3", block_local_index%get_local_index(1, 3), [1, 2])
+    call start_array_tests("local_index")
+    call add_test("local_index:node=1, block_num=1", block_local_index%get_local_index(1, 1), [2])
+    call add_test("local_index:node=1, block_num=2", block_local_index%get_local_index(1, 2), [3])
+    call add_test("local_index:node=1, block_num=3", block_local_index%get_local_index(1, 3), [1, 2])
+    call end_array_tests()
 
     call start_tests("start_row_num")
     call add_test(1, block_local_index%get_start_row_num(1, 1), 1)
@@ -59,7 +61,7 @@ contains
     call add_test("node=3, block_num=1", block_local_index%get_local_index(3, 1), [2])
     call add_test("node=3, block_num=2", block_local_index%get_local_index(3, 2), [1])
     call add_test("node=4, block_num=1", block_local_index%get_local_index(4, 1), [1])
-    call end_tests()
+    call end_array_tests()
 
     call start_tests("start_row_num")
     call add_test("node=1, block_num=1", block_local_index%get_start_row_num(1, 1), 1)
@@ -111,7 +113,7 @@ contains
     call add_test("node=3, block_num=1", block_local_index%get_local_index(3, 1), [1, 2])
     call add_test("node=3, block_num=2", block_local_index%get_local_index(3, 2), [1])
     call add_test("node=4, block_num=1", block_local_index%get_local_index(4, 1), [1])
-    call end_tests()
+    call end_array_tests()
 
     call start_tests("start_row_num")
     call add_test("node=1, block_num=1", block_local_index%get_start_row_num(1, 1), 1)
@@ -161,7 +163,7 @@ contains
     call add_test("node=1, block_num=3", block_local_index%get_local_index(1, 3), [1])
     call add_test("node=2, block_num=1", block_local_index%get_local_index(2, 1), [3])
     call add_test("node=2, block_num=2", block_local_index%get_local_index(2, 2), [1])
-    call end_tests()
+    call end_array_tests()
     
     !TODO: バグを修正したのちにget_start_row_numのテスト作成
   end subroutine

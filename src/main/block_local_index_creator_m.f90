@@ -6,7 +6,7 @@ module block_local_index_creator_m
   implicit none
   private
 
-  public :: create_num_blocks, create_num_indices, rebuild_val
+  public :: create_num_blocks, create_num_indices, rebuild_val, create_block_nums
 contains
 
   function create_num_blocks(node_data, local_index) result(set)
@@ -94,6 +94,39 @@ contains
       if(local_index(i) == 0)then
         local_index(i) = nb
       endif
+    enddo
+
+  end subroutine
+
+  subroutine create_block_nums(node_data, local_index, set, parent, child)
+    type(node_data_c), pointer :: node_data
+    type(jagged_array_c), pointer :: local_index
+    type(contiguous_sets_c), pointer :: set
+    type(jagged_array_c), pointer :: parent, child
+    integer, pointer, contiguous :: local(:), parent_array(:), child_array(:)
+    integer :: node, array_ptr, parent_num, child_num, prev_parent, prev_child, i
+
+    parent => create_jagged_array(set)
+    child => create_jagged_array(set)
+
+    do node=1, node_data%num_node-1
+      parent_array => parent%get_array(node)
+      child_array => child%get_array(node)
+      local => local_index%get_array(node)
+      prev_child = 0
+      prev_parent = 0
+      array_ptr = 1
+      do i=1, size(local)
+        parent_num = node_data%get_matrix_num(local(i))
+        child_num = node_data%get_work_num(i, node)
+        if(prev_parent /= parent_num .or. prev_child /= child_num)then
+          prev_parent = parent_num
+          prev_child = child_num
+          parent_array(array_ptr) = parent_num
+          child_array(array_ptr) = child_num
+          array_ptr = array_ptr + 1
+        endif
+      enddo
     enddo
 
   end subroutine
