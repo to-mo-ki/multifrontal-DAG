@@ -2,9 +2,9 @@ module matrix_splitter_m
   implicit none
   
 contains
-  subroutine split_tri_matrix(origin, left, right, lsize, rsize, n)
-    integer, intent(in) :: lsize, rsize, n
-    double precision :: origin(n, n), left(lsize, n), right(rsize, n)
+  subroutine split_tri_matrix(origin, left, right, lsize, rsize)
+    integer, intent(in) :: lsize, rsize
+    double precision :: origin(lsize+rsize, *), left(lsize, *), right(rsize, *)
     integer :: i, j
 
     do i=1, lsize
@@ -13,7 +13,7 @@ contains
       enddo
     enddo
 
-    do i=lsize+1, n
+    do i=lsize+1, lsize+rsize
       do j=1, lsize
         left(j, i) = origin(j, i)
       enddo
@@ -27,9 +27,9 @@ contains
 
   end subroutine
 
-  subroutine split_rect_matrix(origin, left, right, lsize, rsize, nrow, ncol)
-    integer, intent(in) :: lsize, rsize, nrow, ncol
-    double precision :: origin(ncol, nrow), left(lsize, nrow), right(rsize, nrow)
+  subroutine split_rect_matrix(origin, left, right, lsize, rsize, nrow)
+    integer, intent(in) :: lsize, rsize, nrow
+    double precision :: origin(lsize+rsize, nrow), left(lsize, nrow), right(rsize, nrow)
     integer :: i, j
 
     do i=1, nrow
