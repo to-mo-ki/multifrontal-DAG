@@ -33,6 +33,12 @@ contains
     call add_test(3, block_local_index%get_start_row_num(1, 3), 3)
     call end_tests()
 
+    call start_tests("block_offset")
+    call add_test("node=1, block_num=1", block_local_index%get_block_offset(1, 1), 0)
+    call add_test("node=1, block_num=2", block_local_index%get_block_offset(1, 2), 0)
+    call add_test("node=1, block_num=3", block_local_index%get_block_offset(1, 3), 1)
+    call end_tests()
+
     call start_tests("parent")
     call add_test("node=1,idx=1", block_local_index%get_parent_num(1, 1), 1)
     call add_test("node=1,idx=2", block_local_index%get_parent_num(1, 2), 1)
@@ -77,6 +83,17 @@ contains
     call add_test("node=3, block_num=1", block_local_index%get_start_row_num(3, 1), 1)
     call add_test("node=3, block_num=2", block_local_index%get_start_row_num(3, 2), 2)
     call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
+    call end_tests()
+
+    call start_tests("block_offset")
+    call add_test("node=1, block_num=1", block_local_index%get_block_offset(1, 1), 0)
+    call add_test("node=1, block_num=2", block_local_index%get_block_offset(1, 2), 0)
+    call add_test("node=1, block_num=3", block_local_index%get_block_offset(1, 3), 1)
+    call add_test("node=2, block_num=1", block_local_index%get_block_offset(2, 1), 0)
+    call add_test("node=2, block_num=2", block_local_index%get_block_offset(2, 2), 1)
+    call add_test("node=3, block_num=1", block_local_index%get_block_offset(3, 1), 0)
+    call add_test("node=3, block_num=2", block_local_index%get_block_offset(3, 2), 1)
+    call add_test("node=4, block_num=1", block_local_index%get_block_offset(4, 1), 0)
     call end_tests()
 
     call start_tests("parent")
@@ -139,6 +156,17 @@ contains
     call add_test("node=4, block_num=1", block_local_index%get_start_row_num(4, 1), 1)
     call end_tests()
 
+    call start_tests("block_offset")
+    call add_test("node=1, block_num=1", block_local_index%get_block_offset(1, 1), 0)
+    call add_test("node=1, block_num=2", block_local_index%get_block_offset(1, 2), 0)
+    call add_test("node=1, block_num=3", block_local_index%get_block_offset(1, 3), 1)
+    call add_test("node=2, block_num=1", block_local_index%get_block_offset(2, 1), 0)
+    call add_test("node=2, block_num=2", block_local_index%get_block_offset(2, 2), 1)
+    call add_test("node=3, block_num=1", block_local_index%get_block_offset(3, 1), 0)
+    call add_test("node=3, block_num=2", block_local_index%get_block_offset(3, 2), 0)
+    call add_test("node=4, block_num=1", block_local_index%get_block_offset(4, 1), 0)
+    call end_tests()
+
     call start_tests("parent")
     call add_test("node=1,idx=1", block_local_index%get_parent_num(1, 1), 1)
     call add_test("node=1,idx=2", block_local_index%get_parent_num(1, 2), 2)
@@ -173,7 +201,7 @@ contains
 
 
   subroutine test4()
-    local_index => create_jagged_array([5, 2, 0], [2, 3, 4, 5, 7, 3, 4])
+    local_index => create_jagged_array([5, 3, 0], [2, 3, 4, 5, 7, 1, 3, 4])
     node_data => create_node_data([4,5,4],[5,2,0],3)
     node_set => create_contiguous_sets([4, 5, 4])
     block_local_index => create_block_local_index(node_data, local_index)
@@ -182,15 +210,24 @@ contains
     call add_test("node=1, block_num=1", block_local_index%get_local_index(1, 1), [2, 3])
     call add_test("node=1, block_num=2", block_local_index%get_local_index(1, 2), [1, 2])
     call add_test("node=1, block_num=3", block_local_index%get_local_index(1, 3), [1])
-    call add_test("node=2, block_num=1", block_local_index%get_local_index(2, 1), [3])
-    call add_test("node=2, block_num=2", block_local_index%get_local_index(2, 2), [1])
+    call add_test("node=2, block_num=1", block_local_index%get_local_index(2, 1), [1])
+    call add_test("node=2, block_num=2", block_local_index%get_local_index(2, 2), [3])
+    call add_test("node=2, block_num=3", block_local_index%get_local_index(2, 3), [1])
     call end_array_tests()
     
     !TODO: バグを修正したのちにget_start_row_numのテスト作成
-
+    call start_tests("block_offset")
+    call add_test("node=1, block_num=1", block_local_index%get_block_offset(1, 1), 0)
+    call add_test("node=1, block_num=2", block_local_index%get_block_offset(1, 2), 0)
+    call add_test("node=1, block_num=3", block_local_index%get_block_offset(1, 3), 2)
+    call add_test("node=2, block_num=1", block_local_index%get_block_offset(2, 1), 0)
+    call add_test("node=2, block_num=2", block_local_index%get_block_offset(2, 2), 0)
+    call add_test("node=2, block_num=3", block_local_index%get_block_offset(2, 3), 1)
+    call end_tests()
+    
     call start_tests("num_blocks")
     call add_test("node=1", block_local_index%get_num_block(1), 3)
-    call add_test("node=2", block_local_index%get_num_block(2), 2)
+    call add_test("node=2", block_local_index%get_num_block(2), 3)
     call add_test("node=1", block_local_index%get_num_block(3), 0)
     call end_tests()
   end subroutine

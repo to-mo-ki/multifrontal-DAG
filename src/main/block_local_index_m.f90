@@ -70,7 +70,6 @@ contains
 
   end function
 
-  ! TODO:TEST
   integer function get_block_offset(this, node, idx) result(offset)
     class(block_local_index_c) :: this
     integer, intent(in) :: node, idx
@@ -79,7 +78,7 @@ contains
     ssize = this%node_data%get_border_supernode_size(node)
     wsize = this%node_data%get_border_work_size(node)
 
-    if(ssize+this%get_start_row_num(node, idx)-1 <= wsize)then
+    if(this%get_start_row_num(node, idx) <= wsize)then !error
       offset = this%get_start_row_num(node, idx)-1
     else
       offset = mod(ssize+this%get_start_row_num(node, idx)-1, this%node_data%nb)
