@@ -16,7 +16,7 @@ contains
 
     do node=1, factors%get_num_node()
       call supernode_factrize(factors, node)
-      if(factors%exist_border(node))then
+      if(factors%exist_border(node) .and. node /= factors%get_num_node())then
         call border_factorize2(factors, node)
       endif
       call extend_add(factors, block_local_index, node, parent(node))
@@ -44,8 +44,8 @@ contains
       enddo
     enddo
 
-    !TODO: num_blockメソッドを作成
-    if(node==factors%get_num_node())then
+    !TODO: num_blockメソッドを作成, bug!! divisibleのときは不要
+    if(node==factors%get_num_node() .and. factors%exist_border(node))then
       call factorize(factors, node, factors%get_work_start_index(node))
     endif
 

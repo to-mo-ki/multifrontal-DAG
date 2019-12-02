@@ -21,7 +21,7 @@ program factors_test
   call check_num_blocks([2, 4, 2])
 
   call check_work_start_indices([1, 3])
-  call check_exist_border([.true., .false., .false.])
+  call check_exist_border([.true., .false., .true.])
   call check_matrix_size(1, [9, 6, 4])
   call check_matrix_size(2, [9, 9, 9, 6, 9, 9, 6, 9, 6, 4])
   call check_matrix_size(3, [9, 3, 1])

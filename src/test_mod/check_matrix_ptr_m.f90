@@ -79,12 +79,14 @@ contains
       print *, "check supernode"
       if(node /= num_node)then
         call search(factors, node, 1, work_start_index-1, num_block, extract_supernode, a_check_mark)
+        call search(factors, node, work_start_index, work_start_index, num_block, extract_supernode, a_check_no_mark)
       else
         call search(factors, node, 1, work_start_index, num_block, extract_supernode, a_check_mark)
       endif
-      call search(factors, node, work_start_index, work_start_index, num_block, extract_supernode, a_check_no_mark)
       print *, "check border"
-      call search(factors, node, work_start_index, work_start_index, num_block, extract_border, a_check_mark)
+      if(node /= num_node)then
+        call search(factors, node, work_start_index, work_start_index, num_block, extract_border, a_check_mark)
+      endif
       if(node /= num_node)then
         print *, "check work"
         call search(factors, node, work_start_index+1, num_block, num_block, extract_work, a_check_mark)
