@@ -112,17 +112,8 @@ contains
   integer function get_num_block(this, node) result(num_block)
     class(factors_c) :: this
     integer, intent(in) :: node
-    integer :: nb, nc, nr, n
 
-    nb = this%nb
-    nc = this%node_sets%get_length(node)
-    nr = this%ccs%get_array_length(node)
-    n = nc + nr
-    if(mod(n, nb) == 0)then
-      num_block = n/nb
-    else
-      num_block = n/nb+1
-    endif
+    num_block = this%node_data%get_num_matrix_block(node)
 
   end function
 

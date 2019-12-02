@@ -10,6 +10,7 @@ module node_data_m
     procedure :: divisible
     procedure :: get_border_supernode_size
     procedure :: get_border_work_size
+    procedure :: get_num_matrix_block
     procedure :: get_num_supernode_block
     procedure :: get_num_work_block
     procedure :: get_work_size
@@ -134,6 +135,24 @@ contains
     integer, intent(in) :: idx, node
     
     num = this%get_matrix_num(this%supernode_size(node) + idx)
+  end function
+
+  ! TODO: TEST
+  integer function get_num_matrix_block(this, node) result(num_block)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    integer :: nb, nc, nr, n
+
+    nb = this%nb
+    nc = this%supernode_size(node)
+    nr = this%work_size(node)
+    n = nc + nr
+    if(mod(n, nb) == 0)then
+      num_block = n/nb
+    else
+      num_block = n/nb+1
+    endif
+
   end function
 
 
