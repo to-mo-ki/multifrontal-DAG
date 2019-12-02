@@ -6,10 +6,12 @@ module factors_m
   use supernode_controller_m
   use work_controller_m
   use border_controller_m
+  use node_data_m
   implicit none
   private
   type, public :: factors_c
     private
+    type(node_data_c), pointer :: node_data
     type(block_matrices_c), pointer :: supernode, work, border
     type(contiguous_sets_c), pointer :: node_sets
     type(jagged_array_c), pointer :: ccs
@@ -24,8 +26,9 @@ module factors_m
   public :: create_factors
 
 contains
-  function create_factors(node_sets, ccs, nb)result(this)
+  function create_factors(node_data, node_sets, ccs, nb)result(this)
     type(factors_c), pointer :: this
+    type(node_data_c), pointer :: node_data
     type(contiguous_sets_c), pointer, intent(in) :: node_sets
     type(jagged_array_c), pointer, intent(in) :: ccs
     integer, intent(in) :: nb
@@ -41,6 +44,7 @@ contains
     this%node_sets => node_sets
     this%ccs => ccs
     this%nb = nb
+    this%node_data => node_data
   
   end function
 
@@ -150,6 +154,7 @@ contains
   end function
 
   function get_block_size(this, idx, node) result(block_size)
+    use block_size_calculator_m, p_get_block_size => get_block_size
     class(factors_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
@@ -157,12 +162,7 @@ contains
     
     n = this%node_sets%get_length(node) + this%ccs%get_array_length(node)
     nb = this%nb
-    
-    if(idx*nb > n)then
-      block_size = mod(n, nb)
-    else
-      block_size = nb
-    endif
+    block_size = p_get_block_size(idx, nb, n)
     
   end function
 
@@ -195,11 +195,8 @@ contains
     integer, intent(out) :: ssize, wsize
     integer :: order, block_size, j
 
-    j = this%get_work_start_index(node)
-    block_size = this%get_block_size(j, node)
-    order = this%node_sets%get_length(node)
-    ssize = mod(order, this%nb)
-    wsize = block_size - ssize
+    ssize = this%node_data%get_border_supernode_size(node)
+    wsize = this%node_data%get_border_work_size(node)
 
   end subroutine
 

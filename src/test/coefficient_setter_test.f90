@@ -4,6 +4,7 @@ program coefficient_setter_test
   use factors_m
   use jagged_array_m
   use contiguous_sets_m
+  use node_data_m
   use ccs_m
   use test_util
   implicit none
@@ -11,13 +12,15 @@ program coefficient_setter_test
   type(jagged_array_c), pointer :: l_structure, a_structure
   type(contiguous_sets_c), pointer :: node_set
   type(factors_c), pointer :: factors
+  type(node_data_c), pointer :: node_data
   double precision, pointer, contiguous :: matrix(:)
   integer :: nb
 
   node_set => create_contiguous_sets([2, 2, 2, 3])
   l_structure => create_jagged_array([2, 2, 2, 0], [8, 9, 7, 9, 7, 8])
   nb = 2
-  factors => create_factors(node_set, l_structure, nb)
+  node_data => create_node_data([2, 2, 2, 3], [2, 2, 2, 0], nb)
+  factors => create_factors(node_data, node_set, l_structure, nb)
   a_structure => create_jagged_array([3,2,4,2,3,3,2,1,1],[1,2,3,2,4,1,2,3,4,2,4,1,2,4,2,3,4,1,3,2,3])
   ccs => create_ccs(a_structure, [double precision :: 11,21,81,22,92,33,43,73,93,44,94,55,65,85,66,76,86,77,97,88,99])
   call set_zero(factors)

@@ -16,10 +16,12 @@ program border_subroutines_test
   use factors_m
   use contiguous_sets_m
   use jagged_array_m
+  use node_data_m
   use border_subroutines_m
   use test_util
   implicit none
   type(factors_c), pointer :: factors
+  type(node_data_c), pointer :: node_data
   type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: ccs
   integer, pointer, contiguous :: ccs_val(:)
@@ -29,8 +31,8 @@ program border_subroutines_test
   allocate(ccs_val(9))
   ccs_val = [4, 5, 6, 7, 8, 9, 10, 11, 12]
   ccs => create_jagged_array([9, 0], ccs_val)
-
-  factors => create_factors(node_sets, ccs, 5)
+  node_data => create_node_data([3,9],[9,0], 5)
+  factors => create_factors(node_data, node_sets, ccs, 5)
 
   a11_s => factors%get_supernode_ptr(1, 1, 1)
   a21_s => factors%get_supernode_ptr(1, 2, 1)
