@@ -31,12 +31,8 @@ contains
         parent_num = node_data%get_matrix_num(local(i))
         child_num = node_data%get_work_num(i, node)
         if(prev_parent /= parent_num .or. prev_child /= child_num)then
-          if(prev_parent /= parent_num)then
-            prev_parent = parent_num
-          endif
-          if(prev_child /= child_num)then
-            prev_child = child_num
-          endif
+          prev_parent = parent_num
+          prev_child = child_num
           num_blocks(node) = num_blocks(node)+1
         endif
       enddo
@@ -68,12 +64,8 @@ contains
         parent_num = node_data%get_matrix_num(local(i))
         child_num = node_data%get_work_num(i, node)
         if(prev_parent /= parent_num .or. prev_child /= child_num)then
-          if(prev_parent /= parent_num)then
-            prev_parent = parent_num
-          endif
-          if(prev_child /= child_num)then
-            prev_child = child_num
-          endif
+          prev_parent = parent_num
+          prev_child = child_num
           array_ptr = array_ptr + 1
         endif
         num_indices(array_ptr) = num_indices(array_ptr) + 1
