@@ -130,11 +130,14 @@ contains
   end function
 
   logical function exist_border(this, node)
-    !TODO: 最後のノード判定
     class(factors_c) :: this
     integer, intent(in) :: node
     integer :: nb, nc
 
+    if(node == this%node_sets%get_num_sets())then
+      exist_border = .false.
+      return
+    endif
     nb = this%nb
     nc = this%node_sets%get_length(node)
     exist_border = mod(nc, nb) /= 0

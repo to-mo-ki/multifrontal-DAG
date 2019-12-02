@@ -15,15 +15,19 @@ program seq_factorize_test
   type(jagged_array_c), pointer :: local_index, supernodal_index
   type(ccs_c), pointer :: ccs
   type(node_data_c), pointer :: node_data
-  double precision, pointer, contiguous :: val(:)
+  double precision, pointer, contiguous :: val(:), matrix(:)
   integer :: nb
 
-  call test_nb_2()
+  nb = 2
+  call init()
+  call check_nb_2()
+
+  nb = 3
+  call init()
+  call check_nb_3()
   
 contains
-
-  subroutine test_nb_2
-    nb = 2
+  subroutine init()
     node_sets => create_contiguous_sets([4,5,4])
     local_index => create_jagged_array([5,3,0],[2,3,4,5,7,1,3,4])
     allocate(val(70), source=[double precision :: 1,2,3,4,1,2,3,4,5,8,12,16,4,8,12,16,20,27,36,9,18,27,36,45,64,16,32,48,64,80,1,2,3,4,5,1,2,3,12,20,28,36,4,28,12,43,60,77,9,58,27,100,128,16,92,48,189,25,130,75,6,2,13,19,8,12,16,147,66,109])
@@ -34,7 +38,9 @@ contains
     block_local_index => create_block_local_index(node_data, local_index)
     call set_coefficient(ccs, factors, nb)
     call seq_factorize(factors, block_local_index, [2,3,0])
+  end subroutine
 
+  subroutine check_nb_2
     call start_array_tests("nb=2")
     call add_test_tri("node=1, (i, j) = (1,1)", factors%get_supernode_ptr(1, 1, 1), [1d0,2d0,2d0], 2)
     call add_test("node=1, (i, j) = (2,1)", factors%get_supernode_ptr(1, 2, 1), [3d0,3d0,4d0,4d0])
@@ -56,9 +62,30 @@ contains
     call add_test_tri("node=3, (i, j) = (1,1)", factors%get_supernode_ptr(3, 1, 1), [1d0,2d0,2d0], 2)
     call add_test("node=3, (i, j) = (2,1)", factors%get_supernode_ptr(3, 2, 1), [3d0,3d0,4d0,4d0])
     call add_test_tri("node=3, (i, j) = (2,2)", factors%get_supernode_ptr(3, 2, 2), [3d0,4d0,4d0], 2)
-    
     call end_array_tests()
-
     
   end subroutine
+
+  subroutine check_nb_3
+    call start_array_tests("nb=3")
+    call add_test_tri("node=1, (i, j) = (1,1)", factors%get_supernode_ptr(1, 1, 1), [1d0,2d0,2d0,3d0,3d0,3d0], 3)
+    call add_test("node=1, (i, j) = (2,1)", factors%get_supernode_ptr(1, 2, 1), [4d0,4d0,4d0,1d0,1d0,1d0,2d0,2d0,2d0])
+    call add_test("node=1, (i, j) = (3,1)", factors%get_supernode_ptr(1, 3, 1), [3d0,3d0,3d0,4d0,4d0,4d0,5d0,5d0,5d0])
+    call add_test("node=1, (i, j) = (2,2)", factors%get_supernode_ptr(1, 2, 2), [4d0,1d0,2d0])
+    call add_test("node=1, (i, j) = (3,2)", factors%get_supernode_ptr(1, 3, 2), [3d0,4d0,5d0])
+    call add_test_tri("node=2, (i, j) = (1,1)", factors%get_supernode_ptr(2, 1, 1), [1d0,2d0,2d0,3d0,3d0,3d0], 3)
+    call add_test("node=2, (i, j) = (2,1)", factors%get_supernode_ptr(2, 2, 1), [4d0,4d0,4d0,5d0,5d0,5d0,1d0,1d0,1d0])
+    call add_test("node=2, (i, j) = (3,1)", factors%get_supernode_ptr(2, 3, 1), [2d0,2d0,2d0,3d0,3d0,3d0])
+    matrix => factors%get_supernode_ptr(2, 2, 2)
+    call add_test_tri("node=2, (i, j) = (2,2):tri", matrix(1:4), [4d0,5d0,5d0], 2)
+    call add_test("node=2, (i, j) = (2,2):rect", matrix(5:6), [1d0,1d0])
+    call add_test("node=2, (i, j) = (3,2)", factors%get_supernode_ptr(2, 3, 2), [2d0,2d0,3d0,3d0])
+    call add_test_tri("node=3, (i, j) = (1,1)", factors%get_supernode_ptr(3, 1, 1), [1d0,2d0,2d0,3d0,3d0,3d0], 3)
+    call add_test("node=3, (i, j) = (2,1)", factors%get_supernode_ptr(3, 2, 1), [4d0,4d0,4d0])
+    call add_test_tri("node=3, (i, j) = (2,2)", factors%get_supernode_ptr(3, 2, 2), [4d0], 1)
+    call end_array_tests()
+    
+  end subroutine
+
+  
 end program
