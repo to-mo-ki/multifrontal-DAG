@@ -131,11 +131,8 @@ contains
   logical function exist_border(this, node)
     class(factors_c) :: this
     integer, intent(in) :: node
-    integer :: nb, nc
-
-    nb = this%nb
-    nc = this%node_sets%get_length(node)
-    exist_border = mod(nc, nb) /= 0
+    
+    exist_border = .not. this%node_data%divisible(node)
   
   end function
 
@@ -162,21 +159,10 @@ contains
     integer, intent(in) :: idx, node
     integer :: block_size
     integer :: nb, first_block_size, work_size, work_index
-    
-    nb = this%nb
-    first_block_size = nb - mod(this%node_sets%get_length(node), nb)
-    work_size = this%ccs%get_array_length(node)
-    if(idx == this%get_work_start_index(node))then
-      block_size = first_block_size
-    else
-      !ここがおかしい
-      work_index = idx - this%node_sets%get_length(node)/nb
-      if((work_index-1)*nb + first_block_size > work_size)then
-        block_size = mod(work_size-first_block_size, nb)
-      else
-        block_size = nb
-      endif
-    endif
+    integer :: n
+
+    n = this%node_sets%get_length(node)
+    block_size = this%node_data%get_work_size(idx-n/this%nb, node)
     
   end function
 
