@@ -44,6 +44,11 @@ contains
       enddo
     enddo
 
+    !TODO: num_blockメソッドを作成
+    if(node==factors%get_num_node())then
+      call factorize(factors, node, factors%get_work_start_index(node))
+    endif
+
   end subroutine
 
   subroutine border_factorize2(factors, node)

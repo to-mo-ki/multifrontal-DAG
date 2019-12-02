@@ -71,6 +71,10 @@ contains
         block_matrices => this%border
       endif
     endif
+    !TODO: これがないときにエラーを発生させるテスト作成
+    if(node == this%node_sets%get_num_sets())then
+      block_matrices => this%supernode
+    endif
     ptr => block_matrices%get_ptr(node, i, j)
     
   end function
