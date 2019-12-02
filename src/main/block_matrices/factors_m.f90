@@ -54,22 +54,19 @@ contains
     integer, intent(in) :: node, i, j
     integer :: nc, nr, nb, r, q
     type(block_matrices_c), pointer :: block_matrices
-    nb = this%nb
-    nc = this%node_sets%get_length(node)
-    nr = this%ccs%get_array_length(node)
 
-    r = mod(nc, nb)
-    q = nc/nb
-    if(r == 0)then
-      if(j <= q)then
+    nc = this%node_data%get_num_supernode_block(node)
+    
+    if(.not. this%exist_border(node))then
+      if(j <= nc)then
         block_matrices => this%supernode
       else
         block_matrices => this%work
       endif
     else
-      if(j < q+1)then
+      if(j < nc)then
         block_matrices => this%supernode
-      else if(j > q+1)then
+      else if(j > nc)then
         block_matrices => this%work
       else
         block_matrices => this%border
