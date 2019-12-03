@@ -1,4 +1,4 @@
-program block_matrices_test
+program block_matrices_supernode_test
   use jagged_array_m
   use contiguous_sets_m
   use block_matrices_m
@@ -172,4 +172,4 @@ program block_matrices_test
   call add_test("(6,2,2)", block_matrices%get_ptr(6,2,2), [(1d0, i=1,9)])
   call end_array_tests()
 
-end program block_matrices_test
+end program
