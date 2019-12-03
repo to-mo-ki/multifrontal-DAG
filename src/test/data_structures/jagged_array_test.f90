@@ -29,21 +29,20 @@ program jagged_array_test
   val => ccs%get_raw_val()
   call assert_equal("get_raw_val", ccs%get_raw_val(), row)
   set => ccs%get_set()
-  call assert_equal("get_set(1)", set%get_length(1), 3)
-  call assert_equal("get_set(2)", set%get_length(2), 4)
-  call assert_equal("get_set(3)", set%get_length(3), 3)
-  call assert_equal("get_set(4)", set%get_length(4), 2)
-  call assert_equal("get_set(5)", set%get_length(5), 3)
-  call assert_equal("get_set(6)", set%get_length(6), 2)
-  call assert_equal("get_set(7)", set%get_length(7), 2)
-  call assert_equal("get_set(8)", set%get_length(8), 1)
-  call assert_equal("get_set(9)", set%get_length(9), 1)
+  call start_tests("get_length")
+  call add_test("1", set%get_length(1), 3)
+  call add_test("2", set%get_length(2), 4)
+  call add_test("3", set%get_length(3), 3)
+  call add_test("4", set%get_length(4), 2)
+  call add_test("5", set%get_length(5), 3)
+  call add_test("6", set%get_length(6), 2)
+  call add_test("7", set%get_length(7), 2)
+  call add_test("8", set%get_length(8), 1)
+  call add_test("9", set%get_length(9), 1)
+  call end_tests()
 
   ccs => create_jagged_array(set)
   call assert_equal("get_num_arrays2", ccs%get_num_arrays(), 9)
   call assert_equal("get_num_vals2", ccs%get_num_vals(), 21)
 
-  
-  
-  
 end program
