@@ -23,7 +23,6 @@ contains
     else
       pos = first_block + (idx2-2)*nb+1
     endif
-    print *, "pos:", pos
 
   end function
 
