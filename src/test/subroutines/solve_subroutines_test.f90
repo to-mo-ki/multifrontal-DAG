@@ -3,10 +3,17 @@ program sovle_subroutines_test
   ![3 3  ] [1] = [6]
   ![2 2 2] [1]   [6]
 
-  ![1 1 1] [1] = [4 ]
-  ![2 2 2] [1] = [8 ]
-  ![3 3 3] [1] = [12]
-  ![4 4 4]     = [16]
+  ![1 1 1] [1] = [3]
+  ![2 2 2] [1] = [6]
+  !        [1]
+
+  ![9 ]   [1 1][1]  [9 ]   [3]=[6]
+  ![12] - [2 2][2] =[12] - [6]=[6]
+  ![13]   [2 2]     [13]   [9]=[4]
+
+  ![2 2 2] [1]   [6]
+  ![  3 3] [1] = [6]
+  ![    4] [1]   [4]
   use solve_subroutines_m
   use factors_m
   use right_hand_m
@@ -43,14 +50,12 @@ program sovle_subroutines_test
   factors%get_supernode_ptr(1,1,1) = [2d0,0d0,0d0,2d0,3d0,0d0,2d0,3d0,4d0]
   factors%get_supernode_ptr(1,2,1) = [1d0,2d0,3d0,1d0,2d0,3d0]
   
-  rh%get_array_ptr(1,1) = [6d0,6d0,4d0]
+  rh%get_array_ptr(1,1) = [9d0,12d0,13d0]
+  rh%get_array_ptr(1,2) = [1d0,2d0]
+
+  call update_u(factors, rh, 1, 2, 1)
+  call assert_equal("update_u", rh%get_array_ptr(1,1), [6d0,6d0,4d0])
   call backward(factors, rh, 1, 1)
   call assert_equal("backward", rh%get_array_ptr(1,1), [1d0,1d0,1d0])
 
-  rh%get_array_ptr(1,1) = [3d0,6d0,9d0]
-  rh%get_array_ptr(1,2) = [1d0,2d0]
-  call update_u(factors, rh, 1, 2, 1)
-  call assert_equal("update_u", rh%get_array_ptr(1,1), [0d0,0d0,0d0])
-
-  
 end program sovle_subroutines_test
