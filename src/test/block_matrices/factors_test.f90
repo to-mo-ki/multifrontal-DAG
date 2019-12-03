@@ -3,7 +3,6 @@ program factors_test
   use jagged_array_m
   use factors_m
   use test_util
-  use check_matrix_ptr_m
   use node_data_m
   implicit none
 
