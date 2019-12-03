@@ -29,7 +29,7 @@ contains
     a => factors%get_supernode_ptr(node, i, j)
     b1 => rh%get_array_ptr(node, j)
     b2 => rh%get_array_ptr(node, i)
-    ncol = factors%get_block_size(j, node)
+    ncol = factors%get_supernode_block_size(j, node)
     nrow = factors%get_block_size(i, node)
     call mydgemv_t(a, ncol, nrow, b1, b2)
 
@@ -59,7 +59,7 @@ contains
     a => factors%get_supernode_ptr(node, i, j)
     b1 => rh%get_array_ptr(node, i)
     b2 => rh%get_array_ptr(node, j)
-    ncol = factors%get_block_size(j, node)
+    ncol = factors%get_supernode_block_size(j, node)
     nrow = factors%get_block_size(i, node)
     call mydgemv_n(a, ncol, nrow, b1, b2)
 

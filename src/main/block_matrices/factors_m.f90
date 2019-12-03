@@ -19,7 +19,7 @@ module factors_m
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
-    procedure :: get_block_size, get_border_info, get_work_size
+    procedure :: get_block_size, get_supernode_block_size, get_border_info, get_work_size
     procedure :: get_first, get_last
   end type
 
@@ -146,6 +146,19 @@ contains
     integer :: nb, n
     
     n = this%node_sets%get_length(node) + this%ccs%get_array_length(node)
+    nb = this%nb
+    block_size = p_get_block_size(idx, nb, n)
+    
+  end function
+
+  function get_supernode_block_size(this, idx, node) result(block_size)
+    use block_size_calculator_m, p_get_block_size => get_block_size
+    class(factors_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, n
+    
+    n = this%node_sets%get_length(node)
     nb = this%nb
     block_size = p_get_block_size(idx, nb, n)
     

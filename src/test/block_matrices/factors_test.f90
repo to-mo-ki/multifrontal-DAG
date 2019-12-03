@@ -48,6 +48,14 @@ program factors_test
   call add_test("node=3, index=2", factors%get_block_size(2, 3), 1)
   call end_tests()
 
+  call start_tests("get_supernode_block_size")
+  call add_test("node=1, index=1", factors%get_supernode_block_size(1, 1), 1)
+  call add_test("node=2, index=1", factors%get_supernode_block_size(1, 2), 3)
+  call add_test("node=2, index=2", factors%get_supernode_block_size(2, 2), 3)
+  call add_test("node=3, index=1", factors%get_supernode_block_size(1, 3), 3)
+  call add_test("node=3, index=2", factors%get_supernode_block_size(2, 3), 1)
+  call end_tests()
+
   factors%get_supernode_ptr(1,1,1) = 0.0d0
   factors%get_supernode_ptr(1,2,1) = 0.0d0
   factors%get_supernode_ptr(2,1,1) = 0.0d0
@@ -191,6 +199,21 @@ program factors_test
   call add_test("node=5, index=3", factors%get_block_size(3, 5), 3)
   call add_test("node=6, index=1", factors%get_block_size(1, 6), 3)
   call add_test("node=6, index=2", factors%get_block_size(2, 6), 3)
+  call end_tests()
+
+  call start_tests("get_suprnode_block_size")
+  call add_test("node=1, index=1", factors%get_supernode_block_size(1, 1), 3)
+  call add_test("node=1, index=2", factors%get_supernode_block_size(2, 1), 2)
+  call add_test("node=2, index=1", factors%get_supernode_block_size(1, 2), 3)
+  call add_test("node=2, index=2", factors%get_supernode_block_size(2, 2), 3)
+  call add_test("node=3, index=1", factors%get_supernode_block_size(1, 3), 3)
+  call add_test("node=3, index=2", factors%get_supernode_block_size(2, 3), 3)
+  call add_test("node=3, index=3", factors%get_supernode_block_size(3, 3), 1)
+  call add_test("node=4, index=1", factors%get_supernode_block_size(1, 4), 3)
+  call add_test("node=4, index=2", factors%get_supernode_block_size(2, 4), 2)
+  call add_test("node=5, index=1", factors%get_supernode_block_size(1, 5), 3)
+  call add_test("node=6, index=1", factors%get_supernode_block_size(1, 6), 3)
+  call add_test("node=6, index=2", factors%get_supernode_block_size(2, 6), 3)
   call end_tests()
 
   factors%get_supernode_ptr(1,1,1) = 0d0
