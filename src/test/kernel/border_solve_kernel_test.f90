@@ -6,15 +6,12 @@ program border_solve_kernel_test
 
   matrix = [4,0,0,3,3,0,2,2,2,1,1,1,2,2,2]
   rh = [4,6,6,3,6]
-  call border_forward(matrix, rh, 3, 2)
+  call border_dtrsv_l(matrix, rh, 3, 2)
   call assert_equal("border_forward", rh, [1d0,1d0,1d0,0d0,0d0])
 
   matrix = [2,0,0,2,3,0,2,3,4,1,2,3,1,2,3]
   rh = [9,12,13,1,2]
-  call border_backward(matrix, rh, 3, 2)
+  call border_dtrsv_u(matrix, rh, 3, 2)
   call assert_equal("border_backward", rh, [1d0,1d0,1d0,1d0,2d0])
-
-
-
   
 end program 

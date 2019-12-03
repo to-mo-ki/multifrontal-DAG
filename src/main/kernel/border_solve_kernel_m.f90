@@ -3,10 +3,10 @@ module border_solve_kernel_m
   implicit none
   private
 
-  public :: border_forward, border_backward
+  public :: border_dtrsv_l, border_dtrsv_u
   
 contains
-  subroutine border_forward(matrix, rh, ncol, nrow)
+  subroutine border_dtrsv_l(matrix, rh, ncol, nrow)
     double precision, contiguous :: matrix(:), rh(:)
     integer, intent(in) :: ncol, nrow
 
@@ -15,7 +15,7 @@ contains
 
   end subroutine
 
-  subroutine border_backward(matrix, rh, ncol, nrow)
+  subroutine border_dtrsv_u(matrix, rh, ncol, nrow)
     double precision, contiguous :: matrix(:), rh(:)
     integer, intent(in) :: ncol, nrow
 
