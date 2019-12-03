@@ -21,7 +21,7 @@ program supernode_controller_test
   call add_test("(i, j)=(4,1)", controller%get_ptr(array, 3, 5, 5, 4, 1), [(dble(i), i=28,30)])
   call add_test("(i, j)=(2,2)", controller%get_ptr(array, 3, 5, 5, 2, 2), [(dble(i), i=31,36)])
   call add_test("(i, j)=(3,2)", controller%get_ptr(array, 3, 5, 5, 3, 2), [(dble(i), i=37,42)])
-  call add_test("(i, j)=(4,2)", controller%get_ptr(array, 3, 5, 5, 4, 2), [(dble(i), i=43,45)])
+  call add_test("(i, j)=(4,2)", controller%get_ptr(array, 3, 5, 5, 4, 2), [(dble(i), i=43,44)])
   call end_array_tests()
 
   print *, "nb=3, nc=6, nr=4"
