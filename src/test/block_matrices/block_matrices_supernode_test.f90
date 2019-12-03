@@ -45,7 +45,7 @@ program block_matrices_supernode_test
   block_matrices%get_ptr(3,2,1) = block_matrices%get_ptr(3,2,1) + 1.0d0
   block_matrices%get_ptr(3,2,2) = block_matrices%get_ptr(3,2,2) + 1.0d0
 
-  call start_array_tests("double access & size")
+  call start_array_tests("double access & size:test1")
   call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,3)])
   call add_test("(node, i, j) = (1,2,1)", block_matrices%get_ptr(1,2,1), [(1d0, i=1,2)])
   call add_test("(node, i, j) = (2,1,1)", block_matrices%get_ptr(2,1,1), [(1d0, i=1,9)])
@@ -135,7 +135,7 @@ program block_matrices_supernode_test
   block_matrices%get_ptr(6,2,1) = block_matrices%get_ptr(6,2,1) + 1d0
   block_matrices%get_ptr(6,2,2) = block_matrices%get_ptr(6,2,2) + 1d0
 
-  call start_array_tests("double access & size")
+  call start_array_tests("double access & size:test2")
   call add_test("(1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
   call add_test("(1,2,1)", block_matrices%get_ptr(1,2,1), [(1d0, i=1,9)])
   call add_test("(1,3,1)", block_matrices%get_ptr(1,3,1), [(1d0, i=1,9)])

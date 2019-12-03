@@ -27,7 +27,7 @@ program block_matrices_border_test
   block_matrices%get_ptr(1,2,1) = block_matrices%get_ptr(1,2,1) + 1.0d0
   block_matrices%get_ptr(2,1,1) = block_matrices%get_ptr(2,1,1) + 1.0d0
   
-  call start_array_tests("double access & size")
+  call start_array_tests("double access & size:test1")
   call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
   call add_test("(node, i, j) = (1,2,1)", block_matrices%get_ptr(1,2,1), [(1d0, i=1,6)])
   call end_array_tests()
@@ -53,7 +53,7 @@ program block_matrices_border_test
   block_matrices%get_ptr(4,2,2) = block_matrices%get_ptr(4,2,2) + 1d0
   block_matrices%get_ptr(4,3,2) = block_matrices%get_ptr(4,3,2) + 1d0
 
-  call start_array_tests("double access & size")
+  call start_array_tests("double access & size:test2")
   call add_test("(1,2,2)", block_matrices%get_ptr(1,2,2), [(1d0, i=1,9)])
   call add_test("(1,3,2)", block_matrices%get_ptr(1,3,2), [(1d0, i=1,9)])
   call add_test("(1,4,2)", block_matrices%get_ptr(1,4,2), [(1d0, i=1,3)])
