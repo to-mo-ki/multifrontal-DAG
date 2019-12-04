@@ -14,6 +14,7 @@ module block_arrays_m
     integer :: nb
   contains
     procedure :: set_val
+    procedure :: set_zero
     procedure :: get_ptr
   end type
 
@@ -52,6 +53,13 @@ contains
     double precision, contiguous, target :: val(:)
 
     this%val => val
+
+  end subroutine
+
+  subroutine set_zero(this)
+    class(block_arrays_c) :: this
+    
+    this%val = 0d0
 
   end subroutine
 

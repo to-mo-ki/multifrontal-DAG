@@ -8,9 +8,10 @@ program array_splitter_test
   allocate(origin, source=[(dble(i),i=1,7)])
   allocate(left(4))
   allocate(right(3))
-
+  left = 1d0
+  right = 1d0
   call split_array(origin, left, right, 4, 3)
-  call assert_equal("left", left, [1d0,2d0,3d0,4d0])
+  call assert_equal("left", left, [2d0,3d0,4d0,5d0])
   call assert_equal("right", right, [5d0,6d0,7d0])
   
 end program 

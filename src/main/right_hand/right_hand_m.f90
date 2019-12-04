@@ -40,8 +40,10 @@ contains
     this%supernode => create_block_arrays(nb, node_sets, ccs, controller)
     allocate(rh_work_controller_c::controller)
     this%work => create_block_arrays(nb, node_sets, ccs, controller)
+    call this%work%set_zero()
     allocate(rh_border_controller_c::controller)
     this%border => create_block_arrays(nb, node_sets, ccs, controller)
+    call this%border%set_zero()
     this%node_sets => node_sets
     this%ccs => ccs
     this%nb = nb

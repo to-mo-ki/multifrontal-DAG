@@ -10,7 +10,7 @@ contains
     double precision :: origin(lsize+rsize), left(lsize), right(rsize)
     integer :: i
     
-    left = origin(:lsize)
+    left = left + origin(:lsize)
     right = origin(lsize+1:lsize+rsize)
 
   end subroutine

@@ -11,7 +11,7 @@ contains
     integer :: i
     
     do i=1,n
-      y(indx(i)) = y(indx(i)) - x(i)
+      y(indx(i)) = y(indx(i)) + x(i)
     enddo
     
   end subroutine

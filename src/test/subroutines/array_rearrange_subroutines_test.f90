@@ -15,10 +15,12 @@ program array_rearrange_subroutines_test
   ccs => create_jagged_array([9,0])
   node_data => create_node_data([8,9],[9,0], 5)
   rh => create_right_hand(node_data, node_sets, ccs, 5)
-  
+  rh%get_supernode_ptr(1, 2) = 1d0
+  rh%get_work_ptr(1, 2) = 1d0
   rh%get_array_ptr(1, 2) = [1d0,2d0,3d0,4d0,5d0]
+
   call rearrange_array(rh, 1, 2)
-  call assert_equal("left", rh%get_supernode_ptr(1, 2), [1d0,2d0,3d0])
+  call assert_equal("left", rh%get_supernode_ptr(1, 2), [2d0,3d0,4d0])
   call assert_equal("right", rh%get_work_ptr(1, 2), [4d0,5d0])
   
 end program 

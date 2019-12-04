@@ -15,7 +15,7 @@ contains
     allocate(indx, source=[2,3,7,8])
 
     call myaxpyi(x, indx, y, 4)
-    call assert_equal("test1", y, [0d0,-1d0,-2d0,0d0,0d0,0d0,-3d0,-4d0])
+    call assert_equal("test1", y, [0d0,1d0,2d0,0d0,0d0,0d0,3d0,4d0])
 
   end subroutine
 
@@ -25,7 +25,7 @@ contains
     allocate(indx, source=[1,3,6,8,9])
 
     call myaxpyi(x, indx, y, 5)
-    call assert_equal("test2", y, [-1d0,0d0,-2d0,0d0,0d0,-3d0,0d0,-4d0,-5d0])
+    call assert_equal("test2", y, [1d0,0d0,2d0,0d0,0d0,3d0,0d0,4d0,5d0])
 
   end subroutine
 
