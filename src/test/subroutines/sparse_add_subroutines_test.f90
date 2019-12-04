@@ -32,23 +32,19 @@ program sparse_add_subroutines_test
   rh%get_array_ptr(2,3) = 1d0
   rh%get_array_ptr(2,4) = 1d0
   
-  call start_array_tests("sparse_add")
-  call sparse_add(factors, rh, block_local_index, 1, 1, 2)
+  call start_array_tests("scatter_add")
+  call scatter_add(factors, rh, block_local_index, 1, 1, 2)
   call add_test("node=1, index=1", rh%get_array_ptr(2, 1), [1d0,1d0,2d0])
-  call sparse_add(factors, rh, block_local_index, 2, 1, 2)
+  call scatter_add(factors, rh, block_local_index, 2, 1, 2)
   call add_test("node=1, index=2", rh%get_array_ptr(2, 2), [2d0,1d0,1d0])
-  call sparse_add(factors, rh, block_local_index, 3, 1, 2)
+  call scatter_add(factors, rh, block_local_index, 3, 1, 2)
   call add_test("node=1, index=3", rh%get_array_ptr(2, 2), [2d0,2d0,2d0])
-  call sparse_add(factors, rh, block_local_index, 4, 1, 2)
+  call scatter_add(factors, rh, block_local_index, 4, 1, 2)
   call add_test("node=1, index=4", rh%get_array_ptr(2, 3), [1d0,2d0,1d0])
-  call sparse_add(factors, rh, block_local_index, 5, 1, 2)
+  call scatter_add(factors, rh, block_local_index, 5, 1, 2)
   call add_test("node=1, index=5", rh%get_array_ptr(2, 3), [1d0,2d0,2d0])
-  call sparse_add(factors, rh, block_local_index, 6, 1, 2)
+  call scatter_add(factors, rh, block_local_index, 6, 1, 2)
   call add_test("node=1, index=6", rh%get_array_ptr(2, 4), [2d0])
   call end_array_tests()
   
-
-
-    
-  
-end program sparse_add_subroutines_test
+end program

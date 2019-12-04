@@ -68,7 +68,7 @@ contains
     integer :: i
 
     do i=1, block_local_index%get_num_block(node)
-      call sparse_add(factors, rh, block_local_index, i, node, parent_node)
+      call scatter_add(factors, rh, block_local_index, i, node, parent_node)
     enddo
 
   end subroutine
