@@ -12,14 +12,15 @@ contains
     type(factors_c), pointer :: factors
     type(right_hand_c), pointer :: rh
     integer, intent(in) :: node, j
-    double precision, pointer, contiguous :: a(:), b(:)
+    double precision, pointer, contiguous :: a(:), b1(:), b2(:)
     integer :: ncol, nrow
 
     ncol = factors%get_supernode_block_size(j, node)
     nrow = factors%get_block_size(j, node)
     a => factors%get_supernode_ptr(node, j, j)
-    b => rh%get_array_ptr(node, j)
-    call border_dtrsv_l(a, b, ncol, nrow)
+    b1 => rh%get_supernode_ptr(node, j)
+    b2 => rh%get_work_ptr(node, j)
+    call border_dtrsv_l(a, b1, b2, ncol, nrow-ncol)
     
   end subroutine
 
@@ -27,14 +28,15 @@ contains
     type(factors_c), pointer :: factors
     type(right_hand_c), pointer :: rh
     integer, intent(in) :: node, j
-    double precision, pointer, contiguous :: a(:), b(:)
+    double precision, pointer, contiguous :: a(:), b1(:), b2(:)
     integer :: ncol, nrow
 
     ncol = factors%get_supernode_block_size(j, node)
     nrow = factors%get_block_size(j, node)
     a => factors%get_supernode_ptr(node, j, j)
-    b => rh%get_array_ptr(node, j)
-    call border_dtrsv_u(a, b, ncol, nrow)
+    b1 => rh%get_supernode_ptr(node, j)
+    b2 => rh%get_work_ptr(node, j)
+    call border_dtrsv_u(a, b1, b2, ncol, nrow-ncol)
     
   end subroutine
 

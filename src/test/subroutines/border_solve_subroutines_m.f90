@@ -1,4 +1,4 @@
-program border_solve_subroutines
+program border_solve_subroutines_test
   use border_solve_subroutines_m
   use factors_m
   use right_hand_m
@@ -23,15 +23,16 @@ program border_solve_subroutines
   rh => create_right_hand(node_data, node_sets, ccs, nb)
 
   factors%get_supernode_ptr(1,1,1) = [4d0,0d0,0d0,3d0,3d0,0d0,2d0,2d0,2d0,1d0,1d0,1d0,2d0,2d0,2d0]
-  rh%get_array_ptr(1,1) = [4d0,6d0,6d0, 3d0,6d0]
-
+  rh%get_supernode_ptr(1,1) = [4d0,6d0,6d0]
+  rh%get_work_ptr(1,1) = [3d0,6d0]
   call border_forward(factors, rh, 1, 1)
-  call assert_equal("border_forward", rh%get_array_ptr(1,1), [1d0,1d0,1d0,0d0,0d0])
+  call assert_equal("border_forward", [rh%get_supernode_ptr(1,1), rh%get_work_ptr(1,1)], [1d0,1d0,1d0,0d0,0d0])
   
   factors%get_supernode_ptr(1,1,1) = [2d0,0d0,0d0,2d0,3d0,0d0,2d0,3d0,4d0,1d0,2d0,3d0,1d0,2d0,3d0]
-  rh%get_array_ptr(1,1) = [9d0,12d0,13d0,1d0,2d0]
+  rh%get_supernode_ptr(1,1) = [9d0,12d0,13d0]
+  rh%get_work_ptr(1,1) = [1d0,2d0]
 
   call border_backward(factors, rh, 1, 1)
-  call assert_equal("border_backward", rh%get_array_ptr(1,1), [1d0,1d0,1d0,1d0,2d0])
+  call assert_equal("border_backward", [rh%get_supernode_ptr(1,1), rh%get_work_ptr(1,1)], [1d0,1d0,1d0,1d0,2d0])
   
 end program
