@@ -1,21 +1,15 @@
 program rearrange_subroutines_test
   use factors_m
-  use contiguous_sets_m
-  use jagged_array_m
   use node_data_m
   use rearrange_subroutines_m
   use test_util
   implicit none
   type(factors_c), pointer :: factors
-  type(contiguous_sets_c), pointer :: node_sets
   type(node_data_c), pointer :: node_data
-  type(jagged_array_c), pointer :: ccs
   double precision, pointer, contiguous :: a22(:), a32(:), a42(:), ans(:), chk(:)
   integer, pointer, contiguous :: pos(:)
   integer :: i
 
-  node_sets => create_contiguous_sets([8,9])
-  ccs => create_jagged_array([9,0])
   node_data => create_node_data([8,9],[9,0], 5)
   factors => create_factors(node_data, 5)
   a22 => factors%get_matrix_ptr(1,2,2)

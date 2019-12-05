@@ -1,20 +1,13 @@
 program factors_test
-  use contiguous_sets_m
-  use jagged_array_m
   use factors_m
   use test_util
   use node_data_m
   implicit none
-
   type(factors_c), pointer :: factors
-  type(contiguous_sets_c), pointer :: node_sets
-  type(jagged_array_c), pointer :: ccs
   type(node_data_c), pointer :: node_data
   integer :: nb, i
 
   nb = 3
-  node_sets => create_contiguous_sets([1, 6, 4])
-  ccs => create_jagged_array([4, 5, 0])
   node_data => create_node_data([1,6,4], [4,5,0], nb)
   factors => create_factors(node_data, nb)
 
@@ -89,8 +82,6 @@ program factors_test
   call end_array_tests()
   
   nb = 3
-  node_sets => create_contiguous_sets([5, 6, 7, 5, 3, 6])
-  ccs => create_jagged_array([5, 4, 4, 4, 6, 0])
   node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
   factors => create_factors(node_data, nb)
 

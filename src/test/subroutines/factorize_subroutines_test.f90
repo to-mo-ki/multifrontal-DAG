@@ -8,24 +8,14 @@ program factorize_subroutines_test
   ! [ 4 16 36  0  0  0  0    ]     ! [ 4  4  4 -12 -24 -36 -48     ]
   ! [ 5 20 45  0  0  0  0  0 ]     ! [ 5  5  5 -15 -30 -45 -60 -75 ]
   use factors_m
-  use contiguous_sets_m
-  use jagged_array_m
   use node_data_m
   use factorize_subroutines_m
   use test_util
   implicit none
   type(factors_c), pointer :: factors
-  type(contiguous_sets_c), pointer :: node_sets
   type(node_data_c), pointer :: node_data
-  type(jagged_array_c), pointer :: ccs
-  integer, pointer, contiguous :: ccs_val(:)
   double precision, pointer, contiguous :: a11(:), a21(:), a31(:), a22(:), a32(:), a33(:)
 
-  node_sets => create_contiguous_sets([3, 5])
-  
-  allocate(ccs_val(5))
-  ccs_val = [4, 5, 6, 7, 8]
-  ccs => create_jagged_array([5, 0], ccs_val)
   node_data => create_node_data([3,5],[5,0],3)
   factors => create_factors(node_data, 3)
 

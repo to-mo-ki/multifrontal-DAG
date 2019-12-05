@@ -3,14 +3,12 @@ program seq_forward_test
   use right_hand_m
   use block_local_index_m
   use jagged_array_m
-  use contiguous_sets_m
   use seq_backward_m
   use test_util
   use node_data_m
   implicit none
   type(factors_c), pointer :: factors
   type(block_local_index_c), pointer :: block_local_index
-  type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: local_index
   type(node_data_c), pointer :: node_data
   type(right_hand_c), pointer :: rh
@@ -18,7 +16,6 @@ program seq_forward_test
   integer :: nb, i
 
   nb=2
-  node_sets => create_contiguous_sets([4,5,4])
   local_index => create_jagged_array([5,3,0],[2,3,4,5,7,1,3,4])
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)
@@ -54,7 +51,6 @@ program seq_forward_test
   call assert_equal("nb=2", rh_val, [(1d0, i=1,13)])
 
   nb=3
-  node_sets => create_contiguous_sets([4,5,4])
   local_index => create_jagged_array([5,3,0],[2,3,4,5,7,1,3,4])
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)

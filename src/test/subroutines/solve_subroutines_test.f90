@@ -18,22 +18,16 @@ program sovle_subroutines_test
   use factors_m
   use right_hand_m
   use node_data_m
-  use contiguous_sets_m
-  use jagged_array_m
   use test_util
   implicit none
 
   type(factors_c), pointer :: factors
   type(right_hand_c), pointer :: rh
   type(node_data_c), pointer :: node_data
-  type(contiguous_sets_c), pointer :: node_sets
-  type(jagged_array_c), pointer :: ccs
   integer :: nb
 
   nb = 3
   node_data => create_node_data([3,2],[2,0],nb)
-  node_sets => create_contiguous_sets([3,2])
-  ccs => create_jagged_array([2,0])
   factors => create_factors(node_data, nb)
   rh => create_right_hand(node_data, nb)
 
