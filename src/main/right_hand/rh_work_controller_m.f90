@@ -38,7 +38,6 @@ contains
 
   integer function estimate_size(nb, nc, nr) result(work_size)
     integer, intent(in) :: nc, nr, nb
-    integer :: sn, sr
 
     work_size = nr
     

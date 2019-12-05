@@ -68,6 +68,9 @@ program work_controller_test
   call add_test("(i, j)=(3,3)", controller%get_ptr(array, 3, 3, 6, 3, 3), [(dble(i), i=19,27)])
   call end_array_tests()
 
+  print *, "nb=3, nc=6, nr=0"
+  array_size = controller%estimate_size(3, 6, 0)
+  call assert_equal("estimate_size", array_size, 0)
 
   print *, "nb=4, nc=2, nr=7"
   array_size = controller%estimate_size(4, 2, 7)

@@ -13,36 +13,30 @@ module factors_m
     private
     type(node_data_c), pointer :: node_data
     type(block_matrices_c), pointer :: supernode, work, border
-    type(contiguous_sets_c), pointer :: node_sets
-    type(jagged_array_c), pointer :: ccs
     integer :: nb
   contains
-    procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
-    procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
-    procedure :: get_block_size, get_supernode_block_size, get_border_info, get_work_size
-    procedure :: get_first, get_last
+    procedure :: get_matrix_ptr
+    procedure :: get_supernode_ptr
+    procedure :: get_work_ptr
+    procedure :: get_border_ptr
   end type
 
   public :: create_factors
 
 contains
-  function create_factors(node_data, node_sets, ccs, nb)result(this)
+  function create_factors(node_data, nb)result(this)
     type(factors_c), pointer :: this
     type(node_data_c), pointer :: node_data
-    type(contiguous_sets_c), pointer, intent(in) :: node_sets
-    type(jagged_array_c), pointer, intent(in) :: ccs
     integer, intent(in) :: nb
     class(matrix_controller_c), pointer :: controller
     
     allocate(this)
     allocate(supernode_controller_c::controller)
-    this%supernode => create_block_matrices(nb, node_sets, ccs, controller)
+    this%supernode => create_block_matrices(nb, node_data%supernode_size, node_data%work_size, controller)
     allocate(work_controller_c::controller)
-    this%work => create_block_matrices(nb, node_sets, ccs, controller)
+    this%work => create_block_matrices(nb, node_data%supernode_size, node_data%work_size, controller)
     allocate(border_controller_c::controller)
-    this%border => create_block_matrices(nb, node_sets, ccs, controller)
-    this%node_sets => node_sets
-    this%ccs => ccs
+    this%border => create_block_matrices(nb, node_data%supernode_size, node_data%work_size, controller)
     this%nb = nb
     this%node_data => node_data
   
@@ -52,12 +46,12 @@ contains
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
-    integer :: nc, nr, nb, r, q
+    integer :: nc
     type(block_matrices_c), pointer :: block_matrices
 
     nc = this%node_data%get_num_supernode_block(node)
     
-    if(.not. this%exist_border(node))then
+    if(this%node_data%divisible(node))then
       if(j <= nc)then
         block_matrices => this%supernode
       else
@@ -73,7 +67,7 @@ contains
       endif
     endif
     !TODO: これがないときにエラーを発生させるテスト作成
-    if(node == this%node_sets%get_num_sets())then
+    if(node == this%node_data%num_node)then
       block_matrices => this%supernode
     endif
     ptr => block_matrices%get_ptr(node, i, j)
@@ -103,103 +97,6 @@ contains
     integer, intent(in) :: node, i, j
     
     ptr => this%border%get_ptr(node, i, j)
-
-  end function
-
-  integer function get_num_block(this, node) result(num_block)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    num_block = this%node_data%get_num_matrix_block(node)
-
-  end function
-
-  integer function get_work_start_index(this, node) result(idx)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    integer :: nb, nc
-    
-    nb = this%nb
-    nc = this%node_sets%get_length(node)
-    idx = nc/nb+1
-    
-  end function
-
-  logical function exist_border(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    
-    exist_border = .not. this%node_data%divisible(node)
-  
-  end function
-
-  integer function get_num_node(this) result(num_node)
-    class(factors_c) :: this
-    num_node = this%node_sets%get_num_sets()
-  end function
-
-  function get_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, n
-    
-    n = this%node_sets%get_length(node) + this%ccs%get_array_length(node)
-    nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
-    
-  end function
-
-  function get_supernode_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, n
-    
-    n = this%node_sets%get_length(node)
-    nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
-    
-  end function
-
-  function get_work_size(this, idx, node) result(block_size)
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, first_block_size, work_size, work_index
-    integer :: n
-
-    n = this%node_sets%get_length(node)
-    block_size = this%node_data%get_work_size(idx-n/this%nb, node)
-    
-  end function
-
-  subroutine get_border_info(this, node, ssize, wsize)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    integer, intent(out) :: ssize, wsize
-    integer :: order, block_size, j
-
-    ssize = this%node_data%get_border_supernode_size(node)
-    wsize = this%node_data%get_border_work_size(node)
-
-  end subroutine
-
-  integer function get_first(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    get_first = this%node_sets%get_first(node)
-
-  end function
-
-  integer function get_last(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    get_last = this%node_sets%get_last(node)
 
   end function
 

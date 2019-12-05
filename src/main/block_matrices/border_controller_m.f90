@@ -27,7 +27,6 @@ contains
 
   integer function estimate_size(nb, nc, nr) result(border_size)
     integer, intent(in) :: nc, nr, nb
-    integer :: num_block
 
     if(mod(nc, nb) == 0)then
       border_size = 0

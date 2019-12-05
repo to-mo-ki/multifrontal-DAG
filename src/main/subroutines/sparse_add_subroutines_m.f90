@@ -9,8 +9,7 @@ module sparse_add_subroutines_m
   public :: scatter_add, gather_add
   
 contains
-  subroutine scatter_add(factors, rh, block_local_index, j, cnode, pnode)
-    type(factors_c), pointer :: factors
+  subroutine scatter_add(rh, block_local_index, j, cnode, pnode)
     type(right_hand_c), pointer :: rh
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: j, cnode, pnode
@@ -28,8 +27,7 @@ contains
 
   end subroutine
 
-  subroutine gather_add(factors, rh, block_local_index, j, cnode, pnode)
-    type(factors_c), pointer :: factors
+  subroutine gather_add(rh, block_local_index, j, cnode, pnode)
     type(right_hand_c), pointer :: rh
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: j, cnode, pnode

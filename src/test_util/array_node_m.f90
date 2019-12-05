@@ -24,7 +24,6 @@ contains
   subroutine add_size_error_node(message, error_comment)
     character(*) :: message, error_comment
     type(array_node_c), pointer :: new_node
-    integer :: answer_size, check_size
 
     allocate(new_node)
     allocate(new_node%message, source=message)
@@ -71,7 +70,7 @@ contains
   subroutine add(this, message, answer, check)
     class(array_node_c) :: this
     character(*), intent(in) :: message, answer, check
-    type(node_c), pointer :: new_node, node
+    type(node_c), pointer :: new_node
 
     allocate(new_node)
     allocate(new_node%message, source=message)

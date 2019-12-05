@@ -1,4 +1,5 @@
 module extend_add_subroutines_m
+  use node_data_m
   use factors_m
   use block_local_index_m
   use extend_add_kernel_m
@@ -8,7 +9,8 @@ module extend_add_subroutines_m
 
 contains
 
-  subroutine extend_add_ndiag(factors, block_local_index, i, j, cnode, pnode)
+  subroutine extend_add_ndiag(node_data, factors, block_local_index, i, j, cnode, pnode)
+    type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: i, j, cnode, pnode
@@ -26,13 +28,14 @@ contains
     jlocal => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, ci, cj)
     parent_block => factors%get_matrix_ptr(pnode, pi, pj)
-    ldp = factors%get_block_size(pj, pnode)
-    ldc = factors%get_work_size(cj, cnode)
+    ldp = node_data%get_matrix_block_size(pj, pnode)
+    ldc = node_data%get_work_block_size(cj, cnode)
     call extend_add_rect(child_block(roffset*ldc+coffset+1:), parent_block, jlocal, ilocal, ldc, ldp)
     
   end subroutine
   
-  subroutine extend_add_diag(factors, block_local_index, j, cnode, pnode)
+  subroutine extend_add_diag(node_data, factors, block_local_index, j, cnode, pnode)
+    type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: j, cnode, pnode
@@ -46,8 +49,8 @@ contains
     local => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, cj, cj)
     parent_block => factors%get_matrix_ptr(pnode, pj, pj)
-    ldp = factors%get_block_size(pj, pnode)
-    ldc = factors%get_work_size(cj, cnode)
+    ldp = node_data%get_matrix_block_size(pj, pnode)
+    ldc = node_data%get_work_block_size(cj, cnode)
     call extend_add_tri(child_block(offset*ldc+offset+1:), parent_block, local, ldc, ldp)
 
   end subroutine
