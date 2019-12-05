@@ -8,7 +8,7 @@ module node_data_m
     integer, public :: nb, num_node, max_num_block
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, allocatable :: num_supernode_block(:), num_work_block(:)
-    integer, allocatable :: border_supernode_size(:)
+    integer, allocatable :: border_supernode_size(:), border_work_size(:)
   contains
     procedure :: divisible
     procedure :: get_border_supernode_size
@@ -42,9 +42,10 @@ contains
     this%num_node = num_node
     this%max_num_block = maxval(supernode_size+work_size)/nb+1
 
-    allocate(this%border_supernode_size(num_node))
+    allocate(this%border_supernode_size(num_node), this%border_work_size(num_node))
     do i=1, num_node
       this%border_supernode_size(i) = mod(supernode_size(i), nb)
+      this%border_work_size(i) = min(nb-this%border_supernode_size(i), work_size(i))
     enddo
 
     allocate(this%num_supernode_block(num_node))
@@ -93,8 +94,9 @@ contains
   integer function get_border_work_size(this, node) result(border_work_size)
     class(node_data_c) :: this
     integer, intent(in) :: node
-    !XXX: work_size < nbのときバグが発生
-    border_work_size = this%nb - this%border_supernode_size(node)
+
+    border_work_size = this%border_work_size(node)
+
   end function
 
   integer function get_num_supernode_block(this, node) result(num_supernode_block)

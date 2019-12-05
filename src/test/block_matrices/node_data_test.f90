@@ -136,7 +136,7 @@ program node_data_test
   call assert_equal("divisible", [node_data%divisible(1), node_data%divisible(2)], [.false., .false.])
   
   call assert_equal("border_supernode_size", [node_data%get_border_supernode_size(1), node_data%get_border_supernode_size(2)], [2, 1])
-  call assert_equal("border_work_size", [node_data%get_border_work_size(1), node_data%get_border_work_size(2)], [2, 1])
+  call assert_equal("border_work_size", [node_data%get_border_work_size(1), node_data%get_border_work_size(2)], [2, 2])
   call assert_equal("num_matrix_block", [node_data%get_num_matrix_block(1), node_data%get_num_matrix_block(2)], [2, 2])
   call assert_equal("num_supernode_block", [node_data%get_num_supernode_block(1), node_data%get_num_supernode_block(2)], [1, 2])
   call assert_equal("num_work_block", [node_data%get_num_work_block(1), node_data%get_num_work_block(2)], [2, 1])
