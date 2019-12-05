@@ -21,7 +21,6 @@ module node_data_m
     procedure :: get_work_start_index
     procedure :: get_block_size
     procedure :: get_supernode_block_size
-    procedure :: get_work_size2
   end type
 
   public :: create_node_data
@@ -93,6 +92,7 @@ contains
   integer function get_border_work_size(this, node) result(border_work_size)
     class(node_data_c) :: this
     integer, intent(in) :: node
+    !XXX: work_size < nbのときバグが発生
     border_work_size = this%nb - this%border_supernode_size(node)
   end function
 
@@ -108,37 +108,20 @@ contains
     num_work_block = this%num_work_block(node)
   end function
 
-
   function get_work_size(this, idx, node) result(block_size)
+    use block_size_calculator_m, p_get_block_size => get_block_size
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
     integer :: n
 
-    n = this%supernode_size(node)
-    block_size = this%get_work_size2(idx-n/this%nb, node)
-    
-  end function
-
-  function get_work_size2(this, idx, node) result(block_size)
-    class(node_data_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, first_block_size, work_size
-    
-    nb = this%nb
-    first_block_size = this%get_border_work_size(node)
-    work_size = this%work_size(node)
-    if(idx == 1)then
-      block_size = first_block_size
+    n = this%supernode_size(node)+this%work_size(node)
+    if(idx == this%get_work_start_index(node))then
+      block_size = this%get_border_work_size(node)
     else
-      if((idx-1)*nb + first_block_size > work_size)then
-        block_size = mod(work_size-first_block_size, nb)
-      else
-        block_size = nb
-      endif
+      block_size = p_get_block_size(idx, this%nb, n)
     endif
-    
+
   end function
 
   integer function get_matrix_num(this, idx) result(num)
