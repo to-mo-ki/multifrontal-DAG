@@ -16,7 +16,7 @@ contains
     type(ccs_c), pointer :: ccs
     type(contiguous_sets_c), pointer :: node_sets
     type(factors_c), pointer :: factors
-    integer :: node, i, j, block_col_num, block_row_num, nb, block_i, block_j, ld, row_num, col_num
+    integer :: node, i, j, block_col_num, block_row_num, nb, block_i, block_j, ld, col_num
     integer, pointer, contiguous :: rows(:)
     double precision, pointer, contiguous :: vals(:), block_matrix(:)
 

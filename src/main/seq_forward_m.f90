@@ -16,14 +16,14 @@ contains
     type(right_hand_c), pointer :: rh
     type(block_local_index_c), pointer :: block_local_index
     integer, contiguous :: parent(:)
-    integer :: node, i, j
+    integer :: node
 
     do node=1, node_data%num_node
       call supernode_forward(node_data, factors, rh, node)
       if(.not. node_data%divisible(node))then
         call border_forward2(node_data, factors, rh, node)
       endif
-      call sparse_add2(node_data, factors, rh, block_local_index, node, parent(node))
+      call sparse_add(rh, block_local_index, node, parent(node))
     enddo
 
   end subroutine
@@ -63,10 +63,8 @@ contains
     
   end subroutine
 
-  subroutine sparse_add2(node_data, factors, rh, block_local_index, node, parent_node)
+  subroutine sparse_add(rh, block_local_index, node, parent_node)
     use sparse_add_subroutines_m
-    type(node_data_c), pointer :: node_data
-    type(factors_c), pointer :: factors
     type(right_hand_c), pointer :: rh
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: node, parent_node

@@ -14,7 +14,6 @@ module rh_supernode_controller_m
 contains
   integer function get_start_pos(nb, nc, nr, idx) result(pos)
     integer, intent(in) :: nb, nc, nr, idx
-    integer :: left, up
 
     pos = (idx-1)*nb+1
 
@@ -29,7 +28,6 @@ contains
 
   integer function estimate_size(nb, nc, nr) result(supernode_size)
     integer, intent(in) :: nc, nr, nb
-    integer :: sn, sr
 
     supernode_size = nc
     

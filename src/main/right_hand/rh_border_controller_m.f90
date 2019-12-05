@@ -14,7 +14,6 @@ module rh_border_controller_m
 contains
   integer function get_start_pos(nb, nc, nr, idx) result(pos)
     integer, intent(in) :: nb, nc, nr, idx
-    integer :: left, up
 
     pos = 1
 

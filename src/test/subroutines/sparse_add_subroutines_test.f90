@@ -14,7 +14,6 @@ program sparse_add_subroutines_test
   type(node_data_c), pointer :: node_data
   type(block_local_index_c), pointer :: block_local_index
   type(right_hand_c), pointer :: rh
-  double precision, pointer, contiguous :: a(:), val(:)
 
   local_index => create_jagged_array([7, 3, 0], [3,4,5,6,8,9,10,1,2,3])
   node_set => create_contiguous_sets([4, 7, 3])

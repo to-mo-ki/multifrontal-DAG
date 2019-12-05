@@ -113,7 +113,6 @@ contains
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
-    integer :: nb, first_block_size, work_size, work_index
     integer :: n
 
     n = this%supernode_size(node)

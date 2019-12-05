@@ -9,7 +9,7 @@ program right_hand_test
   type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: ccs
   type(node_data_c), pointer :: node_data
-  integer :: nb, ssize, wsize, i
+  integer :: nb, i
 
   print *, "test1"
   nb = 3

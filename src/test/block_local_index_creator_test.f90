@@ -7,8 +7,7 @@ program block_local_index_creator_test
   use test_util
   implicit none
   type(jagged_array_c), pointer :: local_index
-  type(contiguous_sets_c), pointer :: num_blocks, num_indices, node_set
-  type(jagged_array_3D_c), pointer :: block_local_index
+  type(contiguous_sets_c), pointer :: num_blocks, num_indices
   type(node_data_c), pointer :: node_data
   integer, pointer, contiguous :: local_index_val(:)
   integer, pointer, contiguous :: ans(:)

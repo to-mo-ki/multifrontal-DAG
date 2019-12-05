@@ -46,7 +46,7 @@ contains
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
-    integer :: nc, nr, nb, r, q
+    integer :: nc
     type(block_matrices_c), pointer :: block_matrices
 
     nc = this%node_data%get_num_supernode_block(node)

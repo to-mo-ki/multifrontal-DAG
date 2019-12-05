@@ -60,7 +60,7 @@ contains
     type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
     integer, intent(in) :: node
-    integer :: i, j, k, num_block, ssize, wsize
+    integer :: i, j, k, num_block
 
     j = node_data%get_work_start_index(node)
     num_block = node_data%get_num_matrix_block(node)

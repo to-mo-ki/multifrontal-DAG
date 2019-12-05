@@ -14,7 +14,7 @@ program seq_forward_test
   type(jagged_array_c), pointer :: local_index
   type(node_data_c), pointer :: node_data
   type(right_hand_c), pointer :: rh
-  double precision, pointer, contiguous :: val(:), matrix(:), rh_val(:)
+  double precision, pointer, contiguous :: rh_val(:)
   integer :: nb, i
 
   nb=2

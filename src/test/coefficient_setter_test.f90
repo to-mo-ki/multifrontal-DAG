@@ -13,7 +13,6 @@ program coefficient_setter_test
   type(contiguous_sets_c), pointer :: node_set
   type(factors_c), pointer :: factors
   type(node_data_c), pointer :: node_data
-  double precision, pointer, contiguous :: matrix(:)
   integer :: nb
 
   node_set => create_contiguous_sets([2, 2, 2, 3])

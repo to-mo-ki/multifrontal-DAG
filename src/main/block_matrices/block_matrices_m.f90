@@ -24,7 +24,6 @@ contains
     integer, pointer, contiguous :: matrix_size(:)
     class(matrix_controller_c), pointer, intent(in) :: controller
     integer :: i, nc, nr
-    type(contiguous_sets_c), pointer :: tmp
 
     allocate(this)
     allocate(matrix_size(size(supernode_size)))
