@@ -51,7 +51,7 @@ contains
     integer :: i, j
 
     j = factors%get_work_start_index(node)
-    call rearrange_array(rh, node, j)
+    call rearrange_array_f(rh, node, j)
     call border_forward(factors, rh, node, j)
     do i=j+1, factors%get_num_block(node)
       call border_update_l(factors, rh, node, i, j)
