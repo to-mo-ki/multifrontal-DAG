@@ -1,6 +1,5 @@
 module block_matrices_m
   use contiguous_sets_m
-  use jagged_array_m
   use matrix_controller_m
   implicit none
   private
@@ -8,8 +7,7 @@ module block_matrices_m
     private
     double precision, pointer, contiguous :: val(:)
     type(contiguous_sets_c), pointer :: ptr
-    type(contiguous_sets_c), pointer :: node_sets
-    type(jagged_array_c), pointer :: ccs
+    integer, pointer, contiguous :: supernode_size(:), work_size(:)
     class(matrix_controller_c), pointer :: controller
     integer :: nb
   contains
@@ -19,29 +17,28 @@ module block_matrices_m
   public :: create_block_matrices
 
 contains
-  function create_block_matrices(nb, node_sets, ccs, controller) result(this)
+  function create_block_matrices(nb, supernode_size, work_size, controller) result(this)
     type(block_matrices_c), pointer :: this
     integer, intent(in) :: nb
-    type(contiguous_sets_c), pointer, intent(in) :: node_sets
-    type(jagged_array_c), pointer, intent(in) :: ccs
+    integer, contiguous, target :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: matrix_size(:)
     class(matrix_controller_c), pointer, intent(in) :: controller
     integer :: i, nc, nr
     type(contiguous_sets_c), pointer :: tmp
 
     allocate(this)
-    allocate(matrix_size(node_sets%get_num_sets()))
-    do i=1, node_sets%get_num_sets()
-      nc = node_sets%get_length(i)
-      nr = ccs%get_array_length(i)
+    allocate(matrix_size(size(supernode_size)))
+    do i=1, size(supernode_size)
+      nc = supernode_size(i)
+      nr = work_size(i)
       matrix_size(i) = controller%estimate_size(nb, nc, nr)
     enddo
     this%ptr => create_contiguous_sets(matrix_size)
     deallocate(matrix_size)
     allocate(this%val(this%ptr%get_num_elements()))
     this%controller => controller
-    this%node_sets => node_sets
-    this%ccs => ccs
+    this%supernode_size => supernode_size
+    this%work_size => work_size
     this%nb = nb
 
   end function
@@ -54,8 +51,8 @@ contains
     double precision, pointer, contiguous :: array(:)
 
     nb = this%nb
-    nc = this%node_sets%get_length(node)
-    nr = this%ccs%get_array_length(node)
+    nc = this%supernode_size(node)
+    nr = this%work_size(node)
     array => this%val(this%ptr%get_first(node):this%ptr%get_last(node))
     ptr => this%controller%get_ptr(array, nb, nc, nr, i, j)
 
