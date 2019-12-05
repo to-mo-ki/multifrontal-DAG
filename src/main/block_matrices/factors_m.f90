@@ -15,9 +15,10 @@ module factors_m
     type(block_matrices_c), pointer :: supernode, work, border
     integer :: nb
   contains
-    procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
-    procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
-    procedure :: get_block_size, get_supernode_block_size, get_border_info, get_work_size
+    procedure :: get_matrix_ptr
+    procedure :: get_supernode_ptr
+    procedure :: get_work_ptr
+    procedure :: get_border_ptr
   end type
 
   public :: create_factors
@@ -50,7 +51,7 @@ contains
 
     nc = this%node_data%get_num_supernode_block(node)
     
-    if(.not. this%exist_border(node))then
+    if(this%node_data%divisible(node))then
       if(j <= nc)then
         block_matrices => this%supernode
       else
@@ -98,86 +99,5 @@ contains
     ptr => this%border%get_ptr(node, i, j)
 
   end function
-
-  integer function get_num_block(this, node) result(num_block)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    num_block = this%node_data%get_num_matrix_block(node)
-
-  end function
-
-  integer function get_work_start_index(this, node) result(idx)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    integer :: nb, nc
-    
-    nb = this%nb
-    nc = this%node_data%supernode_size(node)
-    idx = nc/nb+1
-    
-  end function
-
-  logical function exist_border(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    
-    exist_border = .not. this%node_data%divisible(node)
-  
-  end function
-
-  integer function get_num_node(this) result(num_node)
-    class(factors_c) :: this
-    num_node = this%node_data%num_node
-  end function
-
-  function get_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, n
-    
-    n = this%node_data%supernode_size(node)+this%node_data%work_size(node)
-    nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
-    
-  end function
-
-  function get_supernode_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, n
-    
-    n = this%node_data%supernode_size(node)
-    nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
-    
-  end function
-
-  function get_work_size(this, idx, node) result(block_size)
-    class(factors_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: nb, first_block_size, work_size, work_index
-    integer :: n
-
-    n = this%node_data%supernode_size(node)
-    block_size = this%node_data%get_work_size(idx-n/this%nb, node)
-    
-  end function
-
-  subroutine get_border_info(this, node, ssize, wsize)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-    integer, intent(out) :: ssize, wsize
-    integer :: order, block_size, j
-
-    ssize = this%node_data%get_border_supernode_size(node)
-    wsize = this%node_data%get_border_work_size(node)
-
-  end subroutine
 
 end module

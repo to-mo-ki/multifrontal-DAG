@@ -32,7 +32,7 @@ program rearrange_subroutines_test
 contains
 
   subroutine diag_test()
-    call rearrange_diag(factors, 1, 2)
+    call rearrange_diag(node_data, factors, 1, 2)
 
     allocate(chk, source=[double precision::1,6,7,11,12,13,16,17,18,21,22,23])
     allocate(pos, source=[1,4,5,7,8,9,10,11,12,13,14,15])
@@ -47,7 +47,7 @@ contains
   end subroutine
 
   subroutine ndiag_test1()
-    call rearrange_ndiag(factors, 1, 3, 2)
+    call rearrange_ndiag(node_data, factors, 1, 3, 2)
 
     allocate(chk, source=[double precision::26,27,28,31,32,33,36,37,38,41,42,43,46,47,48])
     ans => factors%get_supernode_ptr(1,3,2)
@@ -60,7 +60,7 @@ contains
   end subroutine
 
   subroutine ndiag_test2()
-    call rearrange_ndiag(factors, 1, 4, 2)
+    call rearrange_ndiag(node_data, factors, 1, 4, 2)
 
     allocate(chk, source=[double precision::51,52,53,56,57,58])
     ans => factors%get_supernode_ptr(1,4,2)

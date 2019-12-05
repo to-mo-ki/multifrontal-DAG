@@ -42,9 +42,9 @@ program sovle_subroutines_test
   rh%get_array_ptr(1,1) = [4d0,6d0,6d0]
   rh%get_array_ptr(1,2) = [3d0,6d0]
 
-  call forward(factors, rh, 1, 1)
+  call forward(node_data, factors, rh, 1, 1)
   call assert_equal("forward", rh%get_array_ptr(1,1), [1d0,1d0,1d0])
-  call update_l(factors, rh, 1, 2, 1)
+  call update_l(node_data, factors, rh, 1, 2, 1)
   call assert_equal("update_l", rh%get_array_ptr(1,2), [0d0,0d0])
 
   factors%get_supernode_ptr(1,1,1) = [2d0,0d0,0d0,2d0,3d0,0d0,2d0,3d0,4d0]
@@ -53,9 +53,9 @@ program sovle_subroutines_test
   rh%get_array_ptr(1,1) = [9d0,12d0,13d0]
   rh%get_array_ptr(1,2) = [1d0,2d0]
 
-  call update_u(factors, rh, 1, 2, 1)
+  call update_u(node_data, factors, rh, 1, 2, 1)
   call assert_equal("update_u", rh%get_array_ptr(1,1), [6d0,6d0,4d0])
-  call backward(factors, rh, 1, 1)
+  call backward(node_data, factors, rh, 1, 1)
   call assert_equal("backward", rh%get_array_ptr(1,1), [1d0,1d0,1d0])
 
 end program sovle_subroutines_test

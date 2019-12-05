@@ -50,7 +50,7 @@ program seq_forward_test
   factors%get_supernode_ptr(3,2,1) = [3,3,4,4]
   factors%get_supernode_ptr(3,2,2) = [3,0,4,4]
 
-  call seq_forward(factors, rh, block_local_index, [2,3,0])
+  call seq_forward(node_data, factors, rh, block_local_index, [2,3,0])
   call assert_equal("nb=2", rh_val, [(1d0, i=1,13)])
 
   nb=3
@@ -78,7 +78,7 @@ program seq_forward_test
   factors%get_supernode_ptr(3,2,1) = [4,4,4,4]
   factors%get_supernode_ptr(3,2,2) = [4]
 
-  call seq_forward(factors, rh, block_local_index, [2,3,0])
+  call seq_forward(node_data, factors, rh, block_local_index, [2,3,0])
   call assert_equal("nb=3", rh_val, [(1d0, i=1,13)])
 
 contains

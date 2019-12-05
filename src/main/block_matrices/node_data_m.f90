@@ -18,6 +18,10 @@ module node_data_m
     procedure :: get_work_size
     procedure :: get_matrix_num
     procedure :: get_work_num
+    procedure :: get_work_start_index
+    procedure :: get_block_size
+    procedure :: get_supernode_block_size
+    procedure :: get_work_size2
   end type
 
   public :: create_node_data
@@ -104,7 +108,20 @@ contains
     num_work_block = this%num_work_block(node)
   end function
 
+
   function get_work_size(this, idx, node) result(block_size)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, first_block_size, work_size, work_index
+    integer :: n
+
+    n = this%supernode_size(node)
+    block_size = this%get_work_size2(idx-n/this%nb, node)
+    
+  end function
+
+  function get_work_size2(this, idx, node) result(block_size)
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
@@ -158,6 +175,41 @@ contains
 
   end function
 
+  integer function get_work_start_index(this, node) result(idx)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    integer :: nb, nc
+    
+    nb = this%nb
+    nc = this%supernode_size(node)
+    idx = nc/nb+1
+    
+  end function
 
+  function get_block_size(this, idx, node) result(block_size)
+    use block_size_calculator_m, p_get_block_size => get_block_size
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, n
+    
+    n = this%supernode_size(node)+this%work_size(node)
+    nb = this%nb
+    block_size = p_get_block_size(idx, nb, n)
+    
+  end function
+
+  function get_supernode_block_size(this, idx, node) result(block_size)
+    use block_size_calculator_m, p_get_block_size => get_block_size
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: nb, n
+    
+    n = this%supernode_size(node)
+    nb = this%nb
+    block_size = p_get_block_size(idx, nb, n)
+    
+  end function
 
 end module

@@ -1,4 +1,5 @@
 module coefficient_setter_m
+  use node_data_m
   use factors_m
   use ccs_m
   use jagged_array_m
@@ -10,7 +11,8 @@ module coefficient_setter_m
 
 contains
 
-  subroutine set_coefficient(ccs, node_sets, factors, nb)
+  subroutine set_coefficient(node_data, ccs, node_sets, factors, nb)
+    type(node_data_c), pointer :: node_data
     type(ccs_c), pointer :: ccs
     type(contiguous_sets_c), pointer :: node_sets
     type(factors_c), pointer :: factors
@@ -18,7 +20,7 @@ contains
     integer, pointer, contiguous :: rows(:)
     double precision, pointer, contiguous :: vals(:), block_matrix(:)
 
-    do node=1, factors%get_num_node()
+    do node=1, node_data%num_node
       do j=node_sets%get_first(node), node_sets%get_last(node)
         rows => ccs%get_row_array(j)
         vals => ccs%get_val_array(j)
@@ -29,7 +31,7 @@ contains
           block_row_num = (rows(i)-1)/nb + 1
           block_matrix => factors%get_matrix_ptr(node, block_row_num, block_col_num)
           block_i = mod(rows(i)-1, nb)+1
-          ld = factors%get_block_size(block_col_num, node)
+          ld = node_data%get_block_size(block_col_num, node)
           call set_cofficent_element(block_matrix, block_i, block_j, vals(i), ld)
         enddo
       enddo
