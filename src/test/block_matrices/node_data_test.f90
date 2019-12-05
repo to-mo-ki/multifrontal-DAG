@@ -157,8 +157,6 @@ program node_data_test
   call add_test("node=1, idx=3", node_data%get_work_num(3,1), 2)
   call add_test("node=1, idx=4", node_data%get_work_num(4,1), 2)
   call add_test("node=1, idx=5", node_data%get_work_num(5,1), 2)
-  call add_test("node=1, idx=6", node_data%get_work_num(6,1), 2)
-  call add_test("node=1, idx=7", node_data%get_work_num(7,1), 2)
   call add_test("node=2, idx=1", node_data%get_work_num(1,2), 2)
   call add_test("node=2, idx=2", node_data%get_work_num(2,2), 2)
   call end_tests()
