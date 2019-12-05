@@ -32,7 +32,7 @@ program border_subroutines_test
   ccs_val = [4, 5, 6, 7, 8, 9, 10, 11, 12]
   ccs => create_jagged_array([9, 0], ccs_val)
   node_data => create_node_data([3,9],[9,0], 5)
-  factors => create_factors(node_data, ccs, 5)
+  factors => create_factors(node_data, 5)
 
   a11_s => factors%get_supernode_ptr(1, 1, 1)
   a21_s => factors%get_supernode_ptr(1, 2, 1)

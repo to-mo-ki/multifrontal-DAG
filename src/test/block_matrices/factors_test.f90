@@ -16,7 +16,7 @@ program factors_test
   node_sets => create_contiguous_sets([1, 6, 4])
   ccs => create_jagged_array([4, 5, 0])
   node_data => create_node_data([1,6,4], [4,5,0], nb)
-  factors => create_factors(node_data, ccs, nb)
+  factors => create_factors(node_data, nb)
 
   call assert_equal("num_node", factors%get_num_node(), 3)
   
@@ -148,7 +148,7 @@ program factors_test
   node_sets => create_contiguous_sets([5, 6, 7, 5, 3, 6])
   ccs => create_jagged_array([5, 4, 4, 4, 6, 0])
   node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
-  factors => create_factors(node_data, ccs, nb)
+  factors => create_factors(node_data, nb)
 
   call assert_equal("num_node", factors%get_num_node(), 6)
   

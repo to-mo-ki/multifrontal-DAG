@@ -17,7 +17,7 @@ program rearrange_subroutines_test
   node_sets => create_contiguous_sets([8,9])
   ccs => create_jagged_array([9,0])
   node_data => create_node_data([8,9],[9,0], 5)
-  factors => create_factors(node_data, ccs, 5)
+  factors => create_factors(node_data, 5)
   a22 => factors%get_matrix_ptr(1,2,2)
   a32 => factors%get_matrix_ptr(1,3,2)
   a42 => factors%get_matrix_ptr(1,4,2)

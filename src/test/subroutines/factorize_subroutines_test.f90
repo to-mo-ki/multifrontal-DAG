@@ -27,7 +27,7 @@ program factorize_subroutines_test
   ccs_val = [4, 5, 6, 7, 8]
   ccs => create_jagged_array([5, 0], ccs_val)
   node_data => create_node_data([3,5],[5,0],3)
-  factors => create_factors(node_data, ccs, 3)
+  factors => create_factors(node_data, 3)
 
   a11 => factors%get_matrix_ptr(1, 1, 1)
   a21 => factors%get_matrix_ptr(1, 2, 1)

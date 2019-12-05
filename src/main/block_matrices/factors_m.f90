@@ -25,10 +25,9 @@ module factors_m
   public :: create_factors
 
 contains
-  function create_factors(node_data, ccs, nb)result(this)
+  function create_factors(node_data, nb)result(this)
     type(factors_c), pointer :: this
     type(node_data_c), pointer :: node_data
-    type(jagged_array_c), pointer, intent(in) :: ccs
     integer, intent(in) :: nb
     class(matrix_controller_c), pointer :: controller
     
