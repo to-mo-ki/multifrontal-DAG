@@ -43,7 +43,7 @@ contains
     local => block_local_index%get_local_index(cnode, j)
     child_array => rh%get_work_ptr(cnode, cj)
     parent_array => rh%get_array_ptr(pnode, pj)
-    call gather_add_kernel(parent_array(offset+1:), local, child_array, size(local))
+    call gather_add_kernel(parent_array, local, child_array(offset+1:), size(local))
 
   end subroutine
 
