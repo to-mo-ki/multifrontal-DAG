@@ -17,6 +17,7 @@ module right_hand_m
     type(jagged_array_c), pointer :: ccs
     integer :: nb
   contains
+    procedure :: set_val
     procedure :: get_array_ptr
     procedure :: get_supernode_ptr
     procedure :: get_work_ptr
@@ -39,14 +40,24 @@ contains
     this%supernode => create_block_arrays(nb, node_sets, ccs, controller)
     allocate(rh_work_controller_c::controller)
     this%work => create_block_arrays(nb, node_sets, ccs, controller)
+    call this%work%set_zero()
     allocate(rh_border_controller_c::controller)
     this%border => create_block_arrays(nb, node_sets, ccs, controller)
+    call this%border%set_zero()
     this%node_sets => node_sets
     this%ccs => ccs
     this%nb = nb
     this%node_data => node_data
   
   end function
+
+  subroutine set_val(this, val)
+    class(right_hand_c) :: this
+    double precision, pointer, contiguous :: val(:)
+
+    call this%supernode%set_val(val)
+    
+  end subroutine
 
   function get_array_ptr(this, node, idx) result(ptr)
     double precision, pointer, contiguous :: ptr(:)

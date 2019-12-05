@@ -13,6 +13,8 @@ module block_arrays_m
     class(rh_controller_c), pointer :: controller
     integer :: nb
   contains
+    procedure :: set_val
+    procedure :: set_zero
     procedure :: get_ptr
   end type
 
@@ -44,6 +46,22 @@ contains
     this%nb = nb
 
   end function
+
+  !TODO valがすでにallocateされていたらdeallocate, supernodeはvalを割り当てないようにする
+  subroutine set_val(this, val)
+    class(block_arrays_c) :: this
+    double precision, contiguous, target :: val(:)
+
+    this%val => val
+
+  end subroutine
+
+  subroutine set_zero(this)
+    class(block_arrays_c) :: this
+    
+    this%val = 0d0
+
+  end subroutine
 
   function get_ptr(this, node, idx) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
