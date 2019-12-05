@@ -15,8 +15,8 @@ contains
 
     supernode => factors%get_supernode_ptr(node, j, j)
     work => factors%get_work_ptr(node, j, j)
-    ssize = node_data%get_border_supernode_size(node)
-    wsize = node_data%get_border_work_size(node)
+    ssize = node_data%border_supernode_size(node)
+    wsize = node_data%border_work_size(node)
     call border_potrf(supernode, work, ssize, wsize)
 
   end subroutine
@@ -32,8 +32,8 @@ contains
     diag_supernode => factors%get_supernode_ptr(node, j, j)
     solve_supernode => factors%get_supernode_ptr(node, i, j)
     solve_work => factors%get_work_ptr(node, i, j)
-    ssize = node_data%get_border_supernode_size(node)
-    wsize = node_data%get_border_work_size(node)
+    ssize = node_data%border_supernode_size(node)
+    wsize = node_data%border_work_size(node)
     call border_trsm(diag_supernode, solve_supernode, solve_work, ssize, wsize, nrow)
 
   end subroutine
@@ -46,8 +46,8 @@ contains
     integer :: nrow, ssize, wsize
 
     nrow = node_data%get_matrix_block_size(i, node)
-    ssize = node_data%get_border_supernode_size(node)
-    wsize = node_data%get_border_work_size(node)
+    ssize = node_data%border_supernode_size(node)
+    wsize = node_data%border_work_size(node)
     rect => factors%get_supernode_ptr(node, i, j)
     diag => factors%get_matrix_ptr(node, i, i)
     call mydsyrk(nrow, ssize, rect, diag)
@@ -63,8 +63,8 @@ contains
 
     upper_n = node_data%get_matrix_block_size(upper_idx, node)
     lower_n = node_data%get_matrix_block_size(lower_idx, node)
-    ssize = node_data%get_border_supernode_size(node)
-    wsize = node_data%get_border_work_size(node)
+    ssize = node_data%border_supernode_size(node)
+    wsize = node_data%border_work_size(node)
     upper => factors%get_supernode_ptr(node, upper_idx, col_idx)
     lower => factors%get_supernode_ptr(node, lower_idx, col_idx)
     update => factors%get_matrix_ptr(node, lower_idx, upper_idx)

@@ -75,8 +75,8 @@ contains
     integer, intent(in) :: node, idx
     integer :: ssize, wsize
 
-    ssize = this%node_data%get_border_supernode_size(node)
-    wsize = this%node_data%get_border_work_size(node)
+    ssize = this%node_data%border_supernode_size(node)
+    wsize = this%node_data%border_work_size(node)
 
     if(this%get_start_row_num(node, idx) <= wsize)then !error
       offset = this%get_start_row_num(node, idx)-1

@@ -20,12 +20,12 @@ program node_data_test
   call assert_equal("divisible", tmp_l, [.false., .true., .false., .false., .true., .true.])
   
   do i=1, 6
-    tmp_i(i) = node_data%get_border_supernode_size(i)
+    tmp_i(i) = node_data%border_supernode_size(i)
   enddo
   call assert_equal("border_supernode_size", tmp_i, [2, 0, 1, 2, 0, 0])
 
   do i=1, 6
-    tmp_i(i) = node_data%get_border_work_size(i)
+    tmp_i(i) = node_data%border_work_size(i)
   enddo
   call assert_equal("border_work_size", tmp_i, [1, 3, 2, 1, 3, 3])
 
@@ -135,8 +135,8 @@ program node_data_test
   node_data => create_node_data(supernode_size, work_size, 4)
   call assert_equal("divisible", [node_data%divisible(1), node_data%divisible(2)], [.false., .false.])
   
-  call assert_equal("border_supernode_size", [node_data%get_border_supernode_size(1), node_data%get_border_supernode_size(2)], [2, 1])
-  call assert_equal("border_work_size", [node_data%get_border_work_size(1), node_data%get_border_work_size(2)], [2, 2])
+  call assert_equal("border_supernode_size", [node_data%border_supernode_size(1), node_data%border_supernode_size(2)], [2, 1])
+  call assert_equal("border_work_size", [node_data%border_work_size(1), node_data%border_work_size(2)], [2, 2])
   call assert_equal("num_matrix_block", [node_data%get_num_matrix_block(1), node_data%get_num_matrix_block(2)], [2, 2])
   call assert_equal("num_supernode_block", [node_data%get_num_supernode_block(1), node_data%get_num_supernode_block(2)], [1, 2])
   call assert_equal("num_work_block", [node_data%get_num_work_block(1), node_data%get_num_work_block(2)], [2, 1])
