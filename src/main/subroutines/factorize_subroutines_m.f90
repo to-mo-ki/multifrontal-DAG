@@ -14,7 +14,7 @@ contains
     integer :: n, info
 
     diag => factors%get_matrix_ptr(node, j, j)
-    n = node_data%get_block_size(j, node)
+    n = node_data%get_matrix_block_size(j, node)
     call mydpotrf(n, diag, info)
         
   end subroutine
@@ -26,8 +26,8 @@ contains
     double precision, pointer, contiguous :: diag(:), lower(:)
     integer :: n, m
 
-    n = node_data%get_block_size(j, node)
-    m = node_data%get_block_size(i, node)
+    n = node_data%get_matrix_block_size(j, node)
+    m = node_data%get_matrix_block_size(i, node)
     diag => factors%get_matrix_ptr(node, j, j)
     lower => factors%get_matrix_ptr(node, i, j)
     call mydtrsm(n, m, diag, lower)
@@ -41,8 +41,8 @@ contains
     double precision, pointer, contiguous :: off_diag(:), update_matrix(:)
     integer :: n, m
 
-    n = node_data%get_block_size(j, node)
-    m = node_data%get_block_size(i, node)
+    n = node_data%get_matrix_block_size(j, node)
+    m = node_data%get_matrix_block_size(i, node)
     off_diag => factors%get_matrix_ptr(node, i, j)
     update_matrix => factors%get_matrix_ptr(node, i, i)
     call mydsyrk(m, n, off_diag, update_matrix)
@@ -56,8 +56,8 @@ contains
     double precision, pointer, contiguous :: lower(:), upper(:), update_matrix(:)
     integer :: upper_n, lower_n
 
-    upper_n = node_data%get_block_size(upper_idx, node)
-    lower_n = node_data%get_block_size(lower_idx, node)
+    upper_n = node_data%get_matrix_block_size(upper_idx, node)
+    lower_n = node_data%get_matrix_block_size(lower_idx, node)
     upper => factors%get_matrix_ptr(node, upper_idx, col_idx)
     lower => factors%get_matrix_ptr(node, lower_idx, col_idx)
     update_matrix => factors%get_matrix_ptr(node, lower_idx, upper_idx)

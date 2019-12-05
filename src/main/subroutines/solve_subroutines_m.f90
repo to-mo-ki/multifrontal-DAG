@@ -16,7 +16,7 @@ contains
 
     a => factors%get_supernode_ptr(node, j, j)
     b => rh%get_array_ptr(node, j)
-    n = node_data%get_block_size(j, node)
+    n = node_data%get_matrix_block_size(j, node)
     call mydtrsv_l(a, n, b)
 
   end subroutine
@@ -33,7 +33,7 @@ contains
     b1 => rh%get_array_ptr(node, j)
     b2 => rh%get_array_ptr(node, i)
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(i, node)
+    nrow = node_data%get_matrix_block_size(i, node)
     call mydgemv_t(a, ncol, nrow, b1, b2)
 
   end subroutine
@@ -48,7 +48,7 @@ contains
 
     a => factors%get_supernode_ptr(node, j, j)
     b => rh%get_array_ptr(node, j)
-    n = node_data%get_block_size(j, node)
+    n = node_data%get_matrix_block_size(j, node)
     call mydtrsv_u(a, n, b)
 
   end subroutine
@@ -65,7 +65,7 @@ contains
     b1 => rh%get_array_ptr(node, i)
     b2 => rh%get_array_ptr(node, j)
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(i, node)
+    nrow = node_data%get_matrix_block_size(i, node)
     call mydgemv_n(a, ncol, nrow, b1, b2)
 
   end subroutine

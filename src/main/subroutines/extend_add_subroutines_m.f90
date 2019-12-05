@@ -28,7 +28,7 @@ contains
     jlocal => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, ci, cj)
     parent_block => factors%get_matrix_ptr(pnode, pi, pj)
-    ldp = node_data%get_block_size(pj, pnode)
+    ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_size(cj, cnode)
     call extend_add_rect(child_block(roffset*ldc+coffset+1:), parent_block, jlocal, ilocal, ldc, ldp)
     
@@ -49,7 +49,7 @@ contains
     local => block_local_index%get_local_index(cnode, j)
     child_block => factors%get_work_ptr(cnode, cj, cj)
     parent_block => factors%get_matrix_ptr(pnode, pj, pj)
-    ldp = node_data%get_block_size(pj, pnode)
+    ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_size(cj, cnode)
     call extend_add_tri(child_block(offset*ldc+offset+1:), parent_block, local, ldc, ldp)
 

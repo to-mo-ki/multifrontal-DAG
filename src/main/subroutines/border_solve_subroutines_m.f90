@@ -19,7 +19,7 @@ contains
     integer :: ncol, nrow
 
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(j, node)
+    nrow = node_data%get_matrix_block_size(j, node)
     a => factors%get_supernode_ptr(node, j, j)
     b1 => rh%get_supernode_ptr(node, j)
     b2 => rh%get_work_ptr(node, j)
@@ -39,7 +39,7 @@ contains
     b1 => rh%get_supernode_ptr(node, j)
     b2 => rh%get_array_ptr(node, i)
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(i, node)
+    nrow = node_data%get_matrix_block_size(i, node)
     call mydgemv_t(a, ncol, nrow, b1, b2)
 
   end subroutine
@@ -53,7 +53,7 @@ contains
     integer :: ncol, nrow
 
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(j, node)
+    nrow = node_data%get_matrix_block_size(j, node)
     a => factors%get_supernode_ptr(node, j, j)
     b1 => rh%get_supernode_ptr(node, j)
     b2 => rh%get_work_ptr(node, j)
@@ -73,7 +73,7 @@ contains
     b1 => rh%get_array_ptr(node, i)
     b2 => rh%get_supernode_ptr(node, j)
     ncol = node_data%get_supernode_block_size(j, node)
-    nrow = node_data%get_block_size(i, node)
+    nrow = node_data%get_matrix_block_size(i, node)
     call mydgemv_n(a, ncol, nrow, b1, b2)
 
   end subroutine

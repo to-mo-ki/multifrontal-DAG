@@ -37,7 +37,7 @@ contains
     work => factors%get_work_ptr(node, i, j)
     ssize = node_data%get_border_supernode_size(node)
     wsize = node_data%get_border_work_size(node)
-    nrow = node_data%get_block_size(i, node)
+    nrow = node_data%get_matrix_block_size(i, node)
     call split_rect_matrix(matrix, supernode, work, ssize, wsize, nrow)
 
   end subroutine

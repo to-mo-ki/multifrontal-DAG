@@ -31,7 +31,7 @@ contains
           block_row_num = (rows(i)-1)/nb + 1
           block_matrix => factors%get_matrix_ptr(node, block_row_num, block_col_num)
           block_i = mod(rows(i)-1, nb)+1
-          ld = node_data%get_block_size(block_col_num, node)
+          ld = node_data%get_matrix_block_size(block_col_num, node)
           call set_cofficent_element(block_matrix, block_i, block_j, vals(i), ld)
         enddo
       enddo

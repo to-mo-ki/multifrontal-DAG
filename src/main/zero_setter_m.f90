@@ -16,11 +16,11 @@ contains
     double precision, pointer, contiguous :: a(:)
     do node=1, node_data%num_node
       do j=1, node_data%get_num_matrix_block(node)
-        ncol = node_data%get_block_size(j, node)
+        ncol = node_data%get_matrix_block_size(j, node)
         a => factors%get_matrix_ptr(node, j, j)
         call set_zero_tri(a, ncol)
         do i=j+1, node_data%get_num_matrix_block(node)
-          nrow = node_data%get_block_size(i, node)
+          nrow = node_data%get_matrix_block_size(i, node)
           a => factors%get_matrix_ptr(node, j, j)
           call set_zero_rect(a, ncol, nrow)
         enddo

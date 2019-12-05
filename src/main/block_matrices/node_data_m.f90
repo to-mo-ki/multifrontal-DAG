@@ -1,5 +1,6 @@
 module node_data_m
   use contiguous_sets_m
+  use block_size_calculator_m
   implicit none
   private
   type, public :: node_data_c
@@ -19,7 +20,7 @@ module node_data_m
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
-    procedure :: get_block_size
+    procedure :: get_matrix_block_size
     procedure :: get_supernode_block_size
   end type
 
@@ -109,7 +110,6 @@ contains
   end function
 
   function get_work_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
@@ -119,7 +119,7 @@ contains
     if(idx == this%get_work_start_index(node))then
       block_size = this%get_border_work_size(node)
     else
-      block_size = p_get_block_size(idx, this%nb, n)
+      block_size = get_block_size(idx, this%nb, n)
     endif
 
   end function
@@ -137,6 +137,7 @@ contains
     integer, intent(in) :: idx, node
     
     num = this%get_matrix_num(this%supernode_size(node) + idx)
+
   end function
 
   ! TODO: TEST
@@ -168,8 +169,7 @@ contains
     
   end function
 
-  function get_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
+  function get_matrix_block_size(this, idx, node) result(block_size)
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
@@ -177,12 +177,11 @@ contains
     
     n = this%supernode_size(node)+this%work_size(node)
     nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
+    block_size = get_block_size(idx, nb, n)
     
   end function
 
   function get_supernode_block_size(this, idx, node) result(block_size)
-    use block_size_calculator_m, p_get_block_size => get_block_size
     class(node_data_c) :: this
     integer, intent(in) :: idx, node
     integer :: block_size
@@ -190,7 +189,7 @@ contains
     
     n = this%supernode_size(node)
     nb = this%nb
-    block_size = p_get_block_size(idx, nb, n)
+    block_size = get_block_size(idx, nb, n)
     
   end function
 
