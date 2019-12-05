@@ -14,11 +14,9 @@ program block_matrices_border_test
 
   block_matrices%get_ptr(1,1,1) = 0.0d0
   block_matrices%get_ptr(1,2,1) = 0.0d0
-  block_matrices%get_ptr(2,1,1) = 0.0d0
   
   block_matrices%get_ptr(1,1,1) = block_matrices%get_ptr(1,1,1) + 1.0d0
   block_matrices%get_ptr(1,2,1) = block_matrices%get_ptr(1,2,1) + 1.0d0
-  block_matrices%get_ptr(2,1,1) = block_matrices%get_ptr(2,1,1) + 1.0d0
   
   call start_array_tests("double access & size:test1")
   call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
