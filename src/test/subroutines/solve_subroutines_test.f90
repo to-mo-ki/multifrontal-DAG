@@ -35,7 +35,7 @@ program sovle_subroutines_test
   node_sets => create_contiguous_sets([3,2])
   ccs => create_jagged_array([2,0])
   factors => create_factors(node_data, nb)
-  rh => create_right_hand(node_data, node_sets, ccs, nb)
+  rh => create_right_hand(node_data, nb)
 
   factors%get_supernode_ptr(1,1,1) = [4d0,0d0,0d0,3d0,3d0,0d0,2d0,2d0,2d0]
   factors%get_supernode_ptr(1,2,1) = [1d0,1d0,1d0,2d0,2d0,2d0]

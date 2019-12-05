@@ -19,7 +19,7 @@ program block_arrays_supernode_test
   nb = 3
   node_sets => create_contiguous_sets([1, 6, 4])
   ccs => create_jagged_array([4, 5, 0])
-  block_arrays => create_block_arrays(nb, node_sets, ccs, controller)
+  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)
 
   call block_arrays%set_val(val)
   call start_array_tests("set")

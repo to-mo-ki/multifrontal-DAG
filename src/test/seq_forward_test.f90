@@ -23,7 +23,7 @@ program seq_forward_test
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)
   block_local_index => create_block_local_index(node_data, local_index)
-  rh => create_right_hand(node_data, node_sets, local_index, nb)
+  rh => create_right_hand(node_data, nb)
 
   allocate(rh_val, source=[double precision::1,4,9,16,1,8,17,28,41,6,4,39,31])
   call rh%set_val(rh_val)
@@ -59,7 +59,7 @@ program seq_forward_test
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)
   block_local_index => create_block_local_index(node_data, local_index)
-  rh => create_right_hand(node_data, node_sets, local_index, nb)
+  rh => create_right_hand(node_data, nb)
 
   allocate(rh_val, source=[double precision::1,4,9,16,1,8,17,28,41,6,4,39,31])
   call rh%set_val(rh_val)

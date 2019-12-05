@@ -21,7 +21,7 @@ program sparse_add_subroutines_test
   factors => create_factors(node_data, 3)
   node_data => create_node_data([4,7,3], [7,3,0], 3)
   block_local_index => create_block_local_index(node_data, local_index)
-  rh => create_right_hand(node_data, node_set, local_index, 3)
+  rh => create_right_hand(node_data, 3)
   
   rh%get_work_ptr(1,2) = [1,2]
   rh%get_work_ptr(1,3) = [3,4,5]
