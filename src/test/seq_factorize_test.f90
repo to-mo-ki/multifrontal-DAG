@@ -34,7 +34,7 @@ contains
     supernodal_index => create_jagged_array([9,8,7,6,8,7,6,5,4,4,3,2,1],[1,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,3,4,5,6,7,8,9,4,5,6,7,8,9,1,2,3,4,5,6,7,8,2,3,4,5,6,7,8,3,4,5,6,7,8,4,5,6,7,8,5,6,7,8,1,2,3,4,2,3,4,3,4,4])
     ccs => create_ccs(supernodal_index, val)
     node_data => create_node_data([4,5,4],[5,3,0],nb)
-    factors => create_factors(node_data, node_sets, local_index, nb)
+    factors => create_factors(node_data, local_index, nb)
     block_local_index => create_block_local_index(node_data, local_index)
     call set_coefficient(ccs, factors, nb)
     call seq_factorize(factors, block_local_index, [2,3,0])

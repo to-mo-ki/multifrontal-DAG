@@ -14,27 +14,22 @@ program rearrange_subroutines_test
   integer, pointer, contiguous :: pos(:)
   integer :: i
 
-  call init()
+  node_sets => create_contiguous_sets([8,9])
+  ccs => create_jagged_array([9,0])
+  node_data => create_node_data([8,9],[9,0], 5)
+  factors => create_factors(node_data, ccs, 5)
+  a22 => factors%get_matrix_ptr(1,2,2)
+  a32 => factors%get_matrix_ptr(1,3,2)
+  a42 => factors%get_matrix_ptr(1,4,2)
+  a22 = [double precision::(i,i=1,25)]
+  a32 = [double precision::(i+25,i=1,25)]
+  a42 = [double precision::(i+50,i=1,10)]
+
   call diag_test()
   call ndiag_test1()
   call ndiag_test2()
 
 contains
-
-  subroutine init()
-    node_sets => create_contiguous_sets([8,9])
-    ccs => create_jagged_array([9,0])
-    node_data => create_node_data([8,9],[9,0], 5)
-    factors => create_factors(node_data, node_sets, ccs, 5)
-
-    a22 => factors%get_matrix_ptr(1,2,2)
-    a32 => factors%get_matrix_ptr(1,3,2)
-    a42 => factors%get_matrix_ptr(1,4,2)
-
-    a22 = [double precision::(i,i=1,25)]
-    a32 = [double precision::(i+25,i=1,25)]
-    a42 = [double precision::(i+50,i=1,10)]
-  end subroutine
 
   subroutine diag_test()
     call rearrange_diag(factors, 1, 2)

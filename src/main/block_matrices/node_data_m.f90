@@ -1,7 +1,9 @@
 module node_data_m
+  use contiguous_sets_m
   implicit none
   private
   type, public :: node_data_c
+    type(contiguous_sets_c), pointer :: node_sets
     integer, public :: nb, num_node, max_num_block
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, allocatable :: num_supernode_block(:), num_work_block(:)
@@ -28,6 +30,7 @@ contains
     integer :: num_node, i, r
 
     allocate(this)
+    this%node_sets => create_contiguous_sets(supernode_size)
     this%supernode_size => supernode_size
     this%work_size => work_size
     this%nb = nb
