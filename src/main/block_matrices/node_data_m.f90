@@ -111,7 +111,6 @@ contains
 
   end function
 
-  ! TODO: TEST
   integer function get_num_matrix_block(this, node) result(num_block)
     class(node_data_c) :: this
     integer, intent(in) :: node
