@@ -1,4 +1,4 @@
-program array_splitter_test
+program array_rearrange_test
   use array_rearrange_kernel_m
   use test_util
   implicit none
