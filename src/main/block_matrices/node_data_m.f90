@@ -14,12 +14,12 @@ module node_data_m
     procedure :: get_num_matrix_block
     procedure :: get_num_supernode_block
     procedure :: get_num_work_block
-    procedure :: get_work_size
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
     procedure :: get_matrix_block_size
     procedure :: get_supernode_block_size
+    procedure :: get_work_block_size
   end type
 
   public :: create_node_data
@@ -95,21 +95,6 @@ contains
     num_work_block = this%num_work_block(node)
   end function
 
-  function get_work_size(this, idx, node) result(block_size)
-    class(node_data_c) :: this
-    integer, intent(in) :: idx, node
-    integer :: block_size
-    integer :: n
-
-    n = this%supernode_size(node)+this%work_size(node)
-    if(idx == this%get_work_start_index(node))then
-      block_size = this%border_work_size(node)
-    else
-      block_size = get_block_size(idx, this%nb, n)
-    endif
-
-  end function
-
   integer function get_matrix_num(this, idx) result(num)
     class(node_data_c) :: this
     integer, intent(in) :: idx
@@ -177,6 +162,21 @@ contains
     nb = this%nb
     block_size = get_block_size(idx, nb, n)
     
+  end function
+
+  function get_work_block_size(this, idx, node) result(block_size)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: block_size
+    integer :: n
+
+    n = this%supernode_size(node)+this%work_size(node)
+    if(idx == this%get_work_start_index(node))then
+      block_size = this%border_work_size(node)
+    else
+      block_size = get_block_size(idx, this%nb, n)
+    endif
+
   end function
 
 end module

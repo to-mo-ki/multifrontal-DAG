@@ -27,7 +27,7 @@ program node_data_test
   do i=1, 6
     tmp_i(i) = node_data%border_work_size(i)
   enddo
-  call assert_equal("border_work_size", tmp_i, [1, 3, 2, 1, 3, 3])
+  call assert_equal("border_work_size", tmp_i, [1, 3, 2, 1, 3, 0])
 
   do i=1, 6
     tmp_i(i) = node_data%get_num_supernode_block(i)
@@ -95,17 +95,17 @@ program node_data_test
   call end_tests()
 
   call start_tests("get_work_size")
-  call add_test("node=1, i=2", node_data%get_work_size(2,1), 1)
-  call add_test("node=1, i=3", node_data%get_work_size(3,1), 3)
-  call add_test("node=1, i=4", node_data%get_work_size(4,1), 1)
-  call add_test("node=2, i=3", node_data%get_work_size(3,2), 3)
-  call add_test("node=2, i=4", node_data%get_work_size(4,2), 1)
-  call add_test("node=3, i=3", node_data%get_work_size(3,3), 2)
-  call add_test("node=3, i=4", node_data%get_work_size(4,3), 2)
-  call add_test("node=4, i=2", node_data%get_work_size(2,4), 1)
-  call add_test("node=4, i=3", node_data%get_work_size(3,4), 3)
-  call add_test("node=5, i=2", node_data%get_work_size(2,5), 3)
-  call add_test("node=5, i=3", node_data%get_work_size(3,5), 3)
+  call add_test("node=1, i=2", node_data%get_work_block_size(2,1), 1)
+  call add_test("node=1, i=3", node_data%get_work_block_size(3,1), 3)
+  call add_test("node=1, i=4", node_data%get_work_block_size(4,1), 1)
+  call add_test("node=2, i=3", node_data%get_work_block_size(3,2), 3)
+  call add_test("node=2, i=4", node_data%get_work_block_size(4,2), 1)
+  call add_test("node=3, i=3", node_data%get_work_block_size(3,3), 2)
+  call add_test("node=3, i=4", node_data%get_work_block_size(4,3), 2)
+  call add_test("node=4, i=2", node_data%get_work_block_size(2,4), 1)
+  call add_test("node=4, i=3", node_data%get_work_block_size(3,4), 3)
+  call add_test("node=5, i=2", node_data%get_work_block_size(2,5), 3)
+  call add_test("node=5, i=3", node_data%get_work_block_size(3,5), 3)
   call end_tests()
 
   call start_tests("get_matrix_num")
@@ -174,6 +174,12 @@ program node_data_test
   call add_test("node=1, idx=1", node_data%get_supernode_block_size(1, 1), 2)
   call add_test("node=2, idx=1", node_data%get_supernode_block_size(1, 2), 4)
   call add_test("node=1, idx=1", node_data%get_supernode_block_size(2, 2), 1)
+  call end_tests()
+
+  call start_tests("work_block_size")
+  call add_test("node=1, idx=1", node_data%get_work_block_size(1, 1), 2)
+  call add_test("node=1, idx=2", node_data%get_work_block_size(2, 1), 3)
+  call add_test("node=1, idx=1", node_data%get_work_block_size(2, 2), 2)
   call end_tests()
 
   call assert_equal("work_start_index", [node_data%get_work_start_index(1), node_data%get_work_start_index(2)], [1, 2])
