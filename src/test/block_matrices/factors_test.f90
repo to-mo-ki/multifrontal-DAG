@@ -131,18 +131,6 @@ program factors_test
   call add_test("node=1:ssize", ssize, 1)
   call add_test("node=1:wsize", wsize, 2)
   call end_tests()
-
-  call start_tests("get_first")
-  call add_test("node=1", factors%get_first(1), 1)
-  call add_test("node=2", factors%get_first(2), 2)
-  call add_test("node=3", factors%get_first(3), 8)
-  call end_tests()
-
-  call start_tests("get_last")
-  call add_test("node=1", factors%get_last(1), 1)
-  call add_test("node=2", factors%get_last(2), 7)
-  call add_test("node=3", factors%get_last(3), 11)
-  call end_tests()
   
   nb = 3
   node_sets => create_contiguous_sets([5, 6, 7, 5, 3, 6])
@@ -404,24 +392,6 @@ program factors_test
   call add_test("node=4:ssize", ssize, 2)
   call add_test("node=4:wsize", wsize, 1)
   call end_array_tests()
-
-  call start_tests("get_first")
-  call add_test("node=1", factors%get_first(1), 1)
-  call add_test("node=2", factors%get_first(2), 6)
-  call add_test("node=3", factors%get_first(3), 12)
-  call add_test("node=4", factors%get_first(4), 19)
-  call add_test("node=5", factors%get_first(5), 24)
-  call add_test("node=6", factors%get_first(6), 27)
-  call end_tests()
-
-  call start_tests("get_last")
-  call add_test("node=1", factors%get_last(1), 5)
-  call add_test("node=2", factors%get_last(2), 11)
-  call add_test("node=3", factors%get_last(3), 18)
-  call add_test("node=4", factors%get_last(4), 23)
-  call add_test("node=5", factors%get_last(5), 26)
-  call add_test("node=6", factors%get_last(6), 32)
-  call end_tests()
 
 end program factors_test
 

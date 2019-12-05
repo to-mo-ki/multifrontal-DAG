@@ -10,18 +10,19 @@ module coefficient_setter_m
 
 contains
 
-  subroutine set_coefficient(ccs, factors, nb)
+  subroutine set_coefficient(ccs, node_sets, factors, nb)
     type(ccs_c), pointer :: ccs
+    type(contiguous_sets_c), pointer :: node_sets
     type(factors_c), pointer :: factors
     integer :: node, i, j, block_col_num, block_row_num, nb, block_i, block_j, ld, row_num, col_num
     integer, pointer, contiguous :: rows(:)
     double precision, pointer, contiguous :: vals(:), block_matrix(:)
 
     do node=1, factors%get_num_node()
-      do j=factors%get_first(node), factors%get_last(node)
+      do j=node_sets%get_first(node), node_sets%get_last(node)
         rows => ccs%get_row_array(j)
         vals => ccs%get_val_array(j)
-        col_num = j - factors%get_first(node) + 1
+        col_num = j - node_sets%get_first(node) + 1
         block_col_num = (col_num-1)/nb + 1
         block_j = mod(col_num-1, nb)+1
         do i=1, size(rows)

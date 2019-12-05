@@ -13,13 +13,11 @@ module factors_m
     private
     type(node_data_c), pointer :: node_data
     type(block_matrices_c), pointer :: supernode, work, border
-    type(contiguous_sets_c), pointer :: node_sets ! TODO: 一時的
     integer :: nb
   contains
     procedure :: get_matrix_ptr, get_supernode_ptr, get_work_ptr, get_border_ptr
     procedure :: get_num_block, get_work_start_index, exist_border, get_num_node
     procedure :: get_block_size, get_supernode_block_size, get_border_info, get_work_size
-    procedure :: get_first, get_last
   end type
 
   public :: create_factors
@@ -40,7 +38,6 @@ contains
     this%border => create_block_matrices(nb, node_data%supernode_size, node_data%work_size, controller)
     this%nb = nb
     this%node_data => node_data
-    this%node_sets => create_contiguous_sets(node_data%supernode_size)
   
   end function
 
@@ -182,21 +179,5 @@ contains
     wsize = this%node_data%get_border_work_size(node)
 
   end subroutine
-
-  integer function get_first(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    get_first = this%node_sets%get_first(node)
-
-  end function
-
-  integer function get_last(this, node)
-    class(factors_c) :: this
-    integer, intent(in) :: node
-
-    get_last = this%node_sets%get_last(node)
-
-  end function
 
 end module
