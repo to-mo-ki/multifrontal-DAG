@@ -17,15 +17,18 @@ module analyze_phase_m
   private
   
 contains
-  subroutine analyze_phase(origin_ccs, max_zero, perm_out)
+  subroutine analyze_phase(origin_ccs, max_zero, l_structure, node_sets, perm_out, parent_out)
     ! NOTE: reorderingは外部で行う
     type(jagged_array_c), pointer, intent(in) :: origin_ccs
     integer, intent(in) :: max_zero
+    type(jagged_array_c), pointer, intent(out) :: l_structure
+    type(contiguous_sets_c), pointer, intent(out) :: node_sets
+    integer, pointer, contiguous, intent(out) :: perm_out(:), parent_out(:)
     type(jagged_array_c), pointer :: origin_crs, tree_child, ccs_l, ccs_supernode, postordering_ccs
     integer, pointer, contiguous :: parent(:), postordering_parent(:)
     integer, pointer, contiguous :: cc_node(:), postordering_perm(:), postordering_iperm(:)
     type(supernode_c), pointer :: fundamental, relaxed
-    integer, pointer, contiguous :: perm_out(:)
+    
     
     allocate(fundamental, relaxed)
     call ccs_to_crs(origin_ccs, origin_crs)
@@ -56,14 +59,10 @@ contains
 
     ccs_l => symbolic_factorize(ccs_supernode, relaxed%node_sets, relaxed%cc, relaxed%tree_child)
 
-    ! Tree pruning
-    ! local index
-    ! CCSのオーダリングはpermを用いて行う(ccs_permを作成しない)
     call perm_product(fundamental%perm, relaxed%perm, perm_out)
-
-
-    
-    
+    l_structure => ccs_l
+    node_sets => relaxed%node_sets
+    parent_out => create_parent(relaxed%tree_child)
 
   end subroutine
 

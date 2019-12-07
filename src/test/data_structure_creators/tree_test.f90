@@ -16,6 +16,9 @@ program tree_test
   
   call assert_equal("tree_child by parent and num_child", tree_child%get_val(), check_child_val)
 
+  parent => create_parent(tree_child)
+  call assert_equal("create_parent", parent, [7, 4, 5, 6, 6, 8, 8, 9, 0])
+
   subtree_size => count_subtree_size(tree_child)
   call assert_equal("subtree size", subtree_size, [1, 1, 1, 2, 2, 5, 2, 8, 9])
   perm => tree_traverse_postordering(tree_child)
