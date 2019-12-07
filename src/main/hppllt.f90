@@ -11,6 +11,8 @@ contains
     use analyze_phase_m
     use reordering_m
     use perm_m
+    use create_local_index_m
+    use create_supernodal_index_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
     integer, intent(in) :: n, nb, max_zero
     type(contiguous_sets_c), pointer :: origin_set
@@ -18,6 +20,7 @@ contains
     type(jagged_array_c), pointer :: reordered_ccs
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: reordering_perm(:), analyze_perm(:), iperm(:)
+    type(jagged_array_c), pointer :: local_index
     integer :: i
     
     origin_set => create_raw_contiguous_sets(ccs_col, n)
@@ -27,7 +30,7 @@ contains
     !reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm)
     reordered_ccs => origin_structure
 
-    call analyze_phase(reordered_ccs, max_zero, l_structure, node_sets, analyze_perm, parent)
+    call analyze_phase(reordered_ccs, max_zero, l_structure, node_sets, analyze_perm, parent, tree_child)
     ! TODO:reordering
     !call perm_product(reordering_perm, analyze_perm, perm)
     perm => analyze_perm
@@ -46,6 +49,9 @@ contains
     node_data => create_node_data(supernode_size, work_size, nb)
     factors => create_factors(node_data, nb)
     rh => create_right_hand(node_data, nb)
+    supernodal_index => create_supernodal_index(node_sets, a_structure, l_structure)
+    local_index => create_local_index(l_structure, node_sets, tree_child)
+    block_local_index => create_block_local_index(node_data, local_index)
 
   end subroutine
 
@@ -58,8 +64,7 @@ contains
     double precision, pointer, contiguous :: ccs_val(:)
 
     ccs_val => reordering_ccs_val(origin_structure%get_set(), a_structure%get_set(), a, perm)
-    ccs => create_ccs(a_structure, ccs_val)
-    
+    ccs => create_ccs(supernodal_index, ccs_val)
     call set_coefficient(node_data, ccs, node_sets, factors)
     call seq_factorize(node_data, factors, block_local_index, parent)
 

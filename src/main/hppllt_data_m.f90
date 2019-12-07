@@ -14,8 +14,10 @@ module hppllt_data_m
   type(ccs_c), pointer :: ccs
   type(factors_c), pointer :: factors
   type(block_local_index_c), pointer :: block_local_index
+  type(jagged_array_c), pointer :: supernodal_index
   type(right_hand_c), pointer :: rh
   integer, pointer, contiguous :: parent(:)
   integer, pointer, contiguous :: perm(:)
+  type(jagged_array_c), pointer :: tree_child
 
 end module
