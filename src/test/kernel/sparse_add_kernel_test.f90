@@ -34,10 +34,10 @@ contains
 
   subroutine gather_test1()
     allocate(x, source=[(dble(i),i=1,8)])
-    allocate(y(4), source=0d0)
+    allocate(y(4), source=1d0)
     allocate(indx, source=[2,3,7,8])
 
-    call gather_add_kernel(x,indx, y, 4)
+    call gather_kernel(x,indx, y, 4)
     call assert_equal("gather_test1", y, [2d0,3d0,7d0,8d0])
 
   end subroutine
@@ -47,7 +47,7 @@ contains
     allocate(y(5), source=0d0)
     allocate(indx, source=[1,3,6,8,9])
 
-    call gather_add_kernel(x, indx, y, 5)
+    call gather_kernel(x, indx, y, 5)
     call assert_equal("gather_test2", y, [1d0,3d0,6d0,8d0,9d0])
 
   end subroutine

@@ -55,18 +55,18 @@ program sparse_add_subroutines_test
   rh%get_array_ptr(2,3) = [7,8,9]
   rh%get_array_ptr(2,4) = [10]
 
-  call start_array_tests("gather_add")
-  call gather_add(rh, block_local_index, 1, 1, 2)
+  call start_array_tests("gather")
+  call gather(rh, block_local_index, 1, 1, 2)
   call add_test("node=1, index=1", rh%get_work_ptr(1, 2), [3d0,0d0])
-  call gather_add(rh, block_local_index, 2, 1, 2)
+  call gather(rh, block_local_index, 2, 1, 2)
   call add_test("node=1, index=2", rh%get_work_ptr(1, 2), [3d0,4d0])
-  call gather_add(rh, block_local_index, 3, 1, 2)
+  call gather(rh, block_local_index, 3, 1, 2)
   call add_test("node=1, index=3", rh%get_array_ptr(1, 3), [5d0,6d0,0d0])
-  call gather_add(rh, block_local_index, 4, 1, 2)
+  call gather(rh, block_local_index, 4, 1, 2)
   call add_test("node=1, index=4", rh%get_array_ptr(1, 3), [5d0,6d0,8d0])
-  call gather_add(rh, block_local_index, 5, 1, 2)
+  call gather(rh, block_local_index, 5, 1, 2)
   call add_test("node=1, index=5", rh%get_array_ptr(1, 4), [9d0,0d0])
-  call gather_add(rh, block_local_index, 6, 1, 2)
+  call gather(rh, block_local_index, 6, 1, 2)
   call add_test("node=1, index=6", rh%get_array_ptr(1, 4), [9d0,10d0])
   call end_array_tests()
   
