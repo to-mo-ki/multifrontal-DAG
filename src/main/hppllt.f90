@@ -60,11 +60,13 @@ contains
     use seq_factorize_m
     use perm_m
     use reordering_m
+    use zero_setter_m
     double precision, pointer, contiguous :: a(:)
     double precision, pointer, contiguous :: ccs_val(:)
 
     ccs_val => reordering_ccs_val(origin_structure%get_set(), a_structure%get_set(), a, perm)
     ccs => create_ccs(supernodal_index, ccs_val)
+    call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
     call seq_factorize(node_data, factors, block_local_index, parent)
 
