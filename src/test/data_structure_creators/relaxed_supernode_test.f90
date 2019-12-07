@@ -79,5 +79,31 @@ program relaxed_supernode_test
   num_child => count_num_child(sons, map)
   call assert_equal("max_zero=2:count num child", num_child, [0, 1, 1])
 
+  merge_lists => create_doubly_linked_lists(7)
+  do i=1, 7
+    call merge_lists%add(i, i)
+  enddo
+  call merge_lists%merge(1, 2)
+  call merge_lists%merge(2, 3)
+  call merge_lists%merge(3, 4)
+  call merge_lists%merge(4, 5)
+  call merge_lists%merge(5, 6)
+  call merge_lists%merge(6, 7)
+
+  map => build_map(merge_lists)
+  call assert_equal("all merge:build map", map, [7])
+
+  node_sets_relaxed => create_node_sets(node_sets_fundamental, map, merge_lists)
+  call assert_equal("all merge:create node sets", node_sets_relaxed%get_num_sets(), 1)
+  
+  perm => create_perm(node_sets_fundamental, node_sets_relaxed, map, merge_lists)
+  call assert_equal("all merge:perm", perm, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+  cc_relaxed => build_cc(cc_fundamental, map)
+  call assert_equal("all merge:cc", cc_relaxed(1), 0)
+
+  sons => create_doubly_linked_lists(7)
+  num_child => count_num_child(sons, map)
+  call assert_equal("all merge:count num child", num_child, [0])
   
 end program relaxed_supernode_test
