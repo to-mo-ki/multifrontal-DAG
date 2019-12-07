@@ -1,9 +1,10 @@
 module reordering_m
+  use contiguous_sets_m
   use jagged_array_m
   implicit none
   private
 
-  public :: reordering_tree, reordering_ccs
+  public :: reordering_tree, reordering_ccs, reordering_ccs_val
   
 contains
   function reordering_tree(parent_origin, perm, iperm) result(parent_reordered)
@@ -49,4 +50,25 @@ contains
     end do
 
   end function
+
+  function reordering_ccs_val(origin_ccs_set, reorder_ccs_set, origin_val, perm) result(reorder_val)
+    type(contiguous_sets_c), pointer :: origin_ccs_set, reorder_ccs_set
+    double precision, contiguous, target :: origin_val(:)
+    double precision, pointer, contiguous :: reorder_val(:)
+    double precision, pointer, contiguous :: reorder_val_ptr(:), origin_val_ptr(:)
+    integer, contiguous :: perm(:)
+    integer :: reorder_idx, origin_idx
+
+    allocate(reorder_val(size(origin_val)))
+
+    do reorder_idx=1,origin_ccs_set%get_num_sets()
+      origin_idx = perm(reorder_idx)
+      reorder_val_ptr => reorder_val(reorder_ccs_set%get_first(reorder_idx):reorder_ccs_set%get_last(reorder_idx))
+      origin_val_ptr => origin_val(origin_ccs_set%get_first(origin_idx):origin_ccs_set%get_last(origin_idx))
+      reorder_val_ptr = origin_val_ptr
+    enddo
+
+  end function
+
+
 end module
