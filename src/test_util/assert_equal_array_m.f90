@@ -89,7 +89,7 @@ contains
 
   subroutine assert_equal_array_logical(message, answer, check)
     character(*), intent(in) :: message
-    logical, intent(in) :: answer(:), check(:)
+    logical, contiguous, intent(in) :: answer(:), check(:)
     logical :: err_flag
     logical, allocatable :: err_flag_array(:)
     integer :: i, n
@@ -129,8 +129,9 @@ contains
 
   subroutine assert_equal_partial_array(message, answer, pos, n, check, precision)
     character(*), intent(in) :: message
-    double precision, intent(in) :: answer(*), check(n)
-    integer, intent(in) :: n, pos(*)
+    double precision, contiguous, intent(in) :: answer(:), check(:)
+    integer, contiguous, intent(in) :: pos(:)
+    integer, intent(in) :: n
     double precision, optional :: precision
     logical :: err_flag_array(n), err_flag
     integer :: i

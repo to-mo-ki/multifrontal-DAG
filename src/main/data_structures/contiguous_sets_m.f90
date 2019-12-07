@@ -31,7 +31,7 @@ contains
 
   function create_raw_contiguous_sets(ptr, n) result(this)
     type(contiguous_sets_c), pointer :: this
-    integer, intent(in) :: ptr(*)
+    integer, contiguous, intent(in) :: ptr(:)
     integer, intent(in) :: n
     
     allocate(this)
