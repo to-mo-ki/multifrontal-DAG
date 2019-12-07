@@ -23,7 +23,7 @@ program coefficient_setter_test
   a_structure => create_jagged_array([3,2,4,2,3,3,2,1,1],[1,2,3,2,4,1,2,3,4,2,4,1,2,4,2,3,4,1,3,2,3])
   ccs => create_ccs(a_structure, [double precision :: 11,21,81,22,92,33,43,73,93,44,94,55,65,85,66,76,86,77,97,88,99])
   call set_zero(node_data, factors)
-  call set_coefficient(node_data, ccs, node_set, factors, nb)
+  call set_coefficient(node_data, ccs, node_set, factors)
   
   call start_array_tests("coefficient setter")
   call add_test_tri("node=1, i=1, j=1", factors%get_matrix_ptr(1,1,1), [11d0,21d0,22d0], 2)
