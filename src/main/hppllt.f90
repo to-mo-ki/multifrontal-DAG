@@ -10,27 +10,30 @@ contains
   subroutine hppllt_analyze(ccs_col, ccs_row, n, nb, max_zero)
     use analyze_phase_m
     use reordering_m
+    use perm_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
     integer, intent(in) :: n, nb, max_zero
     type(contiguous_sets_c), pointer :: origin_set
-    type(jagged_array_c), pointer :: origin_ccs, l_structure
+    type(jagged_array_c), pointer :: l_structure
     type(jagged_array_c), pointer :: reordered_ccs
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: reordering_perm(:), analyze_perm(:), iperm(:)
     integer :: i
     
     origin_set => create_raw_contiguous_sets(ccs_col, n)
-    origin_ccs => create_jagged_array(origin_set, ccs_row)
+    origin_structure => create_jagged_array(origin_set, ccs_row)
     
     ! TODO:reordering
-    !reordered_ccs => reordering_ccs(origin_ccs, reordering_perm, reordering_iperm)
-    reordered_ccs => origin_ccs
+    !reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm)
+    reordered_ccs => origin_structure
 
     call analyze_phase(reordered_ccs, max_zero, l_structure, node_sets, analyze_perm, parent)
-    call perm_product(reordering_perm, analyze_perm, perm)
+    ! TODO:reordering
+    !call perm_product(reordering_perm, analyze_perm, perm)
+    perm => analyze_perm
     call set_iperm(perm, iperm)
     
-    a_structure => reordering_ccs(origin_ccs, perm, iperm)
+    a_structure => reordering_ccs(origin_structure, perm, iperm)
     
     ! TODO:node_sets%get_lengthsを作成する？
     allocate(supernode_size(node_sets%get_num_sets()))

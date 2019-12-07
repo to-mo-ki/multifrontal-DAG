@@ -15,6 +15,8 @@ module analyze_phase_m
   use supernode_m
   implicit none
   private
+
+  public :: analyze_phase
   
 contains
   subroutine analyze_phase(origin_ccs, max_zero, l_structure, node_sets, perm_out, parent_out)
@@ -100,6 +102,6 @@ contains
     relaxed%tree_child => create_tree_child(num_child, parent)
     relaxed%cc => build_cc(fundamental%cc, map)
     call set_iperm(relaxed%perm, relaxed%iperm)
-    relaxed%ccs = reordering_ccs(fundamental%ccs, relaxed%perm, relaxed%iperm)
+    relaxed%ccs => reordering_ccs(fundamental%ccs, relaxed%perm, relaxed%iperm)
   end subroutine
 end module
