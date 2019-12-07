@@ -11,7 +11,7 @@ module contiguous_sets_m
     procedure :: get_num_elements
   end type
 
-  public :: create_contiguous_sets
+  public :: create_contiguous_sets, create_raw_contiguous_sets
 
 contains
   function create_contiguous_sets(set_length) result(this)
@@ -26,6 +26,17 @@ contains
     do i=1, n
       this%ptr(i+1) = this%ptr(i) + set_length(i)
     enddo
+
+  end function
+
+  function create_raw_contiguous_sets(ptr, n) result(this)
+    type(contiguous_sets_c), pointer :: this
+    integer, intent(in) :: ptr(*)
+    integer, intent(in) :: n
+    
+    allocate(this)
+    allocate(this%ptr(n+1))
+    this%ptr = ptr(:n+1)
 
   end function
 
