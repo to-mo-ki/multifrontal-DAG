@@ -19,7 +19,7 @@ contains
     
     sn = nc/nb
     sr = mod(nc, nb)
-    fw = mod(nb-sr, nb)
+    fw = min(mod(nb-sr, nb), nr)
     wn = (nr-fw)/nb
     wr = mod(nr-fw, nb)
     wn = max((j-1)-(nc+fw)/nb, 0)
@@ -41,7 +41,7 @@ contains
 
     sn = nc/nb
     sr = mod(nc, nb)
-    fw = mod(nb-sr, nb)
+    fw = min(mod(nb-sr, nb), nr)
 
     work_size = get_block_size(i-sn, nb, nr, fw) * get_block_size(j-sn, nb, nr, fw)
     
@@ -50,14 +50,18 @@ contains
   integer function estimate_size(nb, nc, nr) result(work_size)
     integer, intent(in) :: nc, nr, nb
     integer :: sn, sr, wn, wr, fw
+    integer :: left, lower, internal
+    
     sn = nc/nb
     sr = mod(nc, nb)
-    fw = mod(nb-sr, nb)
+    fw = min(mod(nb-sr, nb), nr)
     wn = (nr-fw)/nb
     wr = mod(nr-fw, nb)
-    work_size = partial_sum(1, nr) + partial_sum(1, nb-1)*wn
-    work_size = work_size + partial_sum(1, fw-1)
-    work_size = work_size + partial_sum(1, wr-1)
+    
+    left = nr*fw
+    internal = partial_sum(1, wn)*nb*nb
+    lower = (nr-fw)*wr
+    work_size = left + internal + lower
     
   end function
 end module
