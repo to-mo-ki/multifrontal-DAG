@@ -52,4 +52,41 @@ program block_matrices_border_test
   call add_test("(4,3,2)", block_matrices%get_ptr(4,3,2), [(1d0, i=1,9)])
   call end_array_tests()
 
+  nb = 3
+  block_matrices => create_block_matrices(nb, [1,1,1,1,1,4], [2,3,3,3,3,0], controller)
+
+  block_matrices%get_ptr(1,1,1) = 0.0d0
+  block_matrices%get_ptr(2,1,1) = 0.0d0
+  block_matrices%get_ptr(2,2,1) = 0.0d0
+  block_matrices%get_ptr(3,1,1) = 0.0d0
+  block_matrices%get_ptr(3,2,1) = 0.0d0
+  block_matrices%get_ptr(4,1,1) = 0.0d0
+  block_matrices%get_ptr(4,2,1) = 0.0d0
+  block_matrices%get_ptr(5,1,1) = 0.0d0
+  block_matrices%get_ptr(5,2,1) = 0.0d0
+  
+  
+  block_matrices%get_ptr(1,1,1) = block_matrices%get_ptr(1,1,1) + 1d0
+  block_matrices%get_ptr(2,1,1) = block_matrices%get_ptr(2,1,1) + 1d0
+  block_matrices%get_ptr(2,2,1) = block_matrices%get_ptr(2,2,1) + 1d0
+  block_matrices%get_ptr(3,1,1) = block_matrices%get_ptr(3,1,1) + 1d0
+  block_matrices%get_ptr(3,2,1) = block_matrices%get_ptr(3,2,1) + 1d0
+  block_matrices%get_ptr(4,1,1) = block_matrices%get_ptr(4,1,1) + 1d0
+  block_matrices%get_ptr(4,2,1) = block_matrices%get_ptr(4,2,1) + 1d0
+  block_matrices%get_ptr(5,1,1) = block_matrices%get_ptr(5,1,1) + 1d0
+  block_matrices%get_ptr(5,2,1) = block_matrices%get_ptr(5,2,1) + 1d0
+  
+  call start_array_tests("double access & size:test1")
+  call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (2,1,1)", block_matrices%get_ptr(2,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (2,2,1)", block_matrices%get_ptr(2,2,1), [(1d0, i=1,3)])
+  call add_test("(node, i, j) = (3,1,1)", block_matrices%get_ptr(3,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (3,2,1)", block_matrices%get_ptr(3,2,1), [(1d0, i=1,3)])
+  call add_test("(node, i, j) = (4,1,1)", block_matrices%get_ptr(4,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (4,2,1)", block_matrices%get_ptr(4,2,1), [(1d0, i=1,3)])
+  call add_test("(node, i, j) = (5,1,1)", block_matrices%get_ptr(5,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (5,2,1)", block_matrices%get_ptr(5,2,1), [(1d0, i=1,3)])
+  
+  call end_array_tests()
+
 end program

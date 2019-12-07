@@ -76,11 +76,16 @@ contains
     use seq_forward_m
     use seq_backward_m
     use right_hand_m
+    use perm_m
     double precision, contiguous :: b(:)
+    double precision, pointer, contiguous :: tmp_b(:)
 
-    call rh%set_val(b)
+    allocate(tmp_b(size(perm)))
+    call permutate(perm, b, tmp_b)
+    call rh%set_val(tmp_b)
     call seq_forward(node_data, factors, rh, block_local_index, parent)
     call seq_backward(node_data, factors, rh, block_local_index, parent)
+    call inverse_permutate(perm, tmp_b, b)
 
   end subroutine
 

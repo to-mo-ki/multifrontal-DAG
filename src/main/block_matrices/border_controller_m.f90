@@ -27,14 +27,25 @@ contains
 
   integer function estimate_size(nb, nc, nr) result(border_size)
     integer, intent(in) :: nc, nr, nb
+    integer :: width, sr
+
+    sr = mod(nc, nb)
 
     if(mod(nc, nb) == 0)then
       border_size = 0
     else
-      if(nr < nb)then
-        border_size = mod(nc+nr, nb)*mod(nc+nr, nb)
+      if(nc+nr < nb)then
+        width = nc+nr
+        if(width == 0)then
+          width = nb
+        endif
+        border_size = width*width
       else
-        border_size = (nc+nr-(nc/nb)*nb)*nb
+        if(nr < nb-sr)then
+          border_size = (nc+nr-(nc/nb)*nb)*(sr+nr)
+        else
+          border_size = (nc+nr-(nc/nb)*nb)*nb
+        endif
       endif
     endif
     

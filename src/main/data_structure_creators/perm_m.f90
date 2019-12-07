@@ -37,13 +37,11 @@ contains
 
   subroutine permutate_DP(perm, in_data, out_data)
     integer, pointer, intent(in) :: perm(:)
-    double precision, pointer, intent(in) :: in_data(:)
-    double precision, pointer, intent(out) :: out_data(:)
+    double precision, intent(in) :: in_data(:)
+    double precision, intent(out) :: out_data(:)
     integer :: i, n
 
-    n = size(perm)
-    allocate(out_data(n))
-    do i=1,n
+    do i=1, size(perm)
       out_data(i) = in_data(perm(i))
     enddo
 
@@ -51,13 +49,11 @@ contains
 
   subroutine permutate_int(perm, in_data, out_data)
     integer, pointer, intent(in) :: perm(:)
-    integer, pointer, intent(in) :: in_data(:)
-    integer, pointer, intent(out) :: out_data(:)
+    integer, intent(in) :: in_data(:)
+    integer, intent(out) :: out_data(:)
     integer :: i, n
 
-    n = size(perm)
-    allocate(out_data(n))
-    do i=1,n
+    do i=1, size(perm)
       out_data(i) = in_data(perm(i))
     enddo
 
@@ -65,13 +61,11 @@ contains
 
   subroutine inverse_permutate(perm, in_data, out_data)
     integer, pointer, intent(in) :: perm(:)
-    double precision, pointer, intent(in) :: in_data(:)
-    double precision, pointer, intent(out) :: out_data(:)
+    double precision, intent(in) :: in_data(:)
+    double precision, intent(out) :: out_data(:)
     integer :: i, n
 
-    n = size(perm)
-    allocate(out_data(n))
-    do i=1,n
+    do i=1, size(in_data)
       out_data(perm(i)) = in_data(i)
     enddo
 

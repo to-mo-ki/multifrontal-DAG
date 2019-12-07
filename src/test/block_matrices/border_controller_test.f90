@@ -59,7 +59,7 @@ program supernode_controller_test
   call add_test("(i, j)=(3,1)", controller%get_ptr(array, 4, 2, 7, 3, 1), [(dble(i), i=33,36)])
   call end_array_tests()
 
-  print *, "nb=3, nc=5, nr=5(nr < nb)"
+  print *, "nb=4, nc=5, nr=2(nr < nb)"
   array_size = controller%estimate_size(4, 5, 2)
   call assert_equal("estimate_size", array_size, 9)
   allocate(array(array_size))
