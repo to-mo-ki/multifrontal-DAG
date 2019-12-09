@@ -10,6 +10,7 @@ module tests_m
     procedure :: add_test4
     procedure :: add_test5
     procedure :: add_test6
+    procedure :: add_test7
   end interface
 
   public :: add_test, add_test_tri
