@@ -56,7 +56,7 @@ contains
     !TODO: TEST, node=1でソートされるような問題
     do node=1, ccs_l%get_num_arrays()
       rows_l => ccs_l%get_array(node)
-      call sort(rows_l, size(rows_l))
+      call sort(rows_l)
     enddo
 
   end function

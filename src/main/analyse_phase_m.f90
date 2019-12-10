@@ -41,7 +41,7 @@ contains
 
     postordering_perm => tree_traverse_postordering(tree_child)
     call set_iperm(postordering_perm, postordering_iperm)
-    postordering_ccs => reordering_ccs(origin_ccs, postordering_perm, postordering_iperm)
+    postordering_ccs => repostordering_ccs(origin_ccs, postordering_perm, postordering_iperm)
     postordering_parent => reordering_tree(parent, postordering_perm, postordering_iperm)
     ! TODO: finalize tree_child
     tree_child => create_tree_child(postordering_parent)
@@ -104,6 +104,6 @@ contains
     relaxed%tree_child => create_tree_child(num_child, parent)
     relaxed%cc => build_cc(fundamental%cc, map)
     call set_iperm(relaxed%perm, relaxed%iperm)
-    relaxed%ccs => reordering_ccs(fundamental%ccs, relaxed%perm, relaxed%iperm)
+    relaxed%ccs => repostordering_ccs(fundamental%ccs, relaxed%perm, relaxed%iperm)
   end subroutine
 end module

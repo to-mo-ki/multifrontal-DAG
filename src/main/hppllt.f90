@@ -20,7 +20,8 @@ contains
     type(jagged_array_c), pointer :: l_structure
     type(jagged_array_c), pointer :: reordered_ccs
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    integer, pointer, contiguous :: reordering_perm(:), reordering_iperm(:), analyze_perm(:), iperm(:)
+    integer, pointer, contiguous :: reordering_perm(:), reordering_iperm(:), analyze_perm(:), analyze_iperm(:)
+    integer, pointer, contiguous :: reordering_ccs_perm(:), analyze_ccs_perm(:)
     type(jagged_array_c), pointer :: local_index
     integer :: i
     
@@ -28,16 +29,14 @@ contains
     origin_structure => create_jagged_array(origin_set, ccs_row)
     
     call Metis_ordering(origin_structure, reordering_perm, reordering_iperm)
-    reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm)
-    !reordered_ccs => origin_structure
-
+    reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm, reordering_ccs_perm)
     call analyze_phase(reordered_ccs, max_zero, l_structure, node_sets, analyze_perm, parent, tree_child)
-    ! TODO:reordering
     call perm_product(reordering_perm, analyze_perm, perm)
-    perm => analyze_perm
-    call set_iperm(perm, iperm)
-    
-    a_structure => reordering_ccs(origin_structure, perm, iperm)
+    !TODO : reorderingしないなら
+    !perm => analyze_perm
+    call set_iperm(analyze_perm, analyze_iperm)
+    a_structure => repostordering_ccs(reordered_ccs, analyze_perm, analyze_iperm, analyze_ccs_perm)
+    call perm_product(reordering_ccs_perm, analyze_ccs_perm, ccs_perm)
     
     ! TODO:node_sets%get_lengthsを作成する？
     allocate(supernode_size(node_sets%get_num_sets()))

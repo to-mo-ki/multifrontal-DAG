@@ -14,7 +14,7 @@ message(STATUS "install directory: ${CMAKE_INSTALL_PREFIX}")
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/main/*.f90" "src/starpu/*.f90")
 add_library(
   mysolver
-  SHARED
+  STATIC
   ${SOURCES}
 )
 

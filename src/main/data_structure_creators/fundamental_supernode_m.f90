@@ -71,7 +71,6 @@ contains
 
   function create_supernodal_ccs(node_sets, ccs_node) result(ccs_supernode)
     ! HACK: サブルーチン化
-    use sort_m
     type(jagged_array_c), pointer :: ccs_supernode
     type(contiguous_sets_c), pointer, intent(in) :: node_sets
     type(jagged_array_c), pointer, intent(in) :: ccs_node

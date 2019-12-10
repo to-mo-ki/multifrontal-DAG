@@ -19,5 +19,6 @@ module hppllt_data_m
   integer, pointer, contiguous :: parent(:)
   integer, pointer, contiguous :: perm(:)
   type(jagged_array_c), pointer :: tree_child
+  integer, pointer, contiguous :: ccs_perm(:)
 
 end module
