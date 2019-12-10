@@ -13,26 +13,27 @@ contains
     use perm_m
     use create_local_index_m
     use create_supernodal_index_m
+    use ordering_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
     integer, intent(in) :: n, nb, max_zero
     type(contiguous_sets_c), pointer :: origin_set
     type(jagged_array_c), pointer :: l_structure
     type(jagged_array_c), pointer :: reordered_ccs
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    integer, pointer, contiguous :: reordering_perm(:), analyze_perm(:), iperm(:)
+    integer, pointer, contiguous :: reordering_perm(:), reordering_iperm(:), analyze_perm(:), iperm(:)
     type(jagged_array_c), pointer :: local_index
     integer :: i
     
     origin_set => create_raw_contiguous_sets(ccs_col, n)
     origin_structure => create_jagged_array(origin_set, ccs_row)
     
-    ! TODO:reordering
-    !reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm)
-    reordered_ccs => origin_structure
+    call Metis_ordering(origin_structure, reordering_perm, reordering_iperm)
+    reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm)
+    !reordered_ccs => origin_structure
 
     call analyze_phase(reordered_ccs, max_zero, l_structure, node_sets, analyze_perm, parent, tree_child)
     ! TODO:reordering
-    !call perm_product(reordering_perm, analyze_perm, perm)
+    call perm_product(reordering_perm, analyze_perm, perm)
     perm => analyze_perm
     call set_iperm(perm, iperm)
     

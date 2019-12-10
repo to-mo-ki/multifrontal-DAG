@@ -9,6 +9,7 @@ module contiguous_sets_m
     procedure :: get_length
     procedure :: get_num_sets
     procedure :: get_num_elements
+    procedure :: get_raw
   end type
 
   public :: create_contiguous_sets, create_raw_contiguous_sets
@@ -75,6 +76,14 @@ contains
     class(contiguous_sets_c) :: this
 
     get_num_elements = this%get_last(this%get_num_sets())
+
+  end function
+  
+  function get_raw(this)
+    class(contiguous_sets_c) :: this
+    integer, pointer, contiguous :: get_raw(:)
+
+    get_raw => this%ptr
 
   end function
 

@@ -14,15 +14,17 @@ message(STATUS "install directory: ${CMAKE_INSTALL_PREFIX}")
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/main/*.f90" "src/starpu/*.f90")
 add_library(
   mysolver
-  STATIC
+  SHARED
   ${SOURCES}
 )
 
 link_directories(${STARPU_LIBRARY_DIRS})
+link_directories(${METIS_LIBRARY_DIRS})
 add_executable(main main.f90)
 target_include_directories(main PRIVATE ${STARPU_INCLUDE_DIRS})
 target_link_libraries(main PRIVATE ${STARPU_LIBRARIES})
 target_link_libraries(main PRIVATE mysolver)
+target_link_libraries(main PRIVATE ${METIS_LIBRARY})
 
 file(GLOB_RECURSE test_utils RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/test_util/*.f90")
 add_library(test_util STATIC ${test_utils})
@@ -41,6 +43,7 @@ foreach(test_source ${test_files})
   target_link_libraries(${test_object} PRIVATE ${STARPU_LIBRARIES})
   # NOTE: リンクの順番は大事
   target_link_libraries(${test_object} PRIVATE test_mod mysolver test_util)
+  target_link_libraries(${test_object} PRIVATE ${METIS_LIBRARY})
   add_dependencies(${test_object} mysolver test_util test_mod)
   list (APPEND test_lists ${test_object})
 endforeach()
