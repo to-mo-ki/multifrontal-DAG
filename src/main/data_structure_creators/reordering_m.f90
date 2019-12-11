@@ -138,8 +138,8 @@ contains
     end do
 
     do j=1,n
-      reorder_rows => ccs_reordered%get_array(col)
-      perm_ptr => perm_jag%get_array(col)
+      reorder_rows => ccs_reordered%get_array(j)
+      perm_ptr => perm_jag%get_array(j)
       call sort_with_perm(reorder_rows, perm_ptr)
     enddo
 

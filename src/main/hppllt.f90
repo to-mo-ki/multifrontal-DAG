@@ -64,7 +64,8 @@ contains
     double precision, pointer, contiguous :: a(:)
     double precision, pointer, contiguous :: ccs_val(:)
 
-    ccs_val => reordering_ccs_val(origin_structure%get_set(), a_structure%get_set(), a, perm)
+    allocate(ccs_val(size(ccs_perm)))
+    call permutate(ccs_perm, a, ccs_val)
     ccs => create_ccs(supernodal_index, ccs_val)
     call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
