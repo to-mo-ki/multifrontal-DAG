@@ -98,12 +98,12 @@ contains
   function reordering_ccs(ccs_origin, perm, iperm, ccs_perm) result(ccs_reordered)
     type(jagged_array_c), pointer :: ccs_reordered
     type(jagged_array_c), pointer, intent(in) :: ccs_origin
-    integer, pointer, contiguous, intent(in) :: perm(:), iperm(:)
+    integer, contiguous, intent(in) :: perm(:), iperm(:)
     integer, pointer, contiguous, intent(out) :: ccs_perm(:)
     integer, pointer, contiguous :: rows(:), reorder_rows(:), perm_ptr(:)
     type(jagged_array_c), pointer :: perm_jag
     integer, allocatable :: num_col(:), ptr(:)
-    integer :: n, nonzero, i, j, col, row
+    integer :: n, nonzero, i, j, col, row, offset
 
     n = ccs_origin%get_num_arrays()
     nonzero = ccs_origin%get_num_vals()
@@ -111,7 +111,7 @@ contains
 
     num_col = 0
     do j=1,n
-      rows => ccs_origin%get_array(i)
+      rows => ccs_origin%get_array(j)
       do i=1, size(rows)
         col = min(iperm(j), iperm(rows(i)))
         num_col(col) = num_col(col) + 1
@@ -119,11 +119,10 @@ contains
     end do
 
     ccs_reordered => create_jagged_array(num_col)
-    
-    allocate(ptr(n))
     perm_jag => create_jagged_array(ccs_reordered%get_set())
 
     ptr = 1
+    offset = 0
     do j=1,n
       rows => ccs_origin%get_array(j)
       do i=1,size(rows)
@@ -132,10 +131,17 @@ contains
         reorder_rows => ccs_reordered%get_array(col)
         reorder_rows(ptr(col)) = row
         perm_ptr => perm_jag%get_array(col)
-        perm_ptr(ptr(col)) = j
+        perm_ptr(ptr(col)) = offset+i
         ptr(col) = ptr(col) + 1
       end do
+      offset = offset + size(rows)
     end do
+
+    do j=1,n
+      reorder_rows => ccs_reordered%get_array(col)
+      perm_ptr => perm_jag%get_array(col)
+      call sort_with_perm(reorder_rows, perm_ptr)
+    enddo
 
     ccs_perm => perm_jag%get_raw_val()
 

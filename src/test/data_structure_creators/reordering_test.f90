@@ -36,5 +36,13 @@ program reordering_test
   allocate(origin_val, source=[double precision::11,71,81,22,42,62,92,33,53,83,44,94,55,65,85,66,96,77,97,88,99])
   ordered_val => reordering_ccs_val(ccs_origin%get_set(), ccs_reordered%get_set(), origin_val, perm)
   call assert_equal("reordering_ccs_val", ordered_val, [double precision::11,71,81,77,97,22,42,62,92,44,94,33,53,83,55,65,85,66,96,88,99])
+
+  ccs_origin => create_jagged_array([3,2,1],[1,2,3,2,3,3])
+  ccs_reordered => reordering_ccs(ccs_origin, [3,1,2], [2,3,1], ccs_perm)
+
+  call assert_equal("repostordering_ccs:num_row", ccs_reordered%get_array_lengths(), [3,2,1])
+  call assert_equal("repostordering_ccs:row", ccs_reordered%get_val(), [1,2,3,2,3,3])
+  call assert_equal("repostordering_ccs_with_perm:ccs_perm", ccs_perm, [6,3,5,1,2,4])
+
   
 end program reordering_test
