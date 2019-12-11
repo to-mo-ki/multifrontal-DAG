@@ -45,9 +45,11 @@ contains
     
     if(.not. present(in_ignore_digits))then
       ignore_digits = 1.0E-10
+    else
+      ignore_digits = in_ignore_digits
     endif
   
-    err_flag = abs(answer-check)/answer > ignore_digits
+    err_flag = abs(answer-check) > ignore_digits
     call disp_log(err_flag, message, to_str(answer), to_str(check))
   
   end subroutine
