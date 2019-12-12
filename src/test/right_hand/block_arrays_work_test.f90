@@ -1,6 +1,6 @@
 program block_arrays_work_test
   use block_arrays_m
-  use extractor_m
+  use array_extractor_m
   use work_array_extractor_m
   use test_util
   implicit none

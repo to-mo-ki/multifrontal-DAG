@@ -1,5 +1,5 @@
 module supernode_array_extractor_m
-  use extractor_m
+  use array_extractor_m
   use partial_sum_m
   use block_size_calculator_m
   implicit none

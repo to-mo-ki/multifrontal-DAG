@@ -1,4 +1,4 @@
-program work_extractor_test
+program work_matrix_extractor_test
   use test_util
   use matrix_extractor_m
   use work_matrix_extractor_m
@@ -96,4 +96,4 @@ program work_extractor_test
   call end_array_tests()
   
   
-end program work_extractor_test
+end program work_matrix_extractor_test

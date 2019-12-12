@@ -1,4 +1,4 @@
-module extractor_m
+module array_extractor_m
   use contiguous_sets_m
   implicit none
   private

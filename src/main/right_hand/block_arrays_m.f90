@@ -1,7 +1,7 @@
 module block_arrays_m
   use contiguous_sets_m
   use jagged_array_m
-  use extractor_m
+  use array_extractor_m
   implicit none
   private
   type, public :: block_arrays_c

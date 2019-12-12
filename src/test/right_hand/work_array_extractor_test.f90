@@ -1,5 +1,5 @@
-program work_extractor_test
-  use extractor_m
+program work_array_extractor_test
+  use array_extractor_m
   use work_array_extractor_m
   use test_util
   implicit none

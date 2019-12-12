@@ -2,7 +2,7 @@ module right_hand_m
   use contiguous_sets_m
   use jagged_array_m
   use block_arrays_m
-  use extractor_m
+  use array_extractor_m
   use supernode_array_extractor_m
   use work_array_extractor_m
   use border_array_extractor_m

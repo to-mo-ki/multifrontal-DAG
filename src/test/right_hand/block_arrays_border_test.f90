@@ -1,6 +1,6 @@
 program block_arrays_border_test
   use block_arrays_m
-  use extractor_m
+  use array_extractor_m
   use border_array_extractor_m
   use test_util
   implicit none

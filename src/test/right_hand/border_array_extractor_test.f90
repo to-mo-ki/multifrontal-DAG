@@ -1,5 +1,5 @@
-program border_extractor_test
-  use extractor_m
+program border_array_extractor_test
+  use array_extractor_m
   use border_array_extractor_m
   use test_util
   implicit none

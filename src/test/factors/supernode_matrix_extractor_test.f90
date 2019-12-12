@@ -1,4 +1,4 @@
-program supernode_extractor_test
+program supernode_matrix_extractor_test
   use test_util
   use matrix_extractor_m
   use supernode_matrix_extractor_m
@@ -102,6 +102,6 @@ program supernode_extractor_test
   call add_test("(i, j)=(2,1)", controller%get_ptr(array, 3, 1, 4, 2, 1), [(dble(i), i=4,5)])
   call end_array_tests()
   
-end program supernode_extractor_test
+end program supernode_matrix_extractor_test
 
 
