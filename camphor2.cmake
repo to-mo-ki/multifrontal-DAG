@@ -12,5 +12,4 @@ find_package(PkgConfig)
 pkg_check_modules(STARPU starpu-1.3 REQUIRED)
 
 # METIS
-set(METIS_LIBRARY "metis" CACHE STRING "" FORCE)
 set(METIS_LIBRARY_DIRS "/opt/cray/pe/tpsl/18.06.1/INTEL/16.0/x86_64/lib" CACHE STRING "" FORCE)
