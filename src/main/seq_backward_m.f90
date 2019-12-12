@@ -20,7 +20,8 @@ contains
 
     do node=node_data%num_node, 1, -1
       call sparse_add(rh, block_local_index, node, parent(node))
-      if(.not. node_data%divisible(node))then
+      !TODO: TEST
+      if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
         call border_backward2(node_data, factors, rh, node)
       endif
       call supernode_backward(node_data, factors, rh, node)
@@ -35,6 +36,12 @@ contains
     type(right_hand_c), pointer :: rh
     integer, intent(in) :: node
     integer :: i, j
+
+
+    !TODO: TEST
+    if(node==node_data%num_node .and. (.not. node_data%divisible(node)))then
+      call backward(node_data, factors, rh, node, node_data%get_work_start_index(node))
+    endif
 
     do j=node_data%get_work_start_index(node)-1, 1, -1
       do i=j+1, node_data%get_num_matrix_block(node)
@@ -71,7 +78,7 @@ contains
     integer :: i
 
     do i=1, block_local_index%get_num_block(node)
-      call gather_add(rh, block_local_index, i, node, parent_node)
+      call gather(rh, block_local_index, i, node, parent_node)
     enddo
 
   end subroutine

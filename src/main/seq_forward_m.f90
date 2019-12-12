@@ -20,7 +20,8 @@ contains
 
     do node=1, node_data%num_node
       call supernode_forward(node_data, factors, rh, node)
-      if(.not. node_data%divisible(node))then
+      !TODO: TEST
+      if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
         call border_forward2(node_data, factors, rh, node)
       endif
       call sparse_add(rh, block_local_index, node, parent(node))
@@ -42,6 +43,11 @@ contains
         call update_l(node_data, factors, rh, node, i, j)
       enddo
     enddo
+
+    !TODO: TEST
+    if(node==node_data%num_node .and. (.not. node_data%divisible(node)))then
+      call forward(node_data, factors, rh, node, node_data%get_work_start_index(node))
+    endif
 
   end subroutine
 

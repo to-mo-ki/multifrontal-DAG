@@ -31,6 +31,15 @@ program contiguous_sets_test
   call add_test("index=3", set%get_length(3), 0)
   call add_test("index=4", set%get_length(4), 3)
   call end_tests()
-  
+
+  set => create_raw_contiguous_sets([1,3,4,4,7],4)
+  call start_tests("raw_constructor by first & last")
+  call add_test("first:index=1", set%get_first(1), 1)
+  call add_test("first:index=2", set%get_first(2), 3)
+  call add_test("first:index=4", set%get_first(4), 4)
+  call add_test("last:index=1", set%get_last(1), 2)
+  call add_test("last:index=2", set%get_last(2), 3)
+  call add_test("last:index=4", set%get_last(4), 6)
+  call end_tests()
 
 end program

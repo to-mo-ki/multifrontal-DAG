@@ -6,7 +6,7 @@ module sparse_add_subroutines_m
   implicit none
   private
 
-  public :: scatter_add, gather_add
+  public :: scatter_add, gather
   
 contains
   subroutine scatter_add(rh, block_local_index, j, cnode, pnode)
@@ -27,7 +27,7 @@ contains
 
   end subroutine
 
-  subroutine gather_add(rh, block_local_index, j, cnode, pnode)
+  subroutine gather(rh, block_local_index, j, cnode, pnode)
     type(right_hand_c), pointer :: rh
     type(block_local_index_c), pointer :: block_local_index
     integer, intent(in) :: j, cnode, pnode
@@ -41,7 +41,7 @@ contains
     local => block_local_index%get_local_index(cnode, j)
     child_array => rh%get_work_ptr(cnode, cj)
     parent_array => rh%get_array_ptr(pnode, pj)
-    call gather_add_kernel(parent_array, local, child_array(offset+1:), size(local))
+    call gather_kernel(parent_array, local, child_array(offset+1:), size(local))
 
   end subroutine
 

@@ -85,5 +85,15 @@ program work_controller_test
   call add_test("(i, j)=(3,2)", controller%get_ptr(array, 4, 2, 7, 3, 2), [(dble(i), i=31,34)])
   call add_test("(i, j)=(3,3)", controller%get_ptr(array, 4, 2, 7, 3, 3), [(dble(i), i=35,35)])
   call end_array_tests()
+
+  print *, "nb=10, nc=1, nr=7"
+  array_size = controller%estimate_size(10, 1, 7)
+  call assert_equal("estimate_size", array_size, 49)
+  allocate(array(array_size))
+  array = [(dble(i), i=1,array_size)]
+  call start_array_tests("get_ptr")
+  call add_test("(i, j)=(1,1)", controller%get_ptr(array, 10, 1, 7, 1, 1), [(dble(i), i=1,49)])
+  call end_array_tests()
+  
   
 end program work_controller_test

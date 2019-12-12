@@ -9,7 +9,7 @@ module tree_m
       module procedure :: create_tree_child_by_parent
   end interface
 
-  public :: create_tree_child, create_parent_in_postordering_tree, tree_traverse_postordering, count_subtree_size
+  public :: create_tree_child, create_parent_in_postordering_tree, tree_traverse_postordering, count_subtree_size, create_parent
 
 contains
   function create_tree_child_by_num_child_and_parent(num_child, parent) result(tree_child)
@@ -110,6 +110,24 @@ contains
       childs => tree_child%get_array(i)
       do j=1, size(childs)
         subtree_size(i) = subtree_size(i) + subtree_size(childs(j))
+      enddo
+    enddo
+
+  end function
+
+  function create_parent(tree_child) result(parent)
+    integer, pointer, contiguous :: parent(:)
+    type(jagged_array_c), pointer :: tree_child
+    integer, pointer, contiguous :: childs(:)
+    integer :: node, i, n
+
+    n = tree_child%get_num_arrays()
+    allocate(parent(n))
+    parent(n) = 0
+    do node=1, n
+      childs => tree_child%get_array(node)
+      do i=1, size(childs)
+        parent(childs(i)) = node
       enddo
     enddo
 

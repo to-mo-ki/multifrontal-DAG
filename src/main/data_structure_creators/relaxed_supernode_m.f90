@@ -42,8 +42,8 @@ contains
     num_relaxed = node_sets_relaxed%get_num_sets()
     order = node_sets_relaxed%get_num_elements()
     allocate(perm(order))
-    stack => create_stack(num_relaxed)
-    
+    stack => create_stack(node_sets_fundamental%get_num_sets())
+
     ptr = 1
     do i=1, num_relaxed
       iterator => merge_lists%create_iterator(map(i))

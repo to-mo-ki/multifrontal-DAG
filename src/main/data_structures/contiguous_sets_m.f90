@@ -9,9 +9,10 @@ module contiguous_sets_m
     procedure :: get_length
     procedure :: get_num_sets
     procedure :: get_num_elements
+    procedure :: get_raw
   end type
 
-  public :: create_contiguous_sets
+  public :: create_contiguous_sets, create_raw_contiguous_sets
 
 contains
   function create_contiguous_sets(set_length) result(this)
@@ -26,6 +27,17 @@ contains
     do i=1, n
       this%ptr(i+1) = this%ptr(i) + set_length(i)
     enddo
+
+  end function
+
+  function create_raw_contiguous_sets(ptr, n) result(this)
+    type(contiguous_sets_c), pointer :: this
+    integer, contiguous, intent(in) :: ptr(:)
+    integer, intent(in) :: n
+    
+    allocate(this)
+    allocate(this%ptr(n+1))
+    this%ptr = ptr(:n+1)
 
   end function
 
@@ -64,6 +76,14 @@ contains
     class(contiguous_sets_c) :: this
 
     get_num_elements = this%get_last(this%get_num_sets())
+
+  end function
+  
+  function get_raw(this)
+    class(contiguous_sets_c) :: this
+    integer, pointer, contiguous :: get_raw(:)
+
+    get_raw => this%ptr
 
   end function
 

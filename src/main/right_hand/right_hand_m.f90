@@ -47,7 +47,7 @@ contains
 
   subroutine set_val(this, val)
     class(right_hand_c) :: this
-    double precision, pointer, contiguous :: val(:)
+    double precision, contiguous, target :: val(:)
 
     call this%supernode%set_val(val)
     

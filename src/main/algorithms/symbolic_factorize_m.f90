@@ -14,7 +14,7 @@ contains
     type(contiguous_sets_c), pointer, intent(in) :: node_sets
     integer, pointer, contiguous, intent(in) :: cc(:)
     type(jagged_array_c), pointer, intent(in) :: tree_child
-    integer :: i, j, k, n, child, row_num, ptr, order
+    integer :: i, j, k, n, child, row_num, ptr, order, node
     integer, allocatable :: full_array(:)
     integer, pointer, contiguous :: childs(:), rows_a(:), rows_l(:), rows_child(:)
 
@@ -51,7 +51,12 @@ contains
           full_array(row_num) = i
         enddo
       enddo
-      call sort(rows_l, size(rows_l))
+    enddo
+
+    !TODO: TEST, node=1でソートされるような問題
+    do node=1, ccs_l%get_num_arrays()
+      rows_l => ccs_l%get_array(node)
+      call sort(rows_l)
     enddo
 
   end function

@@ -10,8 +10,8 @@ program perm_test
   integer :: n, i
 
   n = 9
-  allocate(in_int(n))
-  allocate(in_DP(n))
+  allocate(in_int(n), out_int(n))
+  allocate(in_DP(n), out_DP(n))
   call make_postordering_perm(perm, check_iperm)
   
   in_int = [(i, i=1,9)]

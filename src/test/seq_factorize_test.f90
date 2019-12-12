@@ -27,7 +27,7 @@ program seq_factorize_test
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)
   block_local_index => create_block_local_index(node_data, local_index)
-  call set_coefficient(node_data, ccs, node_sets, factors, nb)
+  call set_coefficient(node_data, ccs, node_sets, factors)
   call seq_factorize(node_data, factors, block_local_index, [2,3,0])
   call check_nb_2()
 
@@ -40,7 +40,7 @@ program seq_factorize_test
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data, nb)
   block_local_index => create_block_local_index(node_data, local_index)
-  call set_coefficient(node_data, ccs, node_sets, factors, nb)
+  call set_coefficient(node_data, ccs, node_sets, factors)
   call seq_factorize(node_data, factors, block_local_index, [2,3,0])
   call check_nb_3()
   

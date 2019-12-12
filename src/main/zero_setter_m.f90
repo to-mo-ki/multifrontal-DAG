@@ -21,7 +21,7 @@ contains
         call set_zero_tri(a, ncol)
         do i=j+1, node_data%get_num_matrix_block(node)
           nrow = node_data%get_matrix_block_size(i, node)
-          a => factors%get_matrix_ptr(node, j, j)
+          a => factors%get_matrix_ptr(node, i, j)
           call set_zero_rect(a, ncol, nrow)
         enddo
       enddo
