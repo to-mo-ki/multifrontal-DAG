@@ -1,13 +1,13 @@
-program supernode_controller_test
+program supernode_extractor_test
   use test_util
-  use matrix_controller_m
-  use border_controller_m
+  use matrix_extractor_m
+  use border_matrix_extractor_m
   implicit none
-  class(matrix_controller_c), pointer :: controller
+  class(extractor_c), pointer :: controller
   integer :: array_size, i
   double precision, pointer, contiguous :: array(:)
 
-  allocate(border_controller_c::controller)
+  allocate(border_extractor_c::controller)
 
   print *, "nb=3, nc=5, nr=5"
   array_size = controller%estimate_size(3, 5, 5)
@@ -68,6 +68,6 @@ program supernode_controller_test
   call add_test("(i, j)=(2,2)", controller%get_ptr(array, 4, 5, 2, 2, 2), [(dble(i), i=1,9)])
   call end_tests()
   
-end program supernode_controller_test
+end program supernode_extractor_test
 
 

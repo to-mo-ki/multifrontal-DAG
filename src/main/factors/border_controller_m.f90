@@ -1,9 +1,9 @@
-module border_controller_m
-  use matrix_controller_m
+module border_matrix_extractor_m
+  use matrix_extractor_m
   use block_size_calculator_m
   implicit none
   private
-  type, extends(matrix_controller_c), public :: border_controller_c
+  type, extends(extractor_c), public :: border_extractor_c
   contains
     private
     procedure, nopass :: get_start_pos

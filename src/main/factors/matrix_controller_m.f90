@@ -1,8 +1,8 @@
-module matrix_controller_m
+module matrix_extractor_m
   use contiguous_sets_m
   implicit none
   private
-  type, abstract, public :: matrix_controller_c
+  type, abstract, public :: extractor_c
   contains
     procedure, public :: get_ptr
     procedure(get_start_pos), nopass, deferred :: get_start_pos
@@ -26,7 +26,7 @@ contains
 
   function get_ptr(this, array, nb, nc, nr, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
-    class(matrix_controller_c) :: this
+    class(extractor_c) :: this
     double precision, pointer, contiguous, intent(in) :: array(:)
     integer, intent(in) :: nb, nc, nr, i, j
     integer :: length, start_pos

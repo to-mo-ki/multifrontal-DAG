@@ -3,9 +3,9 @@ module right_hand_m
   use jagged_array_m
   use block_arrays_m
   use rh_controller_m
-  use rh_supernode_controller_m
-  use rh_work_controller_m
-  use rh_border_controller_m
+  use rh_supernode_matrix_extractor_m
+  use rh_work_matrix_extractor_m
+  use rh_border_matrix_extractor_m
   use node_data_m
   implicit none
   private
@@ -32,12 +32,12 @@ contains
     class(rh_controller_c), pointer :: controller
     
     allocate(this)
-    allocate(rh_supernode_controller_c::controller)
+    allocate(rh_supernode_extractor_c::controller)
     this%supernode => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
-    allocate(rh_work_controller_c::controller)
+    allocate(rh_work_extractor_c::controller)
     this%work => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
     call this%work%set_zero()
-    allocate(rh_border_controller_c::controller)
+    allocate(rh_border_extractor_c::controller)
     this%border => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
     call this%border%set_zero()
     this%nb = nb

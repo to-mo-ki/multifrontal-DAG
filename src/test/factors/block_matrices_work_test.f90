@@ -1,14 +1,14 @@
 program block_matrices_work_test
   use block_matrices_m
-  use matrix_controller_m
-  use work_controller_m
+  use matrix_extractor_m
+  use work_matrix_extractor_m
   use test_util
   implicit none
   type(block_matrices_c), pointer :: block_matrices
-  class(matrix_controller_c), pointer :: controller
+  class(extractor_c), pointer :: controller
   integer :: nb, i
 
-  allocate(work_controller_c::controller)
+  allocate(work_extractor_c::controller)
   nb = 3
   block_matrices => create_block_matrices(nb, [1, 6, 4], [4, 5, 0], controller)
 

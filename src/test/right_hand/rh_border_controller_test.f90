@@ -1,13 +1,13 @@
-program rh_border_controller_test
+program rh_border_extractor_test
   use rh_controller_m
-  use rh_border_controller_m
+  use rh_border_matrix_extractor_m
   use test_util
   implicit none
   class(rh_controller_c), pointer :: controller
   integer :: array_size, i
   double precision, pointer, contiguous :: array(:)
   
-  allocate(rh_border_controller_c::controller)
+  allocate(rh_border_extractor_c::controller)
   
   print *, "nb=3, nc=5, nr=5"
   array_size = controller%estimate_size(3, 5, 5)

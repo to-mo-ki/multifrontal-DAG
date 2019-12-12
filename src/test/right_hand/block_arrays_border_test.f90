@@ -1,14 +1,14 @@
 program block_arrays_border_test
   use block_arrays_m
   use rh_controller_m
-  use rh_border_controller_m
+  use rh_border_matrix_extractor_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
   class(rh_controller_c), pointer :: controller
   integer :: nb, i
 
-  allocate(rh_border_controller_c::controller)
+  allocate(rh_border_extractor_c::controller)
   nb = 3
   block_arrays => create_block_arrays(nb, [1,6,4], [4,5,0], controller)
 
