@@ -1,10 +1,10 @@
-module rh_work_matrix_extractor_m
-  use rh_controller_m
+module work_array_extractor_m
+  use extractor_m
   use partial_sum_m
   use block_size_calculator_m
   implicit none
   private
-  type, extends(rh_controller_c), public :: rh_work_extractor_c
+  type, extends(extractor_c), public :: work_extractor_c
   contains
     private
     procedure, nopass :: get_start_pos

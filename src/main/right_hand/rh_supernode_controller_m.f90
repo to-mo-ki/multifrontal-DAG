@@ -1,10 +1,10 @@
-module rh_supernode_matrix_extractor_m
-  use rh_controller_m
+module supernode_array_extractor_m
+  use extractor_m
   use partial_sum_m
   use block_size_calculator_m
   implicit none
   private
-  type, extends(rh_controller_c), public :: rh_supernode_extractor_c
+  type, extends(extractor_c), public :: supernode_extractor_c
   contains
     private
     procedure, nopass :: get_start_pos
