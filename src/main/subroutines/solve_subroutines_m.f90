@@ -14,7 +14,7 @@ contains
     integer :: n
     double precision, pointer, contiguous :: a(:), b(:)
 
-    a => factors%get_supernode_ptr(node, j, j)
+    a => factors%get_supernode(node, j, j)
     b => rh%get_array_ptr(node, j)
     n = node_data%get_matrix_block_size(j, node)
     call mydtrsv_l(a, n, b)
@@ -29,7 +29,7 @@ contains
     integer :: ncol, nrow
     double precision, pointer, contiguous :: a(:), b1(:), b2(:)
     
-    a => factors%get_supernode_ptr(node, i, j)
+    a => factors%get_supernode(node, i, j)
     b1 => rh%get_array_ptr(node, j)
     b2 => rh%get_array_ptr(node, i)
     ncol = node_data%get_supernode_block_size(j, node)
@@ -46,7 +46,7 @@ contains
     integer :: n
     double precision, pointer, contiguous :: a(:), b(:)
 
-    a => factors%get_supernode_ptr(node, j, j)
+    a => factors%get_supernode(node, j, j)
     b => rh%get_array_ptr(node, j)
     n = node_data%get_matrix_block_size(j, node)
     call mydtrsv_u(a, n, b)
@@ -61,7 +61,7 @@ contains
     integer :: ncol, nrow
     double precision, pointer, contiguous :: a(:), b1(:), b2(:)
     
-    a => factors%get_supernode_ptr(node, i, j)
+    a => factors%get_supernode(node, i, j)
     b1 => rh%get_array_ptr(node, i)
     b2 => rh%get_array_ptr(node, j)
     ncol = node_data%get_supernode_block_size(j, node)

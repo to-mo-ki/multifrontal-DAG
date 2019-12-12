@@ -15,10 +15,10 @@ module factors_m
     type(block_matrices_c), pointer :: supernode, work, border
     integer :: nb
   contains
-    procedure :: get_matrix_ptr
-    procedure :: get_supernode_ptr
-    procedure :: get_work_ptr
-    procedure :: get_border_ptr
+    procedure :: get_matrix
+    procedure :: get_supernode
+    procedure :: get_work
+    procedure :: get_border
   end type
 
   public :: create_factors
@@ -42,7 +42,7 @@ contains
   
   end function
 
-  function get_matrix_ptr(this, node, i, j) result(ptr)
+  function get_matrix(this, node, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
@@ -74,7 +74,7 @@ contains
     
   end function
 
-  function get_supernode_ptr(this, node, i, j) result(ptr)
+  function get_supernode(this, node, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
@@ -82,7 +82,7 @@ contains
     ptr => this%supernode%get_ptr(node, i, j)
   end function
 
-  function get_work_ptr(this, node, i, j) result(ptr)
+  function get_work(this, node, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
@@ -91,7 +91,7 @@ contains
 
   end function
 
-  function get_border_ptr(this, node, i, j) result(ptr)
+  function get_border(this, node, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j

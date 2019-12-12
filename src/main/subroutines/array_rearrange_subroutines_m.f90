@@ -12,9 +12,9 @@ contains
     integer, intent(in) :: node, idx
     double precision, pointer, contiguous :: border(:), supernode(:), work(:)
 
-    border => rh%get_border_ptr(node, idx)
-    supernode => rh%get_supernode_ptr(node, idx)
-    work => rh%get_work_ptr(node, idx)
+    border => rh%get_border(node, idx)
+    supernode => rh%get_supernode(node, idx)
+    work => rh%get_work(node, idx)
     call split_array(border, supernode, work, size(supernode), size(work))
     
   end subroutine
@@ -24,9 +24,9 @@ contains
     integer, intent(in) :: node, idx
     double precision, pointer, contiguous :: border(:), supernode(:), work(:)
 
-    border => rh%get_border_ptr(node, idx)
-    supernode => rh%get_supernode_ptr(node, idx)
-    work => rh%get_work_ptr(node, idx)
+    border => rh%get_border(node, idx)
+    supernode => rh%get_supernode(node, idx)
+    work => rh%get_work(node, idx)
     call join_array(border, supernode, work, size(supernode), size(work))
     
   end subroutine

@@ -17,9 +17,9 @@ module right_hand_m
   contains
     procedure :: set_val
     procedure :: get_array_ptr
-    procedure :: get_supernode_ptr
-    procedure :: get_work_ptr
-    procedure :: get_border_ptr
+    procedure :: get_supernode
+    procedure :: get_work
+    procedure :: get_border
   end type
 
   public :: create_right_hand
@@ -85,7 +85,7 @@ contains
     
   end function
 
-  function get_supernode_ptr(this, node, idx) result(ptr)
+  function get_supernode(this, node, idx) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(right_hand_c) :: this
     integer, intent(in) :: node, idx
@@ -93,7 +93,7 @@ contains
     ptr => this%supernode%get_ptr(node, idx)
   end function
 
-  function get_work_ptr(this, node, idx) result(ptr)
+  function get_work(this, node, idx) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(right_hand_c) :: this
     integer, intent(in) :: node, idx
@@ -102,7 +102,7 @@ contains
 
   end function
 
-  function get_border_ptr(this, node, idx) result(ptr)
+  function get_border(this, node, idx) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
     class(right_hand_c) :: this
     integer, intent(in) :: node, idx
