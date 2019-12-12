@@ -1,6 +1,6 @@
 module block_matrices_m
   use contiguous_sets_m
-  use matrix_controller_m
+  use matrix_extractor_m
   implicit none
   private
   type, public :: block_matrices_c
@@ -8,7 +8,7 @@ module block_matrices_m
     double precision, pointer, contiguous :: val(:)
     type(contiguous_sets_c), pointer :: ptr
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    class(matrix_controller_c), pointer :: controller
+    class(extractor_c), pointer :: controller
     integer :: nb
   contains
     procedure :: get_ptr
@@ -22,7 +22,7 @@ contains
     integer, intent(in) :: nb
     integer, contiguous, target :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: matrix_size(:)
-    class(matrix_controller_c), pointer, intent(in) :: controller
+    class(extractor_c), pointer, intent(in) :: controller
     integer :: i, nc, nr
 
     allocate(this)

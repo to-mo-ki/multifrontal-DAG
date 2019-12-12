@@ -21,7 +21,7 @@ contains
     pj = block_local_index%get_parent_num(cnode, j)
     offset = block_local_index%get_block_offset(cnode, j)
     local => block_local_index%get_local_index(cnode, j)
-    child_array => rh%get_work_ptr(cnode, cj)
+    child_array => rh%get_work(cnode, cj)
     parent_array => rh%get_array_ptr(pnode, pj)
     call scatter_add_kernel(child_array(offset+1:), local, parent_array, size(local))
 
@@ -39,7 +39,7 @@ contains
     pj = block_local_index%get_parent_num(cnode, j)
     offset = block_local_index%get_block_offset(cnode, j)
     local => block_local_index%get_local_index(cnode, j)
-    child_array => rh%get_work_ptr(cnode, cj)
+    child_array => rh%get_work(cnode, cj)
     parent_array => rh%get_array_ptr(pnode, pj)
     call gather_kernel(parent_array, local, child_array(offset+1:), size(local))
 

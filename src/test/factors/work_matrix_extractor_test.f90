@@ -1,13 +1,13 @@
-program work_controller_test
+program work_matrix_extractor_test
   use test_util
-  use matrix_controller_m
-  use work_controller_m
+  use matrix_extractor_m
+  use work_matrix_extractor_m
   implicit none
-  class(matrix_controller_c), pointer :: controller
+  class(extractor_c), pointer :: controller
   integer :: array_size, i
   double precision, pointer, contiguous :: array(:)
   
-  allocate(work_controller_c::controller)
+  allocate(work_extractor_c::controller)
 
   print *, "nb=3, nc=5, nr=5"
   array_size = controller%estimate_size(3, 5, 5)
@@ -96,4 +96,4 @@ program work_controller_test
   call end_array_tests()
   
   
-end program work_controller_test
+end program work_matrix_extractor_test

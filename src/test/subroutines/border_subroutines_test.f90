@@ -25,15 +25,15 @@ program border_subroutines_test
   node_data => create_node_data([3,9],[9,0], 5)
   factors => create_factors(node_data, 5)
 
-  a11_s => factors%get_supernode_ptr(1, 1, 1)
-  a21_s => factors%get_supernode_ptr(1, 2, 1)
-  a31_s => factors%get_supernode_ptr(1, 3, 1)
-  a11_w => factors%get_work_ptr(1, 1, 1)
-  a21_w => factors%get_work_ptr(1, 2, 1)
-  a31_w => factors%get_work_ptr(1, 3, 1)
-  a22 => factors%get_matrix_ptr(1, 2, 2)
-  a32 => factors%get_matrix_ptr(1, 3, 2)
-  a33 => factors%get_matrix_ptr(1, 3, 3)
+  a11_s => factors%get_supernode(1, 1, 1)
+  a21_s => factors%get_supernode(1, 2, 1)
+  a31_s => factors%get_supernode(1, 3, 1)
+  a11_w => factors%get_work(1, 1, 1)
+  a21_w => factors%get_work(1, 2, 1)
+  a31_w => factors%get_work(1, 3, 1)
+  a22 => factors%get_matrix(1, 2, 2)
+  a32 => factors%get_matrix(1, 3, 2)
+  a33 => factors%get_matrix(1, 3, 3)
 
   a11_s(1)=1;  a11_s(4)=2;  a11_s(5)=8
   a11_s(7)=3;  a11_s(8)=12; a11_s(9)=27

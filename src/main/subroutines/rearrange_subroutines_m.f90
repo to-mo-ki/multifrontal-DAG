@@ -16,9 +16,9 @@ contains
     double precision, pointer, contiguous :: matrix(:), supernode(:), work(:)
     integer :: ssize, wsize
 
-    matrix => factors%get_matrix_ptr(node, j, j)
-    supernode => factors%get_supernode_ptr(node, j, j)
-    work => factors%get_work_ptr(node, j, j)
+    matrix => factors%get_matrix(node, j, j)
+    supernode => factors%get_supernode(node, j, j)
+    work => factors%get_work(node, j, j)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
     call split_tri_matrix(matrix, supernode, work, ssize, wsize)
@@ -32,9 +32,9 @@ contains
     double precision, pointer, contiguous :: matrix(:), supernode(:), work(:)
     integer :: ssize, wsize, nrow
 
-    matrix => factors%get_matrix_ptr(node, i, j)
-    supernode => factors%get_supernode_ptr(node, i, j)
-    work => factors%get_work_ptr(node, i, j)
+    matrix => factors%get_matrix(node, i, j)
+    supernode => factors%get_supernode(node, i, j)
+    work => factors%get_work(node, i, j)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
     nrow = node_data%get_matrix_block_size(i, node)

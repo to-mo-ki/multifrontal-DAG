@@ -1,7 +1,7 @@
 module block_arrays_m
   use contiguous_sets_m
   use jagged_array_m
-  use rh_controller_m
+  use array_extractor_m
   implicit none
   private
   type, public :: block_arrays_c
@@ -9,7 +9,7 @@ module block_arrays_m
     double precision, pointer, contiguous :: val(:)
     type(contiguous_sets_c), pointer :: ptr
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    class(rh_controller_c), pointer :: controller
+    class(extractor_c), pointer :: controller
     integer :: nb
   contains
     procedure :: set_val
@@ -25,7 +25,7 @@ contains
     integer, intent(in) :: nb
     integer, contiguous, target :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: array_size(:)
-    class(rh_controller_c), pointer, intent(in) :: controller
+    class(extractor_c), pointer, intent(in) :: controller
     integer :: i, nc, nr
 
     allocate(this)

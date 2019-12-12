@@ -1,15 +1,15 @@
 program block_arrays_supernode_test
   use block_arrays_m
-  use rh_controller_m
-  use rh_supernode_controller_m
+  use array_extractor_m
+  use supernode_array_extractor_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
-  class(rh_controller_c), pointer :: controller
+  class(extractor_c), pointer :: controller
   double precision, pointer, contiguous :: val(:)
   integer :: nb, i
 
-  allocate(rh_supernode_controller_c::controller)
+  allocate(supernode_extractor_c::controller)
   allocate(val, source=[(dble(i),i=1,11)])
   nb = 3
   block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)

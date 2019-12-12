@@ -1,8 +1,8 @@
-module rh_controller_m
+module matrix_extractor_m
   use contiguous_sets_m
   implicit none
   private
-  type, abstract, public :: rh_controller_c
+  type, abstract, public :: extractor_c
   contains
     procedure, public :: get_ptr
     procedure(get_start_pos), nopass, deferred :: get_start_pos
@@ -10,12 +10,12 @@ module rh_controller_m
     procedure(estimate_size), nopass, deferred :: estimate_size
   end type
   interface
-    integer function get_start_pos(nb, nc, nr, idx)
-      integer, intent(in) :: nb, nc, nr, idx
+    integer function get_start_pos(nb, nc, nr, i, j)
+      integer, intent(in) :: nb, nc, nr, i, j
     end function
 
-    integer function get_size(nb, nc, nr, idx)
-      integer, intent(in) :: nb, nc, nr, idx
+    integer function get_size(nb, nc, nr, i, j)
+      integer, intent(in) :: nb, nc, nr, i, j
     end function
 
     integer function estimate_size(nb, nc, nr)
@@ -24,15 +24,15 @@ module rh_controller_m
   end interface
 contains
 
-  function get_ptr(this, array, nb, nc, nr, idx) result(ptr)
+  function get_ptr(this, array, nb, nc, nr, i, j) result(ptr)
     double precision, pointer, contiguous :: ptr(:)
-    class(rh_controller_c) :: this
+    class(extractor_c) :: this
     double precision, pointer, contiguous, intent(in) :: array(:)
-    integer, intent(in) :: nb, nc, nr, idx
+    integer, intent(in) :: nb, nc, nr, i, j
     integer :: length, start_pos
 
-    start_pos = this%get_start_pos(nb, nc, nr, idx)
-    length = this%get_size(nb, nc, nr, idx)
+    start_pos = this%get_start_pos(nb, nc, nr, i, j)
+    length = this%get_size(nb, nc, nr, i, j)
     ptr => array(start_pos:start_pos+length-1)
 
   end function

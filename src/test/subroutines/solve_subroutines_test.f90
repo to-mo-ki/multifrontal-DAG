@@ -31,8 +31,8 @@ program sovle_subroutines_test
   factors => create_factors(node_data, nb)
   rh => create_right_hand(node_data, nb)
 
-  factors%get_supernode_ptr(1,1,1) = [4d0,0d0,0d0,3d0,3d0,0d0,2d0,2d0,2d0]
-  factors%get_supernode_ptr(1,2,1) = [1d0,1d0,1d0,2d0,2d0,2d0]
+  factors%get_supernode(1,1,1) = [4d0,0d0,0d0,3d0,3d0,0d0,2d0,2d0,2d0]
+  factors%get_supernode(1,2,1) = [1d0,1d0,1d0,2d0,2d0,2d0]
   rh%get_array_ptr(1,1) = [4d0,6d0,6d0]
   rh%get_array_ptr(1,2) = [3d0,6d0]
 
@@ -41,8 +41,8 @@ program sovle_subroutines_test
   call update_l(node_data, factors, rh, 1, 2, 1)
   call assert_equal("update_l", rh%get_array_ptr(1,2), [0d0,0d0])
 
-  factors%get_supernode_ptr(1,1,1) = [2d0,0d0,0d0,2d0,3d0,0d0,2d0,3d0,4d0]
-  factors%get_supernode_ptr(1,2,1) = [1d0,2d0,3d0,1d0,2d0,3d0]
+  factors%get_supernode(1,1,1) = [2d0,0d0,0d0,2d0,3d0,0d0,2d0,3d0,4d0]
+  factors%get_supernode(1,2,1) = [1d0,2d0,3d0,1d0,2d0,3d0]
   
   rh%get_array_ptr(1,1) = [9d0,12d0,13d0]
   rh%get_array_ptr(1,2) = [1d0,2d0]

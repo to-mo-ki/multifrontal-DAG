@@ -1,10 +1,10 @@
-module rh_supernode_controller_m
-  use rh_controller_m
+module border_array_extractor_m
+  use array_extractor_m
   use partial_sum_m
   use block_size_calculator_m
   implicit none
   private
-  type, extends(rh_controller_c), public :: rh_supernode_controller_c
+  type, extends(extractor_c), public :: border_extractor_c
   contains
     private
     procedure, nopass :: get_start_pos
@@ -15,21 +15,29 @@ contains
   integer function get_start_pos(nb, nc, nr, idx) result(pos)
     integer, intent(in) :: nb, nc, nr, idx
 
-    pos = (idx-1)*nb+1
+    pos = 1
 
   end function
 
-  integer function get_size(nb, nc, nr, idx) result(supernode_size)
+  integer function get_size(nb, nc, nr, idx) result(border_size)
     integer, intent(in) :: nb, nc, nr, idx
 
-    supernode_size = get_block_size(idx, nb, nc)
+    border_size = get_block_size(idx, nb, nc+nr)
 
   end function
 
-  integer function estimate_size(nb, nc, nr) result(supernode_size)
+  integer function estimate_size(nb, nc, nr) result(border_size)
     integer, intent(in) :: nc, nr, nb
+    integer :: idx
 
-    supernode_size = nc
+    if(mod(nc, nb)==0)then
+      border_size = 0
+      return
+    else
+      idx = nc/nb+1
+    endif
+
+    border_size = get_block_size(idx, nb, nc+nr)
     
   end function
 end module

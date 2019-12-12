@@ -19,12 +19,12 @@ program factorize_subroutines_test
   node_data => create_node_data([3,5],[5,0],3)
   factors => create_factors(node_data, 3)
 
-  a11 => factors%get_matrix_ptr(1, 1, 1)
-  a21 => factors%get_matrix_ptr(1, 2, 1)
-  a31 => factors%get_matrix_ptr(1, 3, 1)
-  a22 => factors%get_matrix_ptr(1, 2, 2)
-  a32 => factors%get_matrix_ptr(1, 3, 2)
-  a33 => factors%get_matrix_ptr(1, 3, 3)
+  a11 => factors%get_matrix(1, 1, 1)
+  a21 => factors%get_matrix(1, 2, 1)
+  a31 => factors%get_matrix(1, 3, 1)
+  a22 => factors%get_matrix(1, 2, 2)
+  a32 => factors%get_matrix(1, 3, 2)
+  a33 => factors%get_matrix(1, 3, 3)
 
   a11(1)=1; a11(4)=2;  a11(5)=8
   a11(7)=3; a11(8)=12; a11(9)=27

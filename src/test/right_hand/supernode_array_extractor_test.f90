@@ -1,13 +1,13 @@
-program rh_supernode_controller_test
-  use rh_controller_m
-  use rh_supernode_controller_m
+program supernode_array_extractor_test
+  use array_extractor_m
+  use supernode_array_extractor_m
   use test_util
   implicit none
-  class(rh_controller_c), pointer :: controller
+  class(extractor_c), pointer :: controller
   integer :: array_size, i
   double precision, pointer, contiguous :: array(:)
   
-  allocate(rh_supernode_controller_c::controller)
+  allocate(supernode_extractor_c::controller)
   
   print *, "nb=3, nc=5, nr=5"
   array_size = controller%estimate_size(3, 5, 5)
