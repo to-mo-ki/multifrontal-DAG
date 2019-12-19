@@ -37,12 +37,6 @@ contains
     integer, intent(in) :: node
     integer :: i, j
 
-
-    !TODO: TEST
-    if(node==node_data%num_node .and. (.not. node_data%divisible(node)))then
-      call backward(node_data, factors, rh, node, node_data%get_work_start_index(node))
-    endif
-
     do j=node_data%get_work_start_index(node)-1, 1, -1
       do i=j+1, node_data%get_num_matrix_block(node)
         call update_u(node_data, factors, rh, node, i, j)

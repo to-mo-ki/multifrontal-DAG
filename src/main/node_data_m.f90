@@ -136,6 +136,14 @@ contains
     nb = this%nb
     nc = this%supernode_size(node)
     idx = nc/nb+1
+    !TODO: TEST
+    if(node == this%num_node)then
+      if(this%divisible(node))then
+        idx = nc/nb+1
+      else
+        idx = nc/nb+2
+      endif
+    endif
     
   end function
 

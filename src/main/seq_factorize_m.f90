@@ -47,11 +47,6 @@ contains
       enddo
     enddo
 
-    !TODO: num_blockメソッドを作成, bug!! divisibleのときは不要
-    if(node==node_data%num_node .and. (.not. node_data%divisible(node)))then
-      call factorize(node_data, factors, node, node_data%get_work_start_index(node))
-    endif
-
   end subroutine
 
   subroutine border_factorize2(node_data, factors, node)
