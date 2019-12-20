@@ -7,13 +7,12 @@ module node_data_m
     type(contiguous_sets_c), pointer :: node_sets
     integer, public :: nb, num_node, max_num_block
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    integer, allocatable :: num_supernode_block(:), num_work_block(:)
+    integer, allocatable :: num_supernode_block(:)
     integer, allocatable :: border_supernode_size(:), border_work_size(:)
   contains
     procedure :: divisible
     procedure :: get_num_matrix_block
     procedure :: get_num_supernode_block
-    procedure :: get_num_work_block
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
@@ -55,26 +54,6 @@ contains
       endif
     enddo
 
-    allocate(this%num_work_block(num_node))
-    do i=1, num_node
-      if(this%divisible(i))then
-        r = mod(work_size(i), nb)
-        if(r == 0)then
-          this%num_work_block(i) = work_size(i)/nb
-        else
-          this%num_work_block(i) = work_size(i)/nb+1
-        endif
-      else
-        r = mod(work_size(i)-this%border_work_size(i), nb)
-        if(r == 0)then
-          this%num_work_block(i) = (work_size(i)-this%border_work_size(i))/nb+1
-        else
-          this%num_work_block(i) = (work_size(i)-this%border_work_size(i))/nb+2
-        endif
-      endif
-    enddo
-
-
   end function
 
   logical function divisible(this, node)
@@ -87,12 +66,6 @@ contains
     class(node_data_c) :: this
     integer, intent(in) :: node
     num_supernode_block = this%num_supernode_block(node)
-  end function
-
-  integer function get_num_work_block(this, node) result(num_work_block)
-    class(node_data_c) :: this
-    integer, intent(in) :: node
-    num_work_block = this%num_work_block(node)
   end function
 
   integer function get_matrix_num(this, idx) result(num)
