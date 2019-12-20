@@ -59,16 +59,16 @@ contains
     integer, intent(in) :: node, idx
     integer :: nc
     type(block_arrays_c), pointer :: block_arrays
-
-    nc = this%node_data%get_num_supernode_block(node)
     
     if(this%node_data%divisible(node))then
+      nc = this%node_data%get_work_start_index(node)-1
       if(idx <= nc)then
         block_arrays => this%supernode
       else
         block_arrays => this%work
       endif
     else
+      nc = this%node_data%get_work_start_index(node)
       if(idx < nc)then
         block_arrays => this%supernode
       else if(idx > nc)then

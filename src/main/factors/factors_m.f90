@@ -49,15 +49,15 @@ contains
     integer :: nc
     type(block_matrices_c), pointer :: block_matrices
 
-    nc = this%node_data%get_num_supernode_block(node)
-    
     if(this%node_data%divisible(node))then
+      nc = this%node_data%get_work_start_index(node)-1
       if(j <= nc)then
         block_matrices => this%supernode
       else
         block_matrices => this%work
       endif
     else
+      nc = this%node_data%get_work_start_index(node)
       if(j < nc)then
         block_matrices => this%supernode
       else if(j > nc)then

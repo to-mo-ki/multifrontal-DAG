@@ -29,11 +29,6 @@ program node_data_test
   enddo
   call assert_equal("border_work_size", tmp_i, [1, 3, 2, 1, 3, 0])
 
-  do i=1, 6
-    tmp_i(i) = node_data%get_num_supernode_block(i)
-  enddo
-  call assert_equal("num_supernode_block", tmp_i, [2, 2, 3, 2, 1, 2])
-
   call start_tests("num_block")
   call add_test("node=1", node_data%get_num_matrix_block(1), 4)
   call add_test("node=2", node_data%get_num_matrix_block(2), 4)
@@ -133,7 +128,6 @@ program node_data_test
   call assert_equal("border_supernode_size", [node_data%border_supernode_size(1), node_data%border_supernode_size(2)], [2, 1])
   call assert_equal("border_work_size", [node_data%border_work_size(1), node_data%border_work_size(2)], [2, 2])
   call assert_equal("num_matrix_block", [node_data%get_num_matrix_block(1), node_data%get_num_matrix_block(2)], [2, 2])
-  call assert_equal("num_supernode_block", [node_data%get_num_supernode_block(1), node_data%get_num_supernode_block(2)], [1, 2])
   
   call start_tests("matrix_num")
   call add_test("idx=1", node_data%get_matrix_num(1), 1)
