@@ -18,7 +18,7 @@ program seq_forward_test
   nb=2
   local_index => create_jagged_array([5,3,0],[2,3,4,5,7,1,3,4])
   node_data => create_node_data([4,5,4],[5,3,0],nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
   block_local_index => create_block_local_index(node_data, local_index)
   rh => create_right_hand(node_data, nb)
 
@@ -53,7 +53,7 @@ program seq_forward_test
   nb=3
   local_index => create_jagged_array([5,3,0],[2,3,4,5,7,1,3,4])
   node_data => create_node_data([4,5,4],[5,3,0],nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
   block_local_index => create_block_local_index(node_data, local_index)
   rh => create_right_hand(node_data, nb)
 

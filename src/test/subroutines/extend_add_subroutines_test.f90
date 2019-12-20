@@ -22,7 +22,7 @@ contains
     local_index => create_jagged_array([5, 3, 0], [2, 3, 4, 5, 7, 3, 4])
     node_set => create_contiguous_sets([4, 5, 4])
     node_data => create_node_data([5, 3, 0], [4, 5, 4],2)
-    factors => create_factors(node_data, 2)
+    factors => create_factors(node_data)
     
     call set_zero(node_data, factors)
     a => factors%get_work(1, 3, 3)
@@ -59,7 +59,7 @@ contains
     local_index => create_jagged_array([7, 3, 0], [3,4,5,6,8,9,10,1,2,3])
     node_set => create_contiguous_sets([4, 7, 3])
     node_data => create_node_data([4,7,3],[7,3,0],3)
-    factors => create_factors(node_data, 3)
+    factors => create_factors(node_data)
     node_data => create_node_data([4,7,3], [7,3,0], 3)
     block_local_index => create_block_local_index(node_data, local_index)
     

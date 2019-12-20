@@ -9,7 +9,7 @@ program factors_test
 
   nb = 3
   node_data => create_node_data([1,6,4], [4,5,0], nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
 
   factors%get_supernode(1,1,1) = 0.0d0
   factors%get_supernode(1,2,1) = 0.0d0
@@ -83,7 +83,7 @@ program factors_test
   
   nb = 3
   node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
 
   factors%get_supernode(1,1,1) = 0d0
   factors%get_supernode(1,2,1) = 0d0
@@ -263,7 +263,7 @@ program factors_test
   call end_array_tests()
 
   node_data => create_node_data([6], [0], 3)
-  factors => create_factors(node_data, 3)
+  factors => create_factors(node_data)
 
   factors%get_matrix(1,1,1) = 0d0
   factors%get_matrix(1,2,1) = 0d0

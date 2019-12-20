@@ -23,7 +23,7 @@ program border_subroutines_test
   double precision, pointer, contiguous :: a11_s(:), a11_w(:), a21_s(:), a21_w(:), a31_s(:), a31_w(:), a22(:), a32(:), a33(:)
   
   node_data => create_node_data([3,9],[9,0], 5)
-  factors => create_factors(node_data, 5)
+  factors => create_factors(node_data)
 
   a11_s => factors%get_supernode(1, 1, 1)
   a21_s => factors%get_supernode(1, 2, 1)

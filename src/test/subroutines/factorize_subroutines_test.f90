@@ -17,7 +17,7 @@ program factorize_subroutines_test
   double precision, pointer, contiguous :: a11(:), a21(:), a31(:), a22(:), a32(:), a33(:)
 
   node_data => create_node_data([3,5],[5,0],3)
-  factors => create_factors(node_data, 3)
+  factors => create_factors(node_data)
 
   a11 => factors%get_matrix(1, 1, 1)
   a21 => factors%get_matrix(1, 2, 1)
