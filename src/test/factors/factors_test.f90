@@ -262,5 +262,23 @@ program factors_test
   call add_test("(5,3,3)", factors%get_work(5,3,3), [(1d0, i=1,9)])
   call end_array_tests()
 
+  node_data => create_node_data([6], [0], 3)
+  factors => create_factors(node_data, 3)
+
+  factors%get_matrix(1,1,1) = 0d0
+  factors%get_matrix(1,2,1) = 0d0
+  factors%get_matrix(1,2,2) = 0d0
+
+  factors%get_matrix(1,1,1) = factors%get_matrix(1,1,1) + 1d0
+  factors%get_matrix(1,2,1) = factors%get_matrix(1,2,1) + 1d0
+  factors%get_matrix(1,2,2) = factors%get_matrix(1,2,2) + 1d0
+  
+  call start_array_tests("最後のノードがdivisibleの場合:nb=3, supernode_size=6")
+  call add_test("(node, i, j) = (1,1,1)", factors%get_supernode(1,1,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (1,2,1)", factors%get_supernode(1,2,1), [(1d0, i=1,9)])
+  call add_test("(node, i, j) = (2,2,2)", factors%get_supernode(1,2,2), [(1d0, i=1,9)])
+  call end_array_tests()
+
+
 end program factors_test
 
