@@ -30,11 +30,11 @@ contains
     
     allocate(this)
     allocate(supernode_extractor_c::controller)
-    this%supernode => create_block_matrices(node_data%nb, node_data%supernode_size, node_data%work_size, controller)
+    this%supernode => create_block_matrices(node_data, controller)
     allocate(work_extractor_c::controller)
-    this%work => create_block_matrices(node_data%nb, node_data%supernode_size, node_data%work_size, controller)
+    this%work => create_block_matrices(node_data, controller)
     allocate(border_extractor_c::controller)
-    this%border => create_block_matrices(node_data%nb, node_data%supernode_size, node_data%work_size, controller)
+    this%border => create_block_matrices(node_data, controller)
     this%node_data => node_data
   
   end function

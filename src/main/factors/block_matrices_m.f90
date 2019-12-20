@@ -17,20 +17,19 @@ module block_matrices_m
   public :: create_block_matrices
 
 contains
-  function create_block_matrices(nb, supernode_size, work_size, extractor) result(this)
+  function create_block_matrices(node_data, extractor) result(this)
     type(block_matrices_c), pointer :: this
-    integer, intent(in) :: nb
-    integer, contiguous, target :: supernode_size(:), work_size(:)
+    type(node_data_c), pointer :: node_data
     integer, pointer, contiguous :: matrix_size(:)
     class(extractor_c), pointer, intent(in) :: extractor
     integer :: i, nc, nr
 
     allocate(this)
-    allocate(matrix_size(size(supernode_size)))
+    allocate(matrix_size(node_data%num_node))
     this%extractor => extractor
     !TODO: コンストラクタ作成
-    this%extractor%node_data => create_node_data(supernode_size, work_size, nb)
-    do i=1, size(supernode_size)
+    this%extractor%node_data => node_data
+    do i=1, node_data%num_node
       matrix_size(i) = extractor%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(matrix_size)
