@@ -88,11 +88,7 @@ contains
     idx = nc/nb+1
     !TODO: TEST
     if(node == this%num_node)then
-      if(this%divisible(node))then
-        idx = nc/nb+1
-      else
-        idx = nc/nb+2
-      endif
+      idx = div_ceiling(nc, nb)+1
     endif
     
   end function
