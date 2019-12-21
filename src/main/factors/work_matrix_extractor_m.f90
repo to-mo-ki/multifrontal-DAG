@@ -43,41 +43,42 @@ contains
   integer function get_size(this, node, i, j) result(work_size)
     class(work_extractor_c) :: this
     integer, intent(in) :: node, i, j
-    integer :: nb, nc, nr
-    integer :: sn, sr, fw
+    integer :: col_size, row_size
 
-    nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
+    col_size = this%node_data%get_work_block_size(j, node)
+    row_size = this%node_data%get_work_block_size(i, node)
+    work_size = col_size*row_size
 
-    sn = nc/nb
-    sr = mod(nc, nb)
-    fw = min(mod(nb-sr, nb), nr)
-
-    work_size = get_block_size(i-sn, nb, nr, fw) * get_block_size(j-sn, nb, nr, fw)
-    
   end function
 
   integer function estimate_size(this, node) result(work_size)
     class(work_extractor_c) :: this
     integer, intent(in) :: node
     integer :: nc, nr, nb
-    integer :: sn, sr, wn, wr, fw
-    integer :: left, lower, internal
+    integer :: sn, wn, wr, fw
+    integer :: left, lower, internal, last_num, lower_row_size
     
     nb = this%node_data%nb
     nc = this%node_data%supernode_size(node)
     nr = this%node_data%work_size(node)
 
     sn = nc/nb
-    sr = mod(nc, nb)
-    fw = min(mod(nb-sr, nb), nr)
-    wn = (nr-fw)/nb
-    wr = mod(nr-fw, nb)
+    last_num = this%node_data%get_num_matrix_block(node)
+    lower_row_size = this%node_data%get_matrix_block_size(last_num, node)
+    fw = this%node_data%border_work_size(node)
     
-    left = nr*fw
-    internal = partial_sum(wn)*nb*nb
-    lower = (nr-fw)*wr
+    if(this%node_data%divisible(node))then
+      wn = this%node_data%get_num_matrix_block(node)-sn-1
+      left = 0
+      internal = partial_sum(wn)*nb*nb
+      lower = lower_row_size*nr
+    else
+      wn = this%node_data%get_num_matrix_block(node)-sn-2
+      left = nr*fw
+      internal = partial_sum(wn)*nb*nb
+      lower = (nr-fw)*lower_row_size
+    endif
+
     work_size = left + internal + lower
     
   end function
