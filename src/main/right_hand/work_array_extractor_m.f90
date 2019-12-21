@@ -15,36 +15,25 @@ contains
   integer function get_start_pos(this, node, idx) result(pos)
     class(work_extractor_c) :: this
     integer, intent(in) :: node, idx
-    integer :: nb, nc, nr
-    integer :: first_block, idx2
+    integer :: nb, first_block, wstart
+
+    wstart = this%node_data%get_work_start_index(node)
+    if(idx == wstart)then
+      pos = 1
+      return
+    endif
 
     nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
-    
-    idx2 = idx - nc/nb
-    first_block = min(nb - mod(nc, nb), nr)
-    if(idx2 == 1)then
-      pos = 1
-    else
-      pos = first_block + (idx2-2)*nb+1
-    endif
+    first_block = this%node_data%border_work_size(node)
+    pos = first_block + (idx-wstart-1)*nb+1
 
   end function
 
   integer function get_size(this, node, idx) result(work_size)
     class(work_extractor_c) :: this
     integer, intent(in) :: node, idx
-    integer :: nb, nc, nr
-    integer :: first_block, idx2
 
-    nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
-
-    idx2 = idx - nc/nb
-    first_block = min(nb - mod(nc, nb), nr)
-    work_size = get_block_size(idx2, nb, nr, first_block)
+    work_size = this%node_data%get_work_block_size(idx, node)
 
   end function
 

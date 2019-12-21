@@ -87,7 +87,7 @@ contains
     nc = this%supernode_size(node)
     idx = nc/nb+1
     !TODO: TEST
-    if(node == this%num_node)then
+    if(this%work_size(node) == 0)then
       idx = div_ceiling(nc, nb)+1
     endif
     
