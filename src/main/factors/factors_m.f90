@@ -2,10 +2,6 @@ module factors_m
   use contiguous_sets_m
   use jagged_array_m
   use block_matrices_m
-  use matrix_extractor_m
-  use supernode_matrix_extractor_m
-  use work_matrix_extractor_m
-  use border_matrix_extractor_m
   use node_data_m
   implicit none
   private
@@ -26,15 +22,11 @@ contains
   function create_factors(node_data)result(this)
     type(factors_c), pointer :: this
     type(node_data_c), pointer :: node_data
-    class(extractor_c), pointer :: extractor
     
     allocate(this)
-    allocate(supernode_extractor_c::extractor)
-    this%supernode => create_block_matrices(node_data, extractor)
-    allocate(work_extractor_c::extractor)
-    this%work => create_block_matrices(node_data, extractor)
-    allocate(border_extractor_c::extractor)
-    this%border => create_block_matrices(node_data, extractor)
+    this%supernode => create_block_matrices(node_data, SUPERNODE_EXTRACTOR)
+    this%work => create_block_matrices(node_data, WORK_EXTRACTOR)
+    this%border => create_block_matrices(node_data, BORDER_EXTRACTOR)
     this%node_data => node_data
   
   end function

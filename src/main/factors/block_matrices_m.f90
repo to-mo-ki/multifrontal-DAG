@@ -1,9 +1,15 @@
 module block_matrices_m
   use contiguous_sets_m
   use matrix_extractor_m
+  use supernode_matrix_extractor_m
+  use work_matrix_extractor_m
+  use border_matrix_extractor_m
   use node_data_m
   implicit none
   private
+  integer, parameter, public :: SUPERNODE_EXTRACTOR = 1
+  integer, parameter, public :: BORDER_EXTRACTOR = 2
+  integer, parameter, public :: WORK_EXTRACTOR = 3
   type, public :: block_matrices_c
     private
     double precision, pointer, contiguous :: val(:)
@@ -17,20 +23,29 @@ module block_matrices_m
   public :: create_block_matrices
 
 contains
-  function create_block_matrices(node_data, extractor) result(this)
+  function create_block_matrices(node_data, extractor_type) result(this)
     type(block_matrices_c), pointer :: this
     type(node_data_c), pointer :: node_data
     integer, pointer, contiguous :: matrix_size(:)
-    class(extractor_c), pointer, intent(in) :: extractor
+    integer, intent(in) :: extractor_type
     integer :: i, nc, nr
 
     allocate(this)
     allocate(matrix_size(node_data%num_node))
-    this%extractor => extractor
-    !TODO: コンストラクタ作成
+    select case(extractor_type)
+      case(SUPERNODE_EXTRACTOR)
+        allocate(supernode_extractor_c::this%extractor)
+      case(BORDER_EXTRACTOR)
+        allocate(border_extractor_c::this%extractor)
+      case(WORK_EXTRACTOR)
+        allocate(work_extractor_c::this%extractor)
+      case default
+        print *, "Unknown type"
+        return
+    end select
     this%extractor%node_data => node_data
     do i=1, node_data%num_node
-      matrix_size(i) = extractor%estimate_size(i)
+      matrix_size(i) = this%extractor%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(matrix_size)
     deallocate(matrix_size)
