@@ -11,7 +11,7 @@ program rearrange_subroutines_test
   integer :: i
 
   node_data => create_node_data([8,9],[9,0], 5)
-  factors => create_factors(node_data, 5)
+  factors => create_factors(node_data)
   a22 => factors%get_matrix(1,2,2)
   a32 => factors%get_matrix(1,3,2)
   a42 => factors%get_matrix(1,4,2)

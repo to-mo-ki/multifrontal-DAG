@@ -1,43 +1,44 @@
 module border_array_extractor_m
   use array_extractor_m
-  use partial_sum_m
+  use integer_function_m
   use block_size_calculator_m
   implicit none
   private
   type, extends(extractor_c), public :: border_extractor_c
   contains
     private
-    procedure, nopass :: get_start_pos
-    procedure, nopass :: get_size
-    procedure, nopass, public :: estimate_size
+    procedure :: get_start_pos
+    procedure :: get_size
+    procedure, public :: estimate_size
   end type
 contains
-  integer function get_start_pos(nb, nc, nr, idx) result(pos)
-    integer, intent(in) :: nb, nc, nr, idx
+  integer function get_start_pos(this, node, idx) result(pos)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node, idx
 
     pos = 1
 
   end function
 
-  integer function get_size(nb, nc, nr, idx) result(border_size)
-    integer, intent(in) :: nb, nc, nr, idx
+  integer function get_size(this, node, idx) result(border_size)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node, idx
 
-    border_size = get_block_size(idx, nb, nc+nr)
+    border_size = this%node_data%get_matrix_block_size(idx, node)
 
   end function
 
-  integer function estimate_size(nb, nc, nr) result(border_size)
-    integer, intent(in) :: nc, nr, nb
-    integer :: idx
+  integer function estimate_size(this, node) result(border_size)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node
+    integer :: nb, nc, nr, idx
 
-    if(mod(nc, nb)==0)then
+    if(this%node_data%divisible(node))then
       border_size = 0
-      return
     else
-      idx = nc/nb+1
+      idx = this%node_data%get_work_start_index(node)
+      border_size = this%node_data%get_matrix_block_size(idx, node)
     endif
 
-    border_size = get_block_size(idx, nb, nc+nr)
-    
   end function
 end module

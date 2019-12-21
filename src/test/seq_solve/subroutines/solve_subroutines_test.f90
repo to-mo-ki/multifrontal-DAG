@@ -28,7 +28,7 @@ program sovle_subroutines_test
 
   nb = 3
   node_data => create_node_data([3,2],[2,0],nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
   rh => create_right_hand(node_data, nb)
 
   factors%get_supernode(1,1,1) = [4d0,0d0,0d0,3d0,3d0,0d0,2d0,2d0,2d0]

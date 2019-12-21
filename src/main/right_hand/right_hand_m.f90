@@ -2,10 +2,6 @@ module right_hand_m
   use contiguous_sets_m
   use jagged_array_m
   use block_arrays_m
-  use array_extractor_m
-  use supernode_array_extractor_m
-  use work_array_extractor_m
-  use border_array_extractor_m
   use node_data_m
   implicit none
   private
@@ -13,7 +9,6 @@ module right_hand_m
     private
     type(node_data_c), pointer :: node_data
     type(block_arrays_c), pointer :: supernode, work, border
-    integer :: nb
   contains
     procedure :: set_val
     procedure :: get_array_ptr
@@ -29,18 +24,11 @@ contains
     type(right_hand_c), pointer :: this
     type(node_data_c), pointer :: node_data
     integer, intent(in) :: nb
-    class(extractor_c), pointer :: controller
     
     allocate(this)
-    allocate(supernode_extractor_c::controller)
-    this%supernode => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
-    allocate(work_extractor_c::controller)
-    this%work => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
-    call this%work%set_zero()
-    allocate(border_extractor_c::controller)
-    this%border => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
-    call this%border%set_zero()
-    this%nb = nb
+    this%supernode => create_block_arrays(node_data, SUPERNODE_EXTRACTOR)
+    this%work => create_block_arrays(node_data, WORK_EXTRACTOR)
+    this%border => create_block_arrays(node_data, BORDER_EXTRACTOR)
     this%node_data => node_data
   
   end function
@@ -49,6 +37,8 @@ contains
     class(right_hand_c) :: this
     double precision, contiguous, target :: val(:)
 
+    call this%border%set_zero()
+    call this%work%set_zero()
     call this%supernode%set_val(val)
     
   end subroutine
@@ -59,16 +49,16 @@ contains
     integer, intent(in) :: node, idx
     integer :: nc
     type(block_arrays_c), pointer :: block_arrays
-
-    nc = this%node_data%get_num_supernode_block(node)
     
     if(this%node_data%divisible(node))then
+      nc = this%node_data%get_work_start_index(node)-1
       if(idx <= nc)then
         block_arrays => this%supernode
       else
         block_arrays => this%work
       endif
     else
+      nc = this%node_data%get_work_start_index(node)
       if(idx < nc)then
         block_arrays => this%supernode
       else if(idx > nc)then

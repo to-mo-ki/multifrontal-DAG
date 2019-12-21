@@ -44,11 +44,6 @@ contains
       enddo
     enddo
 
-    !TODO: TEST
-    if(node==node_data%num_node .and. (.not. node_data%divisible(node)))then
-      call forward(node_data, factors, rh, node, node_data%get_work_start_index(node))
-    endif
-
   end subroutine
 
   subroutine border_forward2(node_data, factors, rh, node)

@@ -47,7 +47,7 @@ contains
 
     work_size = l_structure%get_array_lengths()
     node_data => create_node_data(supernode_size, work_size, nb)
-    factors => create_factors(node_data, nb)
+    factors => create_factors(node_data)
     rh => create_right_hand(node_data, nb)
     supernodal_index => create_supernodal_index(node_sets, a_structure, l_structure)
     local_index => create_local_index(l_structure, node_sets, tree_child)

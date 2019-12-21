@@ -1,16 +1,15 @@
 program block_arrays_work_test
   use block_arrays_m
-  use array_extractor_m
-  use work_array_extractor_m
+  use node_data_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
-  class(extractor_c), pointer :: controller
+  type(node_data_c), pointer :: node_data
   integer :: nb, i
 
-  allocate(work_extractor_c::controller)
   nb = 3
-  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)
+  node_data => create_node_data([1, 6, 4], [4, 5, 0], nb)
+  block_arrays => create_block_arrays(node_data, WORK_EXTRACTOR)
 
   block_arrays%get_ptr(1,1) = 0.0d0
   block_arrays%get_ptr(1,2) = 0.0d0
@@ -30,7 +29,8 @@ program block_arrays_work_test
   call end_array_tests()
 
   nb = 3
-  block_arrays => create_block_arrays(nb, [5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], controller)
+  node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
+  block_arrays => create_block_arrays(node_data, WORK_EXTRACTOR)
 
   block_arrays%get_ptr(1,2) = 0d0
   block_arrays%get_ptr(1,3) = 0d0

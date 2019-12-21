@@ -1,19 +1,17 @@
 module node_data_m
   use contiguous_sets_m
   use block_size_calculator_m
+  use integer_function_m
   implicit none
   private
   type, public :: node_data_c
     type(contiguous_sets_c), pointer :: node_sets
     integer, public :: nb, num_node, max_num_block
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    integer, allocatable :: num_supernode_block(:), num_work_block(:)
     integer, allocatable :: border_supernode_size(:), border_work_size(:)
   contains
     procedure :: divisible
     procedure :: get_num_matrix_block
-    procedure :: get_num_supernode_block
-    procedure :: get_num_work_block
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
@@ -29,7 +27,7 @@ contains
     type(node_data_c), pointer :: this
     integer, target, contiguous :: supernode_size(:), work_size(:)
     integer, intent(in) :: nb
-    integer :: num_node, i, r
+    integer :: num_node, i
 
     allocate(this)
     this%node_sets => create_contiguous_sets(supernode_size)
@@ -46,53 +44,12 @@ contains
       this%border_work_size(i) = min(nb-this%border_supernode_size(i), work_size(i))
     enddo
 
-    allocate(this%num_supernode_block(num_node))
-    do i=1, num_node
-      if(this%divisible(i))then
-        this%num_supernode_block(i) = supernode_size(i)/nb
-      else
-        this%num_supernode_block(i) = supernode_size(i)/nb+1
-      endif
-    enddo
-
-    allocate(this%num_work_block(num_node))
-    do i=1, num_node
-      if(this%divisible(i))then
-        r = mod(work_size(i), nb)
-        if(r == 0)then
-          this%num_work_block(i) = work_size(i)/nb
-        else
-          this%num_work_block(i) = work_size(i)/nb+1
-        endif
-      else
-        r = mod(work_size(i)-this%border_work_size(i), nb)
-        if(r == 0)then
-          this%num_work_block(i) = (work_size(i)-this%border_work_size(i))/nb+1
-        else
-          this%num_work_block(i) = (work_size(i)-this%border_work_size(i))/nb+2
-        endif
-      endif
-    enddo
-
-
   end function
 
   logical function divisible(this, node)
     class(node_data_c) :: this
     integer, intent(in) :: node
     divisible = this%border_supernode_size(node) == 0
-  end function
-
-  integer function get_num_supernode_block(this, node) result(num_supernode_block)
-    class(node_data_c) :: this
-    integer, intent(in) :: node
-    num_supernode_block = this%num_supernode_block(node)
-  end function
-
-  integer function get_num_work_block(this, node) result(num_work_block)
-    class(node_data_c) :: this
-    integer, intent(in) :: node
-    num_work_block = this%num_work_block(node)
   end function
 
   integer function get_matrix_num(this, idx) result(num)
@@ -114,18 +71,11 @@ contains
   integer function get_num_matrix_block(this, node) result(num_block)
     class(node_data_c) :: this
     integer, intent(in) :: node
-    integer :: nb, nc, nr, n
-
-    nb = this%nb
-    nc = this%supernode_size(node)
-    nr = this%work_size(node)
-    n = nc + nr
-    if(mod(n, nb) == 0)then
-      num_block = n/nb
-    else
-      num_block = n/nb+1
-    endif
-
+    integer :: n
+    
+    n = this%supernode_size(node)+this%work_size(node)
+    num_block = div_ceiling(n, this%nb)
+    
   end function
 
   integer function get_work_start_index(this, node) result(idx)
@@ -136,6 +86,10 @@ contains
     nb = this%nb
     nc = this%supernode_size(node)
     idx = nc/nb+1
+    !TODO: TEST
+    if(this%work_size(node) == 0)then
+      idx = div_ceiling(nc, nb)+1
+    endif
     
   end function
 

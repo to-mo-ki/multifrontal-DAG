@@ -1,16 +1,15 @@
 program block_matrices_supernode_test
   use block_matrices_m
-  use matrix_extractor_m
-  use supernode_matrix_extractor_m
+  use node_data_m
   use test_util
   implicit none
   type(block_matrices_c), pointer :: block_matrices
-  class(extractor_c), pointer :: controller
+  type(node_data_c), pointer :: node_data
   integer :: nb, i
 
-  allocate(supernode_extractor_c::controller)
   nb = 3
-  block_matrices => create_block_matrices(nb, [1,6,4], [4,5,0], controller)
+  node_data => create_node_data([1,6,4], [4,5,0], nb)
+  block_matrices => create_block_matrices(node_data, SUPERNODE_EXTRACTOR)
 
   block_matrices%get_ptr(1,1,1) = 0.0d0
   block_matrices%get_ptr(1,2,1) = 0.0d0
@@ -54,7 +53,8 @@ program block_matrices_supernode_test
   call end_array_tests()
 
   nb = 3
-  block_matrices => create_block_matrices(nb, [5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], controller)
+  node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
+  block_matrices => create_block_matrices(node_data, SUPERNODE_EXTRACTOR)
 
   block_matrices%get_ptr(1,1,1) = 0d0
   block_matrices%get_ptr(1,2,1) = 0d0

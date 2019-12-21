@@ -19,7 +19,7 @@ program coefficient_setter_test
   l_structure => create_jagged_array([2, 2, 2, 0], [8, 9, 7, 9, 7, 8])
   nb = 2
   node_data => create_node_data([2, 2, 2, 3], [2, 2, 2, 0], nb)
-  factors => create_factors(node_data, nb)
+  factors => create_factors(node_data)
   a_structure => create_jagged_array([3,2,4,2,3,3,2,1,1],[1,2,3,2,4,1,2,3,4,2,4,1,2,4,2,3,4,1,3,2,3])
   ccs => create_ccs(a_structure, [double precision :: 11,21,81,22,92,33,43,73,93,44,94,55,65,85,66,76,86,77,97,88,99])
   call set_zero(node_data, factors)

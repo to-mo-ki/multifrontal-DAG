@@ -4,6 +4,7 @@ module coefficient_setter_m
   use ccs_m
   use jagged_array_m
   use contiguous_sets_m
+  use integer_function_m
   implicit none
   private
 
@@ -26,12 +27,12 @@ contains
         rows => ccs%get_row_array(j)
         vals => ccs%get_val_array(j)
         col_num = j - node_sets%get_first(node) + 1
-        block_col_num = (col_num-1)/nb + 1
-        block_j = mod(col_num-1, nb)+1
+        block_col_num = div_ceiling(col_num, nb)
+        block_j = mod2(col_num, nb)
         do i=1, size(rows)
-          block_row_num = (rows(i)-1)/nb + 1
+          block_row_num = div_ceiling(rows(i), nb)
           block_matrix => factors%get_matrix(node, block_row_num, block_col_num)
-          block_i = mod(rows(i)-1, nb)+1
+          block_i = mod2(rows(i), nb)
           ld = node_data%get_matrix_block_size(block_col_num, node)
           call set_cofficent_element(block_matrix, block_i, block_j, vals(i), ld)
         enddo

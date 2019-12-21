@@ -1,18 +1,17 @@
 program block_arrays_supernode_test
   use block_arrays_m
-  use array_extractor_m
-  use supernode_array_extractor_m
+  use node_data_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
-  class(extractor_c), pointer :: controller
+  type(node_data_c), pointer :: node_data
   double precision, pointer, contiguous :: val(:)
   integer :: nb, i
 
-  allocate(supernode_extractor_c::controller)
   allocate(val, source=[(dble(i),i=1,11)])
   nb = 3
-  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)
+  node_data => create_node_data([1, 6, 4], [4, 5, 0], nb)
+  block_arrays => create_block_arrays(node_data, SUPERNODE_EXTRACTOR)
 
   call block_arrays%set_val(val)
   call start_array_tests("set")
