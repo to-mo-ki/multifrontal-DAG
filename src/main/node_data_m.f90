@@ -1,6 +1,7 @@
 module node_data_m
   use contiguous_sets_m
   use block_size_calculator_m
+  use integer_function_m
   implicit none
   private
   type, public :: node_data_c
@@ -70,18 +71,11 @@ contains
   integer function get_num_matrix_block(this, node) result(num_block)
     class(node_data_c) :: this
     integer, intent(in) :: node
-    integer :: nb, nc, nr, n
-
-    nb = this%nb
-    nc = this%supernode_size(node)
-    nr = this%work_size(node)
-    n = nc + nr
-    if(mod(n, nb) == 0)then
-      num_block = n/nb
-    else
-      num_block = n/nb+1
-    endif
-
+    integer :: n
+    
+    n = this%supernode_size(node)+this%work_size(node)
+    num_block = div_ceiling(n, this%nb)
+    
   end function
 
   integer function get_work_start_index(this, node) result(idx)
