@@ -9,9 +9,7 @@ module block_arrays_m
     private
     double precision, pointer, contiguous :: val(:)
     type(contiguous_sets_c), pointer :: ptr
-    integer, pointer, contiguous :: supernode_size(:), work_size(:)
     class(extractor_c), pointer :: extractor
-    integer :: nb
   contains
     procedure :: set_val
     procedure :: set_zero
@@ -21,27 +19,23 @@ module block_arrays_m
   public :: create_block_arrays
 
 contains
-  function create_block_arrays(nb, supernode_size, work_size, extractor) result(this)
+  function create_block_arrays(node_data, extractor) result(this)
     type(block_arrays_c), pointer :: this
-    integer, intent(in) :: nb
-    integer, contiguous, target :: supernode_size(:), work_size(:)
+    type(node_data_c), pointer :: node_data
     integer, pointer, contiguous :: array_size(:)
     class(extractor_c), pointer, intent(in) :: extractor
     integer :: i, nc, nr
 
     allocate(this)
-    allocate(array_size(size(supernode_size)))
-    extractor%node_data => create_node_data(supernode_size, work_size, nb)
-    do i=1, size(supernode_size)
+    allocate(array_size(node_data%num_node))
+    extractor%node_data => node_data
+    do i=1, node_data%num_node
       array_size(i) = extractor%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(array_size)
     deallocate(array_size)
     allocate(this%val(this%ptr%get_num_elements()))
     this%extractor => extractor
-    this%supernode_size => supernode_size
-    this%work_size => work_size
-    this%nb = nb
 
   end function
 

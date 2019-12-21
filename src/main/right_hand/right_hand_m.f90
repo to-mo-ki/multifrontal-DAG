@@ -33,12 +33,12 @@ contains
     
     allocate(this)
     allocate(supernode_extractor_c::extractor)
-    this%supernode => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
+    this%supernode => create_block_arrays(node_data, extractor)
     allocate(work_extractor_c::extractor)
-    this%work => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
+    this%work => create_block_arrays(node_data, extractor)
     call this%work%set_zero()
     allocate(border_extractor_c::extractor)
-    this%border => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
+    this%border => create_block_arrays(node_data, extractor)
     call this%border%set_zero()
     this%nb = nb
     this%node_data => node_data
