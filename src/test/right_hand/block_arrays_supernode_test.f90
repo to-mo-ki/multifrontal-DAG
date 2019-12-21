@@ -5,12 +5,12 @@ program block_arrays_supernode_test
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
-  class(extractor_c), pointer :: controller
+  class(extractor_c), pointer :: extractor
   integer :: nb, i
 
-  allocate(supernode_extractor_c::controller)
+  allocate(supernode_extractor_c::extractor)
   nb = 3
-  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)
+  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], extractor)
 
   block_arrays%get_ptr(1,1) = 0.0d0
   block_arrays%get_ptr(2,1) = 0.0d0
@@ -33,7 +33,7 @@ program block_arrays_supernode_test
   call end_array_tests()
 
   nb = 3
-  block_arrays => create_block_arrays(nb, [5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], controller)
+  block_arrays => create_block_arrays(nb, [5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], extractor)
 
   block_arrays%get_ptr(1,1) = 0d0
   block_arrays%get_ptr(1,2) = 0d0

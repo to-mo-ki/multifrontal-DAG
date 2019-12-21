@@ -10,7 +10,7 @@ module block_arrays_m
     double precision, pointer, contiguous :: val(:)
     type(contiguous_sets_c), pointer :: ptr
     integer, pointer, contiguous :: supernode_size(:), work_size(:)
-    class(extractor_c), pointer :: controller
+    class(extractor_c), pointer :: extractor
     integer :: nb
   contains
     procedure :: set_val
@@ -21,24 +21,24 @@ module block_arrays_m
   public :: create_block_arrays
 
 contains
-  function create_block_arrays(nb, supernode_size, work_size, controller) result(this)
+  function create_block_arrays(nb, supernode_size, work_size, extractor) result(this)
     type(block_arrays_c), pointer :: this
     integer, intent(in) :: nb
     integer, contiguous, target :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: array_size(:)
-    class(extractor_c), pointer, intent(in) :: controller
+    class(extractor_c), pointer, intent(in) :: extractor
     integer :: i, nc, nr
 
     allocate(this)
     allocate(array_size(size(supernode_size)))
-    controller%node_data => create_node_data(supernode_size, work_size, nb)
+    extractor%node_data => create_node_data(supernode_size, work_size, nb)
     do i=1, size(supernode_size)
-      array_size(i) = controller%estimate_size(i)
+      array_size(i) = extractor%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(array_size)
     deallocate(array_size)
     allocate(this%val(this%ptr%get_num_elements()))
-    this%controller => controller
+    this%extractor => extractor
     this%supernode_size => supernode_size
     this%work_size => work_size
     this%nb = nb
@@ -68,7 +68,7 @@ contains
     double precision, pointer, contiguous :: array(:)
 
     array => this%val(this%ptr%get_first(node):this%ptr%get_last(node))
-    ptr => this%controller%get_ptr(array, node, idx)
+    ptr => this%extractor%get_ptr(array, node, idx)
 
   end function  
 end module

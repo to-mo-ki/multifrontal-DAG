@@ -29,16 +29,16 @@ contains
     type(right_hand_c), pointer :: this
     type(node_data_c), pointer :: node_data
     integer, intent(in) :: nb
-    class(extractor_c), pointer :: controller
+    class(extractor_c), pointer :: extractor
     
     allocate(this)
-    allocate(supernode_extractor_c::controller)
-    this%supernode => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
-    allocate(work_extractor_c::controller)
-    this%work => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
+    allocate(supernode_extractor_c::extractor)
+    this%supernode => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
+    allocate(work_extractor_c::extractor)
+    this%work => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
     call this%work%set_zero()
-    allocate(border_extractor_c::controller)
-    this%border => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, controller)
+    allocate(border_extractor_c::extractor)
+    this%border => create_block_arrays(nb, node_data%supernode_size, node_data%work_size, extractor)
     call this%border%set_zero()
     this%nb = nb
     this%node_data => node_data

@@ -26,15 +26,15 @@ contains
   function create_factors(node_data)result(this)
     type(factors_c), pointer :: this
     type(node_data_c), pointer :: node_data
-    class(extractor_c), pointer :: controller
+    class(extractor_c), pointer :: extractor
     
     allocate(this)
-    allocate(supernode_extractor_c::controller)
-    this%supernode => create_block_matrices(node_data, controller)
-    allocate(work_extractor_c::controller)
-    this%work => create_block_matrices(node_data, controller)
-    allocate(border_extractor_c::controller)
-    this%border => create_block_matrices(node_data, controller)
+    allocate(supernode_extractor_c::extractor)
+    this%supernode => create_block_matrices(node_data, extractor)
+    allocate(work_extractor_c::extractor)
+    this%work => create_block_matrices(node_data, extractor)
+    allocate(border_extractor_c::extractor)
+    this%border => create_block_matrices(node_data, extractor)
     this%node_data => node_data
   
   end function

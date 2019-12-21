@@ -5,14 +5,14 @@ program block_arrays_supernode_test
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
-  class(extractor_c), pointer :: controller
+  class(extractor_c), pointer :: extractor
   double precision, pointer, contiguous :: val(:)
   integer :: nb, i
 
-  allocate(supernode_extractor_c::controller)
+  allocate(supernode_extractor_c::extractor)
   allocate(val, source=[(dble(i),i=1,11)])
   nb = 3
-  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], controller)
+  block_arrays => create_block_arrays(nb, [1, 6, 4], [4, 5, 0], extractor)
 
   call block_arrays%set_val(val)
   call start_array_tests("set")
