@@ -1,15 +1,28 @@
 module integer_function_m
   implicit none
-  
+  private
+
+  interface partial_sum
+    procedure :: partial_sum1
+    procedure :: partial_sum2
+  end interface
+
+  public :: partial_sum, div_ceiling, mod2
+
 contains
 
-  integer function partial_sum(s, e)
+  integer function partial_sum1(e)
+    integer, intent(in) :: e
+    partial_sum1 = e*(e+1)/2
+  end function
+
+  integer function partial_sum2(s, e)
     integer, intent(in) :: s, e
     if(e < s)then
-      partial_sum = 0
-      return
+      partial_sum2 = 0
+    else
+      partial_sum2 = partial_sum(e)-partial_sum(s-1)
     endif
-    partial_sum = e*(e+1)/2-s*(s-1)/2
   end function
 
   integer function div_ceiling(a, p)

@@ -21,7 +21,7 @@ contains
     nc = this%node_data%supernode_size(node)
     nr = this%node_data%work_size(node)
 
-    left = partial_sum(nc+nr-(j-1)*nb+1, nc+nr) + partial_sum(1, nb-1)*(j-1)
+    left = partial_sum(nc+nr-(j-1)*nb+1, nc+nr) + partial_sum(nb-1)*(j-1)
     up = (i-j)*nb*get_block_size(j, nb, nc)
     pos = left + up + 1
 
@@ -53,7 +53,7 @@ contains
     sn = nc/nb
     sr = mod(nc, nb)
     
-    supernode_size = partial_sum(nr+1, nc+nr) + partial_sum(1, nb-1)*sn+partial_sum(1, sr-1)
+    supernode_size = partial_sum(nr+1, nc+nr) + partial_sum(nb-1)*sn+partial_sum(sr-1)
     
   end function
 end module

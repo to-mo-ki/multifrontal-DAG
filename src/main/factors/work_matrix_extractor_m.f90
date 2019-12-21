@@ -31,10 +31,10 @@ contains
     
     if(j == nc/nb+1)then
       up = get_block_size(j-sn, nb, nr, fw) * max((nb*(i-1)-nc), 0)
-      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(1, nb-1)*wn
+      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(nb-1)*wn
     else
       up = (i-j)*nb*nb
-      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(1, nb-1)*wn+partial_sum(1, fw-1)
+      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(nb-1)*wn+partial_sum(fw-1)
     endif
     pos = left + up + 1
 
@@ -76,7 +76,7 @@ contains
     wr = mod(nr-fw, nb)
     
     left = nr*fw
-    internal = partial_sum(1, wn)*nb*nb
+    internal = partial_sum(wn)*nb*nb
     lower = (nr-fw)*wr
     work_size = left + internal + lower
     
