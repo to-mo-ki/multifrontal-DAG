@@ -2,9 +2,15 @@ module block_arrays_m
   use contiguous_sets_m
   use jagged_array_m
   use array_extractor_m
+  use supernode_array_extractor_m
+  use work_array_extractor_m
+  use border_array_extractor_m
   use node_data_m
   implicit none
   private
+  integer, parameter, public :: SUPERNODE_EXTRACTOR = 1
+  integer, parameter, public :: BORDER_EXTRACTOR = 2
+  integer, parameter, public :: WORK_EXTRACTOR = 3
   type, public :: block_arrays_c
     private
     double precision, pointer, contiguous :: val(:)
@@ -19,23 +25,33 @@ module block_arrays_m
   public :: create_block_arrays
 
 contains
-  function create_block_arrays(node_data, extractor) result(this)
+  function create_block_arrays(node_data, extractor_type) result(this)
     type(block_arrays_c), pointer :: this
     type(node_data_c), pointer :: node_data
+    integer, intent(in) :: extractor_type
     integer, pointer, contiguous :: array_size(:)
-    class(extractor_c), pointer, intent(in) :: extractor
     integer :: i, nc, nr
 
     allocate(this)
     allocate(array_size(node_data%num_node))
-    extractor%node_data => node_data
+    select case(extractor_type)
+      case(SUPERNODE_EXTRACTOR)
+        allocate(supernode_extractor_c::this%extractor)
+      case(BORDER_EXTRACTOR)
+        allocate(border_extractor_c::this%extractor)
+      case(WORK_EXTRACTOR)
+        allocate(work_extractor_c::this%extractor)
+      case default
+        print *, "Unknown type"
+        return
+    end select
+    this%extractor%node_data => node_data
     do i=1, node_data%num_node
-      array_size(i) = extractor%estimate_size(i)
+      array_size(i) = this%extractor%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(array_size)
     deallocate(array_size)
     allocate(this%val(this%ptr%get_num_elements()))
-    this%extractor => extractor
 
   end function
 

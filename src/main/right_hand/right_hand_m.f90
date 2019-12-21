@@ -2,10 +2,6 @@ module right_hand_m
   use contiguous_sets_m
   use jagged_array_m
   use block_arrays_m
-  use array_extractor_m
-  use supernode_array_extractor_m
-  use work_array_extractor_m
-  use border_array_extractor_m
   use node_data_m
   implicit none
   private
@@ -13,7 +9,6 @@ module right_hand_m
     private
     type(node_data_c), pointer :: node_data
     type(block_arrays_c), pointer :: supernode, work, border
-    integer :: nb
   contains
     procedure :: set_val
     procedure :: get_array_ptr
@@ -29,18 +24,11 @@ contains
     type(right_hand_c), pointer :: this
     type(node_data_c), pointer :: node_data
     integer, intent(in) :: nb
-    class(extractor_c), pointer :: extractor
     
     allocate(this)
-    allocate(supernode_extractor_c::extractor)
-    this%supernode => create_block_arrays(node_data, extractor)
-    allocate(work_extractor_c::extractor)
-    this%work => create_block_arrays(node_data, extractor)
-    call this%work%set_zero()
-    allocate(border_extractor_c::extractor)
-    this%border => create_block_arrays(node_data, extractor)
-    call this%border%set_zero()
-    this%nb = nb
+    this%supernode => create_block_arrays(node_data, SUPERNODE_EXTRACTOR)
+    this%work => create_block_arrays(node_data, WORK_EXTRACTOR)
+    this%border => create_block_arrays(node_data, BORDER_EXTRACTOR)
     this%node_data => node_data
   
   end function
@@ -49,6 +37,8 @@ contains
     class(right_hand_c) :: this
     double precision, contiguous, target :: val(:)
 
+    call this%border%set_zero()
+    call this%work%set_zero()
     call this%supernode%set_val(val)
     
   end subroutine

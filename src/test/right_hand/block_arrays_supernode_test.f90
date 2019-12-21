@@ -1,19 +1,15 @@
 program block_arrays_supernode_test
   use block_arrays_m
-  use array_extractor_m
-  use supernode_array_extractor_m
   use node_data_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays
   type(node_data_c), pointer :: node_data
-  class(extractor_c), pointer :: extractor
   integer :: nb, i
 
-  allocate(supernode_extractor_c::extractor)
   nb = 3
   node_data => create_node_data([1, 6, 4], [4, 5, 0], nb)
-  block_arrays => create_block_arrays(node_data, extractor)
+  block_arrays => create_block_arrays(node_data, SUPERNODE_EXTRACTOR)
 
   block_arrays%get_ptr(1,1) = 0.0d0
   block_arrays%get_ptr(2,1) = 0.0d0
@@ -37,7 +33,7 @@ program block_arrays_supernode_test
 
   nb = 3
   node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
-  block_arrays => create_block_arrays(node_data, extractor)
+  block_arrays => create_block_arrays(node_data, SUPERNODE_EXTRACTOR)
 
   block_arrays%get_ptr(1,1) = 0d0
   block_arrays%get_ptr(1,2) = 0d0
