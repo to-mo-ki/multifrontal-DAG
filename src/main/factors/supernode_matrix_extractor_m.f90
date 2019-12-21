@@ -1,6 +1,6 @@
 module supernode_matrix_extractor_m
   use matrix_extractor_m
-  use partial_sum_m
+  use integer_function_m
   use block_size_calculator_m
   implicit none
   private

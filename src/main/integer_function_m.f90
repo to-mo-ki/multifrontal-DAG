@@ -1,4 +1,4 @@
-module partial_sum_m
+module integer_function_m
   implicit none
   
 contains
@@ -11,4 +11,15 @@ contains
     endif
     partial_sum = e*(e+1)/2-s*(s-1)/2
   end function
+
+  integer function div_ceiling(a, p)
+    integer, intent(in) :: a,p
+    div_ceiling = (a-1)/p + 1
+  end function
+
+  integer function mod2(a, p)
+    integer, intent(in) :: a, p
+    mod2 = mod(a-1, p)+1
+  end function
+
 end module

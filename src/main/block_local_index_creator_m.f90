@@ -3,6 +3,7 @@ module block_local_index_creator_m
   use jagged_array_m
   use jagged_array_3D_m
   use node_data_m
+  use integer_function_m
   implicit none
   private
 
@@ -82,10 +83,7 @@ contains
     integer :: i
     
     do i=1, size(local_index)
-      local_index(i) = mod(local_index(i), nb)
-      if(local_index(i) == 0)then
-        local_index(i) = nb
-      endif
+      local_index(i) = mod2(local_index(i), nb)
     enddo
 
   end subroutine

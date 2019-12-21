@@ -1,5 +1,5 @@
-program partial_sum_test
-  use partial_sum_m
+program integer_function_test
+  use integer_function_m
   use test_util
   implicit none
 
@@ -15,4 +15,4 @@ program partial_sum_test
   call assert_equal("3 to 1", partial_sum(3, 1), 0)
   call assert_equal("5 to 5", partial_sum(5, 5), 5)
   
-end program partial_sum_test
+end program integer_function_test
