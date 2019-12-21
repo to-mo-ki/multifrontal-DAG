@@ -15,12 +15,9 @@ contains
   integer function get_start_pos(this, node, idx) result(pos)
     class(supernode_extractor_c) :: this
     integer, intent(in) :: node, idx
-    integer :: nb, nc, nr
+    integer :: nb
 
     nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
-
     pos = (idx-1)*nb+1
 
   end function
@@ -28,13 +25,8 @@ contains
   integer function get_size(this, node, idx) result(supernode_size)
     class(supernode_extractor_c) :: this
     integer, intent(in) :: node, idx
-    integer :: nb, nc, nr
 
-    nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
-
-    supernode_size = get_block_size(idx, nb, nc)
+    supernode_size = this%node_data%get_supernode_block_size(idx, node)
 
   end function
 
