@@ -16,26 +16,24 @@ contains
     class(work_extractor_c) :: this
     integer, intent(in) :: node, i, j
     integer :: left, up, nb, nc, nr
-    integer :: sn, sr, fw, wn, wr
+    integer :: fw, wn, up_col_size, up_row_size
 
     nb = this%node_data%nb
     nc = this%node_data%supernode_size(node)
     nr = this%node_data%work_size(node)
+    fw = this%node_data%border_work_size(node)
+    up_col_size = this%node_data%get_work_block_size(j, node)
     
-    sn = nc/nb
-    sr = mod(nc, nb)
-    fw = min(mod(nb-sr, nb), nr)
-    wn = (nr-fw)/nb
-    wr = mod(nr-fw, nb)
-    wn = max((j-1)-(nc+fw)/nb, 0)
-    
-    if(j == nc/nb+1)then
-      up = get_block_size(j-sn, nb, nr, fw) * max((nb*(i-1)-nc), 0)
-      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(nb-1)*wn
+    if(j == this%node_data%get_work_start_index(node))then
+      up_row_size =  max((nb*(i-1)-nc), 0)
+      left = 0
     else
-      up = (i-j)*nb*nb
-      left = partial_sum(nc+nr-((j-1)*nb-1), nr) + partial_sum(nb-1)*wn+partial_sum(fw-1)
+      up_row_size = (i-j)*nb
+      wn = j-this%node_data%get_work_start_index(node)-1
+      left = partial_sum(nc+nr-(j-1)*nb+1, nr) + partial_sum(nb-1)*wn+partial_sum(fw-1)
     endif
+
+    up = up_col_size*up_row_size
     pos = left + up + 1
 
   end function
@@ -55,7 +53,7 @@ contains
     class(work_extractor_c) :: this
     integer, intent(in) :: node
     integer :: nc, nr, nb
-    integer :: sn, wn, wr, fw
+    integer :: sn, wn, fw
     integer :: left, lower, internal, last_num, lower_row_size
     
     nb = this%node_data%nb
