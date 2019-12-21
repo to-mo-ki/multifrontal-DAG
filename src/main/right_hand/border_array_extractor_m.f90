@@ -24,7 +24,7 @@ contains
     class(border_extractor_c) :: this
     integer, intent(in) :: node, idx
 
-    border_size = get_block_size(idx, this%node_data%nb, this%node_data%supernode_size(node)+this%node_data%work_size(node))
+    border_size = this%node_data%get_matrix_block_size(idx, node)
 
   end function
 
@@ -33,18 +33,12 @@ contains
     integer, intent(in) :: node
     integer :: nb, nc, nr, idx
 
-    nb = this%node_data%nb
-    nc = this%node_data%supernode_size(node)
-    nr = this%node_data%work_size(node)
-
-    if(mod(nc, nb)==0)then
+    if(this%node_data%divisible(node))then
       border_size = 0
-      return
     else
-      idx = nc/nb+1
+      idx = this%node_data%get_work_start_index(node)
+      border_size = this%node_data%get_matrix_block_size(idx, node)
     endif
 
-    border_size = get_block_size(idx, nb, nc+nr)
-    
   end function
 end module
