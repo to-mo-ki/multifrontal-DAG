@@ -7,28 +7,35 @@ module border_array_extractor_m
   type, extends(extractor_c), public :: border_extractor_c
   contains
     private
-    procedure, nopass :: get_start_pos
-    procedure, nopass :: get_size
-    procedure, nopass, public :: estimate_size
+    procedure :: get_start_pos
+    procedure :: get_size
+    procedure, public :: estimate_size
   end type
 contains
-  integer function get_start_pos(nb, nc, nr, idx) result(pos)
-    integer, intent(in) :: nb, nc, nr, idx
+  integer function get_start_pos(this, node, idx) result(pos)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node, idx
 
     pos = 1
 
   end function
 
-  integer function get_size(nb, nc, nr, idx) result(border_size)
-    integer, intent(in) :: nb, nc, nr, idx
+  integer function get_size(this, node, idx) result(border_size)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node, idx
 
-    border_size = get_block_size(idx, nb, nc+nr)
+    border_size = get_block_size(idx, this%node_data%nb, this%node_data%supernode_size(node)+this%node_data%work_size(node))
 
   end function
 
-  integer function estimate_size(nb, nc, nr) result(border_size)
-    integer, intent(in) :: nc, nr, nb
-    integer :: idx
+  integer function estimate_size(this, node) result(border_size)
+    class(border_extractor_c) :: this
+    integer, intent(in) :: node
+    integer :: nb, nc, nr, idx
+
+    nb = this%node_data%nb
+    nc = this%node_data%supernode_size(node)
+    nr = this%node_data%work_size(node)
 
     if(mod(nc, nb)==0)then
       border_size = 0

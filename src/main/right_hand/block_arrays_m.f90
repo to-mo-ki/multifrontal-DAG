@@ -2,6 +2,7 @@ module block_arrays_m
   use contiguous_sets_m
   use jagged_array_m
   use array_extractor_m
+  use node_data_m
   implicit none
   private
   type, public :: block_arrays_c
@@ -30,10 +31,9 @@ contains
 
     allocate(this)
     allocate(array_size(size(supernode_size)))
+    controller%node_data => create_node_data(supernode_size, work_size, nb)
     do i=1, size(supernode_size)
-      nc = supernode_size(i)
-      nr = work_size(i)
-      array_size(i) = controller%estimate_size(nb, nc, nr)
+      array_size(i) = controller%estimate_size(i)
     enddo
     this%ptr => create_contiguous_sets(array_size)
     deallocate(array_size)
@@ -65,14 +65,10 @@ contains
     double precision, pointer, contiguous :: ptr(:)
     class(block_arrays_c) :: this
     integer, intent(in) :: node, idx
-    integer :: nb, nc, nr
     double precision, pointer, contiguous :: array(:)
 
-    nb = this%nb
-    nc = this%supernode_size(node)
-    nr = this%work_size(node)
     array => this%val(this%ptr%get_first(node):this%ptr%get_last(node))
-    ptr => this%controller%get_ptr(array, nb, nc, nr, idx)
+    ptr => this%controller%get_ptr(array, node, idx)
 
   end function  
 end module
