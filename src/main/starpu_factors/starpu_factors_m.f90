@@ -3,6 +3,7 @@ module starpu_factors
   use jagged_array_m
   use block_matrix_ptrs_m
   use node_data_m
+  use iso_c_binding
   implicit none
   private
   type, public :: starpu_factors_c
@@ -58,29 +59,26 @@ contains
     
   end function
 
-  function get_supernode(this, node, i, j) result(ptr)
-    double precision, pointer, contiguous :: ptr(:)
+  type(c_ptr) function get_supernode(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
     integer, intent(in) :: node, i, j
     
-    ptr => this%supernode%get(node, i, j)
+    ptr = this%supernode%get(node, i, j)
   end function
 
-  function get_work(this, node, i, j) result(ptr)
-    double precision, pointer, contiguous :: ptr(:)
+  type(c_ptr) function get_work(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
     integer, intent(in) :: node, i, j
     
-    ptr => this%work%get(node, i, j)
+    ptr = this%work%get(node, i, j)
 
   end function
 
-  function get_border(this, node, i, j) result(ptr)
-    double precision, pointer, contiguous :: ptr(:)
+  type(c_ptr) function get_border(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
     integer, intent(in) :: node, i, j
     
-    ptr => this%border%get(node, i, j)
+    ptr = this%border%get(node, i, j)
 
   end function
 
