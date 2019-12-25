@@ -48,7 +48,7 @@ contains
         case (MODE_RWC)
           this%task((i-1)*2 + 1 + offset) = FSTARPU_RW .ior. FSTARPU_COMMUTE
         case default
-          print *,  "Wrong access mode" // trim(modes(i))
+          print *,  "Wrong access mode:",modes(i)
       end select
     enddo
 
@@ -70,7 +70,7 @@ contains
         case (MODE_RWC)
           call fstarpu_codelet_add_buffer(cl, FSTARPU_RW .ior. FSTARPU_COMMUTE)
         case default
-          print *,  "Wrong access mode" // trim(modes(i))
+          print *,  "Wrong access mode:",modes(i)
       end select   
     enddo
 

@@ -9,8 +9,8 @@ module border_tasks_m
 contains
   subroutine init()
     use starpu_border_kernel_m
-    border_factorize_task = create_task_type((/MODE_RW, MODE_RW/), 2, border_potrf)
-    border_solve_task = create_task_type((/MODE_R, MODE_RW, MODE_RW/), 3, border_trsm)
+    border_factorize_task = create_task((/MODE_RW, MODE_RW/), 2, border_potrf)
+    border_solve_task = create_task((/MODE_R, MODE_RW, MODE_RW/), 3, border_trsm)
   end subroutine
 
   subroutine finalize()
