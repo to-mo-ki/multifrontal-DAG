@@ -3,6 +3,9 @@ module task_m
   use fstarpu_mod
   implicit none
   private
+  integer, parameter, public :: MODE_R = 1
+  integer, parameter, public :: MODE_RW = 2
+  integer, parameter, public :: MODE_RWC = 3
   type, public :: task_c
     type(c_ptr) :: cl
     type(c_ptr), pointer, contiguous :: task(:)
@@ -21,7 +24,7 @@ module task_m
   public :: create_task
 contains
   type(task_c) function create_task(modes, num_params, func) result(this)
-    character(len=*), intent(in) :: modes(:)
+    integer, intent(in) :: modes(:)
     integer, intent(in) :: num_params
     procedure(func_i) :: func
     integer :: i, offset
@@ -38,11 +41,11 @@ contains
     offset = 1 + num_params*3
     do i=1, size(modes)
       select case(modes(i))
-        case ("R")
+        case (MODE_R)
           this%task((i-1)*2 + 1 + offset) = FSTARPU_R
-        case ("RW")
+        case (MODE_RW)
           this%task((i-1)*2 + 1 + offset) = FSTARPU_RW
-        case ("RWC")
+        case (MODE_RWC)
           this%task((i-1)*2 + 1 + offset) = FSTARPU_RW .ior. FSTARPU_COMMUTE
         case default
           print *,  "Wrong access mode" // trim(modes(i))
@@ -52,7 +55,7 @@ contains
   end function
 
   type(c_ptr) function create_cl(modes, func) result(cl)
-    character(len=*), intent(in) :: modes(:)
+    integer, intent(in) :: modes(:)
     procedure(func_i) :: func
     integer :: i
 
@@ -60,11 +63,11 @@ contains
     call fstarpu_codelet_add_cpu_func(cl, c_funloc(func))
     do i=1, size(modes)
       select case(modes(i))
-        case ("R")
+        case (MODE_R)
           call fstarpu_codelet_add_buffer(cl, FSTARPU_R)
-        case ("RW")
+        case (MODE_RW)
           call fstarpu_codelet_add_buffer(cl, FSTARPU_RW)
-        case ("RWC")
+        case (MODE_RWC)
           call fstarpu_codelet_add_buffer(cl, FSTARPU_RW .ior. FSTARPU_COMMUTE)
         case default
           print *,  "Wrong access mode" // trim(modes(i))

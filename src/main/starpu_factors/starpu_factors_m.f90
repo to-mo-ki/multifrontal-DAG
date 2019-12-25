@@ -1,4 +1,4 @@
-module starpu_factors
+module starpu_factors_m
   use contiguous_sets_m
   use jagged_array_m
   use block_matrix_ptrs_m
