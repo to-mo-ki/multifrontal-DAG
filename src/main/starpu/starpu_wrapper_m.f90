@@ -3,7 +3,7 @@ module starpu_wrapper_m
   implicit none
   private
 
-  public :: starpu_init, starpu_finalize, get_vector_ptr, register_vector_data
+  public :: starpu_init, starpu_finalize, task_wait_for_all, get_vector_ptr, register_vector_data
   public :: get_arg1, get_arg2, get_arg3
   
 contains
@@ -47,6 +47,10 @@ contains
 
   subroutine starpu_finalize()
     call fstarpu_shutdown()
+  end subroutine
+
+  subroutine task_wait_for_all()
+    call fstarpu_task_wait_for_all()
   end subroutine
   
   subroutine get_arg1(cl_args, arg1)
