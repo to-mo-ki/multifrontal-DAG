@@ -14,7 +14,7 @@ contains
     double precision, pointer, contiguous :: work(:), supernode(:)
     integer :: supernode_size, work_size
 
-    call get_arg2(cl_args, supernode_size, work_size)
+    call get_arg(cl_args, supernode_size, work_size)
     call get_vector_ptr(buffers, 0, supernode)
     call get_vector_ptr(buffers, 1, work)
     
@@ -27,7 +27,7 @@ contains
     double precision, pointer, contiguous :: diag_supernode(:), solve_work(:), solve_supernode(:)
     integer :: supernode_size, work_size, nrow
 
-    call get_arg3(cl_args, supernode_size, work_size, nrow)
+    call get_arg(cl_args, supernode_size, work_size, nrow)
     call get_vector_ptr(buffers, 0, diag_supernode)
     call get_vector_ptr(buffers, 1, solve_supernode)
     call get_vector_ptr(buffers, 2, solve_work)

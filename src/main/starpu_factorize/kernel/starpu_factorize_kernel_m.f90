@@ -15,7 +15,7 @@ contains
     double precision, pointer, contiguous :: a(:)
     integer :: ncol, info
 
-    call get_arg1(cl_args, ncol)
+    call get_arg(cl_args, ncol)
     call get_vector_ptr(buffers, 0, a)
     call seq_mydpotrf(ncol, a, info)
 
@@ -26,7 +26,7 @@ contains
     double precision, pointer, contiguous :: a(:), b(:)
     integer :: ncol, nrow
 
-    call get_arg2(cl_args, ncol, nrow)
+    call get_arg(cl_args, ncol, nrow)
     call get_vector_ptr(buffers, 0, a)
     call get_vector_ptr(buffers, 1, b)
     call seq_mydtrsm(ncol, nrow, a, b)
@@ -38,7 +38,7 @@ contains
     double precision, pointer, contiguous :: upper_matrix(:), lower_matrix(:), update_matrix(:)
     integer :: ncol, nrow_upper, nrow_lower
 
-    call get_arg3(cl_args, ncol, nrow_lower, nrow_upper)
+    call get_arg(cl_args, ncol, nrow_lower, nrow_upper)
     call get_vector_ptr(buffers, 0, lower_matrix)
     call get_vector_ptr(buffers, 1, upper_matrix)
     call get_vector_ptr(buffers, 2, update_matrix)
@@ -51,7 +51,7 @@ contains
     double precision, pointer, contiguous :: a(:), b(:)
     integer :: nrow, ncol
 
-    call get_arg2(cl_args, nrow, ncol)
+    call get_arg(cl_args, nrow, ncol)
     call get_vector_ptr(buffers, 0, a)
     call get_vector_ptr(buffers, 1, b)
     call seq_mydsyrk(nrow, ncol, a, b)

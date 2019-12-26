@@ -13,7 +13,7 @@ contains
     double precision, pointer, contiguous :: origin(:), left(:), right(:)
     integer :: lsize, rsize
 
-    call get_arg2(cl_args, lsize, rsize)
+    call get_arg(cl_args, lsize, rsize)
     call get_vector_ptr(buffers, 0, origin)
     call get_vector_ptr(buffers, 1, left)
     call get_vector_ptr(buffers, 2, right)
@@ -26,7 +26,7 @@ contains
     double precision, pointer, contiguous :: origin(:), left(:), right(:)
     integer :: lsize, rsize, nrow
 
-    call get_arg3(cl_args, lsize, rsize, nrow)
+    call get_arg(cl_args, lsize, rsize, nrow)
     call get_vector_ptr(buffers, 0, origin)
     call get_vector_ptr(buffers, 1, left)
     call get_vector_ptr(buffers, 2, right)

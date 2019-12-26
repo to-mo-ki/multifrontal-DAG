@@ -15,11 +15,11 @@ contains
     integer, pointer, contiguous  :: col_local(:), row_local(:)
     integer :: ld_from, ld_to, coffset, roffset
     
-    call get_arg4(cl_args, ld_from, ld_to, coffset, roffset)
+    call get_arg(cl_args, ld_from, ld_to, coffset, roffset)
     call get_vector_ptr(buffers, 0, from)
     call get_vector_ptr(buffers, 1, to)
-    call get_int_vector_ptr(buffers, 2, col_local)
-    call get_int_vector_ptr(buffers, 3, row_local)
+    call get_vector_ptr(buffers, 2, col_local)
+    call get_vector_ptr(buffers, 3, row_local)
 
     call seq_extend_add_rect(from, to, col_local, row_local, ld_from, ld_to, coffset, roffset)
 
@@ -31,10 +31,10 @@ contains
     integer, pointer, contiguous  :: local(:)
     integer :: ld_from, ld_to, offset
 
-    call get_arg3(cl_args, ld_from, ld_to, offset)
+    call get_arg(cl_args, ld_from, ld_to, offset)
     call get_vector_ptr(buffers, 0, from)
     call get_vector_ptr(buffers, 1, to)
-    call get_int_vector_ptr(buffers, 2, local)
+    call get_vector_ptr(buffers, 2, local)
 
     call seq_extend_add_tri(from, to, local, ld_from, ld_to, offset)
 

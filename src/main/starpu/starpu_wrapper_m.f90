@@ -3,8 +3,25 @@ module starpu_wrapper_m
   implicit none
   private
 
-  public :: starpu_init, starpu_finalize, task_wait_for_all, get_vector_ptr, register_vector_data
-  public :: get_arg1, get_arg2, get_arg3
+  interface get_arg
+    procedure :: get_arg1
+    procedure :: get_arg2
+    procedure :: get_arg3
+    procedure :: get_arg4
+  end interface
+
+  interface get_vector_ptr
+    procedure :: get_int_vector_ptr
+    procedure :: get_DP_vector_ptr
+  end interface
+
+  interface register_vector_data
+    procedure :: register_int_vector_data
+    procedure :: register_DP_vector_data
+  end interface
+
+  public :: starpu_init, starpu_finalize, task_wait_for_all, get_vector_ptr
+  public :: register_vector_data, unregister_vector_data, get_arg
   
 contains
   subroutine starpu_init()
@@ -15,7 +32,7 @@ contains
     end if
   end subroutine
 
-  subroutine get_vector_ptr(buffers, i, x)
+  subroutine get_DP_vector_ptr(buffers, i, x)
     type(c_ptr), value, intent(in) :: buffers
     integer(c_int), intent(in) :: i
     double precision, pointer, contiguous :: x(:)
@@ -37,12 +54,25 @@ contains
   
   end subroutine
 
-  subroutine register_vector_data(dh, ptr)
+  subroutine register_DP_vector_data(dh, ptr)
     type(c_ptr) :: dh
     double precision, pointer, contiguous :: ptr(:)
     integer(c_int) :: length
     length = ubound(ptr, 1)-lbound(ptr, 1)+1
     call fstarpu_vector_data_register(dh, 0, c_loc(ptr), length, c_sizeof(ptr(1)))
+  end subroutine
+
+  subroutine register_int_vector_data(dh, ptr)
+    type(c_ptr) :: dh
+    integer, pointer, contiguous :: ptr(:)
+    integer(c_int) :: length
+    length = ubound(ptr, 1)-lbound(ptr, 1)+1
+    call fstarpu_vector_data_register(dh, 0, c_loc(ptr), length, c_sizeof(ptr(1)))
+  end subroutine
+
+  subroutine unregister_vector_data(dh)
+    type(c_ptr) :: dh
+    call fstarpu_data_unregister(dh)
   end subroutine
 
   subroutine starpu_finalize()
