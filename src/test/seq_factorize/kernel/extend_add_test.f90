@@ -14,7 +14,7 @@ contains
     allocate(from(4*4), source=[double precision :: 22,0,0,0,32,33,0,0,72,73,77,0,82,83,87,88])
     allocate(to(9*9), source=100d0)
     allocate(local(4), source=[2,3,7,8])
-    call extend_add_tri(from, to, local, 4, 9)
+    call extend_add_tri(from, to, local, 4, 9, 0)
 
     call start_tests("tri")
     call add_test("(2, 2)", to(2+(2-1)*9), 122d0)
@@ -37,7 +37,7 @@ contains
     allocate(to(9*9), source=100d0)
     allocate(col_local(5), source=[1,3,6,8,9])
     allocate(row_local(4), source=[2,3,7,8])
-    call extend_add_rect(from, to, col_local, row_local, 5, 9)
+    call extend_add_rect(from, to, col_local, row_local, 5, 9, 0, 0)
 
     call start_tests("rect1:4*5")
     call add_test("(2, 1)", to(1+(2-1)*9), 121d0)
@@ -72,7 +72,7 @@ contains
     allocate(to(9*9), source=100d0)
     allocate(col_local(4), source=[2,3,7,8])
     allocate(row_local(5), source=[1,3,6,8,9])
-    call extend_add_rect(from, to, col_local, row_local, 4, 9)
+    call extend_add_rect(from, to, col_local, row_local, 4, 9, 0, 0)
 
     call start_tests("rect2:5*4")
     call add_test("(1, 2)", to(2+(1-1)*9), 112d0)

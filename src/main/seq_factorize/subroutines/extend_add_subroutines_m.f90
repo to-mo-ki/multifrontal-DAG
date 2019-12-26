@@ -32,7 +32,7 @@ contains
     parent_block => factors%get_matrix(pnode, pi, pj)
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
-    call extend_add_rect(child_block(roffset*ldc+coffset+1:), parent_block, jlocal, ilocal, ldc, ldp)
+    call extend_add_rect(child_block, parent_block, jlocal, ilocal, ldc, ldp, coffset, roffset)
     
   end subroutine
   
@@ -54,7 +54,7 @@ contains
     parent_block => factors%get_matrix(pnode, pj, pj)
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
-    call extend_add_tri(child_block(offset*ldc+offset+1:), parent_block, local, ldc, ldp)
+    call extend_add_tri(child_block, parent_block, local, ldc, ldp, offset)
 
   end subroutine
 

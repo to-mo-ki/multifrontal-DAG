@@ -34,7 +34,7 @@ contains
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
 
-    call extend_add_rect_task%insert_task((/ldc, ldp/), (/child_block, parent_block, jlocal, ilocal/))
+    call extend_add_rect_task%insert_task((/ldc, ldp, coffset, roffset/), (/child_block, parent_block, jlocal, ilocal/))
     
   end subroutine
   
@@ -56,7 +56,7 @@ contains
     parent_block = factors%get_matrix(pnode, pj, pj)
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
-    call extend_add_tri_task%insert_task((/ldc, ldp/), (/child_block, parent_block, local/))
+    call extend_add_tri_task%insert_task((/ldc, ldp, offset/), (/child_block, parent_block, local/))
 
   end subroutine
 

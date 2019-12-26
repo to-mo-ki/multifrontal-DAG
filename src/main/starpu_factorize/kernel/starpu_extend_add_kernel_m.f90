@@ -13,15 +13,15 @@ contains
     type(c_ptr), value, intent(in) :: buffers, cl_args
     double precision, pointer, contiguous :: from(:), to(:)
     integer, pointer, contiguous  :: col_local(:), row_local(:)
-    integer :: ld_from, ld_to
+    integer :: ld_from, ld_to, coffset, roffset
     
-    call get_arg2(cl_args, ld_from, ld_to)
+    call get_arg4(cl_args, ld_from, ld_to, coffset, roffset)
     call get_vector_ptr(buffers, 0, from)
     call get_vector_ptr(buffers, 1, to)
     call get_int_vector_ptr(buffers, 2, col_local)
     call get_int_vector_ptr(buffers, 3, row_local)
 
-    call seq_extend_add_rect(from, to, col_local, row_local, ld_from, ld_to)
+    call seq_extend_add_rect(from, to, col_local, row_local, ld_from, ld_to, coffset, roffset)
 
   end subroutine
 
@@ -29,15 +29,14 @@ contains
     type(c_ptr), value, intent(in) :: buffers, cl_args
     double precision, pointer, contiguous :: from(:), to(:)
     integer, pointer, contiguous  :: local(:)
-    integer :: ld_from, ld_to
-    integer :: i, j
+    integer :: ld_from, ld_to, offset
 
-    call get_arg2(cl_args, ld_from, ld_to)
+    call get_arg3(cl_args, ld_from, ld_to, offset)
     call get_vector_ptr(buffers, 0, from)
     call get_vector_ptr(buffers, 1, to)
     call get_int_vector_ptr(buffers, 2, local)
 
-    call seq_extend_add_tri(from, to, local, ld_from, ld_to)
+    call seq_extend_add_tri(from, to, local, ld_from, ld_to, offset)
 
   end subroutine
 

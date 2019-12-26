@@ -67,4 +67,10 @@ contains
     call fstarpu_unpack_arg(cl_args,(/c_loc(arg1), c_loc(arg2), c_loc(arg3)/))
   end subroutine
 
+  subroutine get_arg4(cl_args, arg1, arg2, arg3, arg4)
+    type(c_ptr), value, intent(in) :: cl_args
+    integer, intent(out) :: arg1, arg2, arg3, arg4
+    call fstarpu_unpack_arg(cl_args,(/c_loc(arg1), c_loc(arg2), c_loc(arg3), c_loc(arg4)/))
+  end subroutine
+
 end module
