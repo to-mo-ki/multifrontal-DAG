@@ -28,8 +28,8 @@ subroutine factorize_test
     allocate(a, source=[double precision::1,0,0,2,8,0,3,12,27,4,16,36,5,20,45])
     allocate(b, source=[double precision::64,0,80,125])
 
-    call register_vector_data(a_dh, a)
-    call register_vector_data(b_dh, b)
+    a_dh = register_vector_data(a)
+    b_dh = register_vector_data(b)
     
     call border_factorize_task%insert_task((/3,2/),(/a_dh, b_dh/))
     call task_wait_for_all
@@ -54,9 +54,9 @@ subroutine factorize_test
     allocate(lower_a, source=[double precision::1,6,18,4,18,45])
     allocate(lower_b(4), source=0d0)
 
-    call register_vector_data(diag_a_dh, diag_a)
-    call register_vector_data(lower_a_dh, lower_a)
-    call register_vector_data(lower_b_dh, lower_b)
+    diag_a_dh = register_vector_data(diag_a)
+    lower_a_dh = register_vector_data(lower_a)
+    lower_b_dh = register_vector_data(lower_b)
     
     call border_solve_task%insert_task((/3,2,2/),(/diag_a_dh, lower_a_dh, lower_b_dh/))
     call task_wait_for_all
@@ -80,9 +80,9 @@ subroutine factorize_test
     allocate(lower_a, source=[double precision::1,6,4,18])
     allocate(lower_b(6), source=0d0)
 
-    call register_vector_data(diag_a_dh, diag_a)
-    call register_vector_data(lower_a_dh, lower_a)
-    call register_vector_data(lower_b_dh, lower_b)
+    diag_a_dh = register_vector_data(diag_a)
+    lower_a_dh = register_vector_data(lower_a)
+    lower_b_dh = register_vector_data(lower_b)
     
     call border_solve_task%insert_task((/2,3,2/),(/diag_a_dh, lower_a_dh, lower_b_dh/))
     call task_wait_for_all

@@ -2,12 +2,14 @@ module block_local_index_info_m
   use jagged_array_m
   use contiguous_sets_m
   use jagged_array_3D_m
+  use jagged_array_cptr_m
   use node_data_m
   implicit none
   private
   type, public :: block_local_index_info_c
     private
-    type(contiguous_sets_c), pointer :: node_ptr, block_ptr
+    type(contiguous_sets_c), pointer, public :: node_ptr
+    type(contiguous_sets_c), pointer :: block_ptr
     type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: parent, child
     type(jagged_array_c), pointer :: local_index

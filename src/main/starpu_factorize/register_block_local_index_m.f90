@@ -15,7 +15,7 @@ contains
 
     do node=1, block_local_index%get_num_1d()
       do i=1, block_local_index%get_num_2d(node)
-        call register_vector_data(starpu_block_local_index%get(node, i), block_local_index%get_array(node, i))
+        starpu_block_local_index%get(node, i) = register_vector_data(block_local_index%get_array(node, i))
       enddo
     enddo
 

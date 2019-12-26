@@ -16,7 +16,7 @@ contains
 
     call register_supernode(node_data, starpu_factors, factors)
     call register_work(node_data, starpu_factors, factors)
-    call register_boder(node_data, starpu_factors, factors)
+    call register_border(node_data, starpu_factors, factors)
 
   end subroutine
 
@@ -34,7 +34,7 @@ contains
       endif
       do j=1, jend
         do i=j, node_data%get_num_matrix_block(node)
-          call register_vector_data(starpu_factors%get_supernode(node,i,j), factors%get_supernode(node,i,j))
+          starpu_factors%get_supernode(node,i,j) = register_vector_data(factors%get_supernode(node,i,j))
         enddo
       enddo
     enddo
@@ -53,7 +53,7 @@ contains
       endif
       j = node_data%get_work_start_index(node)
       do i=j, node_data%get_num_matrix_block(node)
-        call register_vector_data(starpu_factors%get_border(node,i,j), factors%get_border(node,i,j))
+        starpu_factors%get_border(node,i,j) = register_vector_data(factors%get_border(node,i,j))
       enddo
     enddo
     
@@ -68,7 +68,7 @@ contains
     do node=1, node_data%num_node
       do j=node_data%get_work_start_index(node), node_data%get_num_matrix_block(node)
         do i=j, node_data%get_num_matrix_block(node)
-          call register_vector_data(starpu_factors%get_work(node,i,j), factors%get_work(node,i,j))
+          starpu_factors%get_work(node,i,j) = register_vector_data(factors%get_work(node,i,j))
         enddo
       enddo
     enddo

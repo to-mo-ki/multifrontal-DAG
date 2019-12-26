@@ -17,10 +17,10 @@ module starpu_factors_m
     procedure :: get_border
   end type
 
-  public :: create_factors
+  public :: create_starpu_factors
 
 contains
-  function create_factors(node_data)result(this)
+  function create_starpu_factors(node_data)result(this)
     type(starpu_factors_c), pointer :: this
     type(node_data_c), pointer :: node_data
     
@@ -32,8 +32,9 @@ contains
   
   end function
 
-  type(c_ptr) function get_matrix(this, node, i, j) result(ptr)
+  function get_matrix(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: node, i, j
     integer :: nc
     type(block_matrix_ptrs_c), pointer :: block_matrix_ptrs
@@ -55,30 +56,33 @@ contains
         block_matrix_ptrs => this%border
       endif
     endif
-    ptr = block_matrix_ptrs%get(node, i, j)
+    ptr => block_matrix_ptrs%get(node, i, j)
     
   end function
 
-  type(c_ptr) function get_supernode(this, node, i, j) result(ptr)
+  function get_supernode(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: node, i, j
     
-    ptr = this%supernode%get(node, i, j)
+    ptr => this%supernode%get(node, i, j)
   end function
 
-  type(c_ptr) function get_work(this, node, i, j) result(ptr)
+  function get_work(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: node, i, j
     
-    ptr = this%work%get(node, i, j)
+    ptr => this%work%get(node, i, j)
 
   end function
 
-  type(c_ptr) function get_border(this, node, i, j) result(ptr)
+  function get_border(this, node, i, j) result(ptr)
     class(starpu_factors_c) :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: node, i, j
     
-    ptr = this%border%get(node, i, j)
+    ptr => this%border%get(node, i, j)
 
   end function
 

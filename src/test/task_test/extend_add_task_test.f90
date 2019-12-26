@@ -6,7 +6,7 @@ program extend_add_task_test
   implicit none
   double precision, pointer, contiguous :: from(:), to(:)
   integer, pointer, contiguous :: local(:), col_local(:), row_local(:)
-  type(c_ptr) :: from_dh, to_dh, local_dh, col_local_dh, row_local_dh
+  type(c_ptr), target :: from_dh, to_dh, local_dh, col_local_dh, row_local_dh
 
   call starpu_init
   call task_init
@@ -22,9 +22,9 @@ contains
     allocate(to(9*9), source=100d0)
     allocate(local(4), source=[2,3,7,8])
 
-    call register_vector_data(from_dh, from)
-    call register_vector_data(to_dh, to)
-    call register_vector_data(local_dh, local)
+    from_dh = register_vector_data(from)
+    to_dh = register_vector_data(to)
+    local_dh = register_vector_data(local)
 
     call extend_add_tri_task%insert_task((/4, 9, 0/), (/from_dh, to_dh, local_dh/))
     call task_wait_for_all
@@ -54,10 +54,10 @@ contains
     allocate(col_local(5), source=[1,3,6,8,9])
     allocate(row_local(4), source=[2,3,7,8])
 
-    call register_vector_data(from_dh, from)
-    call register_vector_data(to_dh, to)
-    call register_vector_data(col_local_dh, col_local)
-    call register_vector_data(row_local_dh, row_local)
+    from_dh = register_vector_data(from)
+    to_dh = register_vector_data(to)
+    col_local_dh = register_vector_data(col_local)
+    row_local_dh = register_vector_data(row_local)
 
     call extend_add_rect_task%insert_task((/5,9,0,0/), (/from_dh, to_dh, col_local_dh, row_local_dh/))
     call task_wait_for_all
@@ -99,10 +99,10 @@ contains
     allocate(col_local(4), source=[2,3,7,8])
     allocate(row_local(5), source=[1,3,6,8,9])
 
-    call register_vector_data(from_dh, from)
-    call register_vector_data(to_dh, to)
-    call register_vector_data(col_local_dh, col_local)
-    call register_vector_data(row_local_dh, row_local)
+    from_dh = register_vector_data(from)
+    to_dh = register_vector_data(to)
+    col_local_dh = register_vector_data(col_local)
+    row_local_dh = register_vector_data(row_local)
     
     call extend_add_rect_task%insert_task((/4,9,0,0/), (/from_dh, to_dh, col_local_dh, row_local_dh/))
     call task_wait_for_all

@@ -24,7 +24,7 @@ contains
     type(c_ptr) :: a_dh
     
     allocate(a, source=[double precision::1,0,0,2,8,0,3,12,27])
-    call register_vector_data(a_dh, a)
+    a_dh = register_vector_data(a)
     call factorize_task%insert_task((/3/), (/a_dh/))
     call task_wait_for_all
     call assert_equal("factorize", a, [double precision::1,0,0,2,2,0,3,3,3])
@@ -41,8 +41,8 @@ contains
     allocate(a, source=[double precision::1,0,0,2,2,0,3,3,3])
     allocate(b, source=[double precision::1,6,18,4,18,45])
 
-    call register_vector_data(a_dh, a)
-    call register_vector_data(b_dh, b)
+    a_dh = register_vector_data(a)
+    b_dh = register_vector_data(b)
     call solve_task%insert_task((/3, 2/), (/a_dh, b_dh/))
     call task_wait_for_all
     call assert_equal("solve", b, [double precision::1,2,3,4,5,6])
@@ -59,8 +59,8 @@ contains
     allocate(a, source=[double precision::1,2,3,4,5,6])
     allocate(b(4), source=1d0)
 
-    call register_vector_data(a_dh, a)
-    call register_vector_data(b_dh, b)
+    a_dh = register_vector_data(a)
+    b_dh = register_vector_data(b)
     call sym_update_task%insert_task((/2,3/),(/a_dh, b_dh/))
     call task_wait_for_all
     call assert_equal("sym_update", b, [-13d0, 1d0, -31d0, -76d0])
@@ -83,9 +83,9 @@ contains
     allocate(lower, source=[(dble(i),i=1,6)])
     allocate(upper, source=[(dble(i),i=1,12)])
     allocate(update(8), source=1d0)
-    call register_vector_data(lower_dh, lower)
-    call register_vector_data(upper_dh, upper)
-    call register_vector_data(update_dh, update)
+    lower_dh = register_vector_data(lower)
+    upper_dh = register_vector_data(upper)
+    update_dh = register_vector_data(update)
     call update_task%insert_task((/3,2,4/),(/lower_dh, upper_dh, update_dh/))
     call task_wait_for_all
     call assert_equal("update", update, [double precision::-13,-31,-49,-67,-31,-76,-121,-166])

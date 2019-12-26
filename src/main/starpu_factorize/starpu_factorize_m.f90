@@ -3,6 +3,7 @@ module starpu_factorize_m
   use starpu_factors_m
   use block_local_index_info_m
   use jagged_array_cptr_m
+  use starpu_wrapper_m
   implicit none
 
   public :: starpu_factorize
@@ -24,6 +25,8 @@ contains
       endif
       call extend_add(node_data, factors, block_local_index, block_local_index_info, node, parent(node))
     enddo
+
+    call task_wait_for_all
     
   end subroutine
 

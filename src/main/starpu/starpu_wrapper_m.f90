@@ -54,21 +54,21 @@ contains
   
   end subroutine
 
-  subroutine register_DP_vector_data(dh, ptr)
+  function register_DP_vector_data(ptr) result(dh)
     type(c_ptr) :: dh
     double precision, pointer, contiguous :: ptr(:)
     integer(c_int) :: length
     length = ubound(ptr, 1)-lbound(ptr, 1)+1
     call fstarpu_vector_data_register(dh, 0, c_loc(ptr), length, c_sizeof(ptr(1)))
-  end subroutine
+  end function
 
-  subroutine register_int_vector_data(dh, ptr)
+  function register_int_vector_data(ptr) result(dh)
     type(c_ptr) :: dh
     integer, pointer, contiguous :: ptr(:)
     integer(c_int) :: length
     length = ubound(ptr, 1)-lbound(ptr, 1)+1
     call fstarpu_vector_data_register(dh, 0, c_loc(ptr), length, c_sizeof(ptr(1)))
-  end subroutine
+  end function
 
   subroutine unregister_vector_data(dh)
     type(c_ptr) :: dh

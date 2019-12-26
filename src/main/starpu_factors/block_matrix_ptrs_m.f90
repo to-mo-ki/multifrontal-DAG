@@ -54,13 +54,14 @@ contains
     
   end function
 
-  type(c_ptr) function get(this, node, i, j) result(ptr)
+  function get(this, node, i, j) result(ptr)
     class(block_matrix_ptrs_c) :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: node, i, j
     type(c_ptr), pointer, contiguous :: array(:)
 
     array => this%val(this%ptr%get_first(node):this%ptr%get_last(node))
-    ptr = array(this%extractor%get_pos(node, i, j))
+    ptr => array(this%extractor%get_pos(node, i, j))
 
   end function  
 end module

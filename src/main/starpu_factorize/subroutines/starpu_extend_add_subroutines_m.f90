@@ -17,8 +17,8 @@ contains
     type(jagged_array_cptr_c), pointer :: block_local_index
     type(block_local_index_info_c), pointer :: block_local_index_info
     integer, intent(in) :: i, j, cnode, pnode
-    type(c_ptr) :: ilocal, jlocal
-    type(c_ptr) :: parent_block, child_block
+    type(c_ptr), pointer :: ilocal, jlocal
+    type(c_ptr), pointer :: parent_block, child_block
     integer :: ldp, ldc, roffset, coffset, pi, pj, ci, cj
 
     ci = block_local_index_info%get_child_num(cnode, i)
@@ -27,10 +27,10 @@ contains
     pj = block_local_index_info%get_parent_num(cnode, j)
     roffset = block_local_index_info%get_block_offset(cnode, i)
     coffset = block_local_index_info%get_block_offset(cnode, j)
-    ilocal = block_local_index%get(cnode, i)
-    jlocal = block_local_index%get(cnode, j)
-    child_block = factors%get_work(cnode, ci, cj)
-    parent_block = factors%get_matrix(pnode, pi, pj)
+    ilocal => block_local_index%get(cnode, i)
+    jlocal => block_local_index%get(cnode, j)
+    child_block => factors%get_work(cnode, ci, cj)
+    parent_block => factors%get_matrix(pnode, pi, pj)
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
 
@@ -44,16 +44,16 @@ contains
     type(jagged_array_cptr_c), pointer :: block_local_index
     type(block_local_index_info_c), pointer :: block_local_index_info
     integer, intent(in) :: j, cnode, pnode
-    type(c_ptr) :: parent_block, child_block
+    type(c_ptr), pointer :: parent_block, child_block
     integer :: ldc, ldp, cj, pj, offset
-    type(c_ptr) :: local
+    type(c_ptr), pointer :: local
     
     cj = block_local_index_info%get_child_num(cnode, j)
     pj = block_local_index_info%get_parent_num(cnode, j)
     offset = block_local_index_info%get_block_offset(cnode, j)
-    local = block_local_index%get(cnode, j)
-    child_block = factors%get_work(cnode, cj, cj)
-    parent_block = factors%get_matrix(pnode, pj, pj)
+    local => block_local_index%get(cnode, j)
+    child_block => factors%get_work(cnode, cj, cj)
+    parent_block => factors%get_matrix(pnode, pj, pj)
     ldp = node_data%get_matrix_block_size(pj, pnode)
     ldc = node_data%get_work_block_size(cj, cnode)
     call extend_add_tri_task%insert_task((/ldc, ldp, offset/), (/child_block, parent_block, local/))

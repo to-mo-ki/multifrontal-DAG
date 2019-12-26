@@ -24,13 +24,14 @@ contains
 
   end function
 
-  type(c_ptr) function get(this, i, j) result(ptr)
+  function get(this, i, j) result(ptr)
     class(jagged_array_cptr_c), target :: this
+    type(c_ptr), pointer :: ptr
     integer, intent(in) :: i, j
     type(c_ptr), pointer, contiguous :: array(:)
     
     array => this%val(this%set%get_first(i):this%set%get_last(i))
-    ptr = array(j)
+    ptr => array(j)
   end function
 
 end module

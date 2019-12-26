@@ -30,9 +30,9 @@ contains
     left = -1
     right = -1
 
-    call register_vector_data(origin_dh, origin)
-    call register_vector_data(left_dh, left)
-    call register_vector_data(right_dh, right)
+    origin_dh = register_vector_data(origin)
+    left_dh = register_vector_data(left)
+    right_dh = register_vector_data(right)
 
     call split_tri_matrix_task%insert_task((/3, 4/), (/origin_dh, left_dh, right_dh/))
     call task_wait_for_all
@@ -57,9 +57,9 @@ contains
     left = -1
     right = -1
     
-    call register_vector_data(origin_dh, origin)
-    call register_vector_data(left_dh, left)
-    call register_vector_data(right_dh, right)
+    origin_dh = register_vector_data(origin)
+    left_dh = register_vector_data(left)
+    right_dh = register_vector_data(right)
 
     call split_rect_matrix_task%insert_task((/2, 3, 4/), (/origin_dh, left_dh, right_dh/))
     call task_wait_for_all

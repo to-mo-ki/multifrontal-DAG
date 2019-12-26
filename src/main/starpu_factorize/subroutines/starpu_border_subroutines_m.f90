@@ -12,11 +12,11 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: factors
     integer, intent(in) :: node, j
-    type(c_ptr) :: supernode, work
+    type(c_ptr), pointer :: supernode, work
     integer :: ssize, wsize
 
-    supernode = factors%get_supernode(node, j, j)
-    work = factors%get_work(node, j, j)
+    supernode => factors%get_supernode(node, j, j)
+    work => factors%get_work(node, j, j)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
     call border_factorize_task%insert_task((/ssize, wsize/), (/supernode, work/))
@@ -27,13 +27,13 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: factors
     integer, intent(in) :: node, i, j
-    type(c_ptr) :: diag_supernode, solve_supernode, solve_work
+    type(c_ptr), pointer :: diag_supernode, solve_supernode, solve_work
     integer :: nrow, ssize, wsize
     
     nrow = node_data%get_matrix_block_size(i, node)
-    diag_supernode = factors%get_supernode(node, j, j)
-    solve_supernode = factors%get_supernode(node, i, j)
-    solve_work = factors%get_work(node, i, j)
+    diag_supernode => factors%get_supernode(node, j, j)
+    solve_supernode => factors%get_supernode(node, i, j)
+    solve_work => factors%get_work(node, i, j)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
     call border_solve_task%insert_task((/ssize, wsize, nrow/), (/diag_supernode, solve_supernode, solve_work/))
@@ -44,14 +44,14 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: factors
     integer, intent(in) :: node, i, j
-    type(c_ptr) :: rect, diag
+    type(c_ptr), pointer :: rect, diag
     integer :: nrow, ssize, wsize
 
     nrow = node_data%get_matrix_block_size(i, node)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
-    rect = factors%get_supernode(node, i, j)
-    diag = factors%get_matrix(node, i, i)
+    rect => factors%get_supernode(node, i, j)
+    diag => factors%get_matrix(node, i, i)
     call factorize_task%insert_task((/nrow, ssize/), (/rect, diag/))
 
   end subroutine
@@ -60,16 +60,16 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: factors
     integer, intent(in) :: node, upper_idx, lower_idx, col_idx
-    type(c_ptr) :: lower, upper, update
+    type(c_ptr), pointer :: lower, upper, update
     integer :: upper_n, lower_n, ssize, wsize
 
     upper_n = node_data%get_matrix_block_size(upper_idx, node)
     lower_n = node_data%get_matrix_block_size(lower_idx, node)
     ssize = node_data%border_supernode_size(node)
     wsize = node_data%border_work_size(node)
-    upper = factors%get_supernode(node, upper_idx, col_idx)
-    lower = factors%get_supernode(node, lower_idx, col_idx)
-    update = factors%get_matrix(node, lower_idx, upper_idx)
+    upper => factors%get_supernode(node, upper_idx, col_idx)
+    lower => factors%get_supernode(node, lower_idx, col_idx)
+    update => factors%get_matrix(node, lower_idx, upper_idx)
     call update_task%insert_task((/ssize, lower_n, upper_n/), (/lower, upper, update/))
 
   end subroutine
