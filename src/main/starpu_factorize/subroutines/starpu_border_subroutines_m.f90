@@ -52,7 +52,7 @@ contains
     wsize = node_data%border_work_size(node)
     rect => factors%get_supernode(node, i, j)
     diag => factors%get_matrix(node, i, i)
-    call factorize_task%insert_task((/nrow, ssize/), (/rect, diag/))
+    call sym_update_task%insert_task((/nrow, ssize/), (/rect, diag/))
 
   end subroutine
 
