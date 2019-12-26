@@ -1,4 +1,4 @@
-module block_local_index_creator_m
+module block_local_index_info_creator_m
   use contiguous_sets_m
   use jagged_array_m
   use jagged_array_3D_m

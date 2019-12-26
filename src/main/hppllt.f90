@@ -51,7 +51,8 @@ contains
     rh => create_right_hand(node_data, nb)
     supernodal_index => create_supernodal_index(node_sets, a_structure, l_structure)
     local_index => create_local_index(l_structure, node_sets, tree_child)
-    block_local_index => create_block_local_index(node_data, local_index)
+    block_local_index_info => create_block_local_index_info(node_data, local_index)
+    block_local_index => block_local_index_info%create_block_local_index()
 
   end subroutine
 
@@ -69,7 +70,7 @@ contains
     ccs => create_ccs(supernodal_index, ccs_val)
     call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
-    call seq_factorize(node_data, factors, block_local_index, parent)
+    call seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
 
   end subroutine
 
@@ -84,8 +85,8 @@ contains
     allocate(tmp_b(size(perm)))
     call permutate(perm, b, tmp_b)
     call rh%set_val(tmp_b)
-    call seq_forward(node_data, factors, rh, block_local_index, parent)
-    call seq_backward(node_data, factors, rh, block_local_index, parent)
+    call seq_forward(node_data, factors, rh, block_local_index, block_local_index_info, parent)
+    call seq_backward(node_data, factors, rh, block_local_index, block_local_index_info, parent)
     call inverse_permutate(perm, tmp_b, b)
 
   end subroutine

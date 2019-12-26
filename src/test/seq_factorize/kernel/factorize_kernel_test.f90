@@ -71,8 +71,8 @@ contains
     double precision :: lower(6), upper(12), update(8), check(8)
     integer :: i
 
-    upper = [ (dble(i),i=1,12) ]
     lower = [ (dble(i),i=1,6) ]
+    upper = [ (dble(i),i=1,12) ]
     update = 1.0d0
     call mydgemm(3, 2, 4, lower, upper, update)
     check = [-13d0, -31d0, -49d0, -67d0, -31d0, -76d0, -121d0, -166d0]

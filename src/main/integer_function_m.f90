@@ -7,7 +7,7 @@ module integer_function_m
     procedure :: partial_sum2
   end interface
 
-  public :: partial_sum, div_ceiling, mod2
+  public :: partial_sum, div_ceiling, mod2, triangular_pos
 
 contains
 
@@ -33,6 +33,11 @@ contains
   integer function mod2(a, p)
     integer, intent(in) :: a, p
     mod2 = mod(a-1, p)+1
+  end function
+
+  integer function triangular_pos(i, j, n)
+    integer, intent(in) :: i, j, n
+    triangular_pos = partial_sum(n-j+2, n) + i-j + 1
   end function
 
 end module

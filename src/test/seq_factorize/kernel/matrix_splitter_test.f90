@@ -7,25 +7,24 @@ program matrix_splitter_test
 
 contains
   subroutine diag_test()
-    double precision :: origin(7, 7), left(3*7), right(4*4)
+    double precision :: origin(7*7), left(3*7), right(4*4)
     integer :: pos_left(18), pos_right(10)
     double precision :: check_left(18), check_right(10)
     integer :: i, j
     
     do i=1, 7
       do j=1, i
-        origin(j, i) = dble(i*10+j)
+        origin((i-1)*7+j) = dble(i*10+j)
       enddo
     enddo
+
+    left = -1
+    right = -1
+
     call split_tri_matrix(origin, left, right, 3, 4)
     
-    pos_left = [1, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
-    check_left = [11d0, 21d0, 22d0, 31d0, 32d0, 33d0, 41d0, 42d0, 43d0, 51d0, 52d0, 53d0, 61d0, 62d0, 63d0, 71d0, 72d0, 73d0]
-    call assert_equal_partial_array("diag:left", left, pos_left, 18, check_left)
-    
-    pos_right = [1, 5, 6, 9, 10, 11, 13, 14, 15, 16]
-    check_right = [44d0, 54d0, 55d0, 64d0, 65d0, 66d0, 74d0, 75d0, 76d0, 77d0]
-    call assert_equal_partial_array("diag:right", right, pos_right, 10, check_right)
+    call assert_equal("diag:left", left, [double precision::11,-1,-1,21,22,-1,31,32,33,41,42,43,51,52,53,61,62,63,71,72,73])
+    call assert_equal("diag:right", right, [double precision::44,-1,-1,-1,54,55,-1,-1,64,65,66,-1,74,75,76,77])
 
   end subroutine
 

@@ -2,7 +2,8 @@ module seq_forward_m
   use node_data_m
   use factors_m
   use right_hand_m
-  use block_local_index_m
+  use jagged_array_3D_m
+  use block_local_index_info_m
   implicit none
   private
   
@@ -10,11 +11,12 @@ module seq_forward_m
   
 contains
 
-  subroutine seq_forward(node_data, factors, rh, block_local_index, parent)
+  subroutine seq_forward(node_data, factors, rh, block_local_index, block_local_index_info, parent)
     type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
     type(right_hand_c), pointer :: rh
-    type(block_local_index_c), pointer :: block_local_index
+    type(jagged_array_3D_c), pointer :: block_local_index
+    type(block_local_index_info_c), pointer :: block_local_index_info
     integer, contiguous :: parent(:)
     integer :: node
 
@@ -24,7 +26,7 @@ contains
       if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
         call border_forward2(node_data, factors, rh, node)
       endif
-      call sparse_add(rh, block_local_index, node, parent(node))
+      call sparse_add(rh, block_local_index, block_local_index_info, node, parent(node))
     enddo
 
   end subroutine
@@ -64,15 +66,16 @@ contains
     
   end subroutine
 
-  subroutine sparse_add(rh, block_local_index, node, parent_node)
+  subroutine sparse_add(rh, block_local_index, block_local_index_info, node, parent_node)
     use sparse_add_subroutines_m
     type(right_hand_c), pointer :: rh
-    type(block_local_index_c), pointer :: block_local_index
+    type(jagged_array_3D_c), pointer :: block_local_index
+    type(block_local_index_info_c), pointer :: block_local_index_info
     integer, intent(in) :: node, parent_node
     integer :: i
 
-    do i=1, block_local_index%get_num_block(node)
-      call scatter_add(rh, block_local_index, i, node, parent_node)
+    do i=1, block_local_index_info%get_num_block(node)
+      call scatter_add(rh, block_local_index, block_local_index_info, i, node, parent_node)
     enddo
 
   end subroutine
