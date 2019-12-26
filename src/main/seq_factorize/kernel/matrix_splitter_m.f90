@@ -20,7 +20,7 @@ contains
     enddo
 
     do i=1, rsize
-      do j=1, rsize
+      do j=1, i
         right(j, i) = origin(j+lsize, i+lsize)
       enddo
     enddo
