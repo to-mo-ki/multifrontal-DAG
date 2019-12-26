@@ -35,7 +35,7 @@ contains
     integer, pointer, contiguous :: array(:)
     integer :: idx
 
-    idx = this%ptr%get_first(j)-1+i
+    idx = this%ptr%get_first(i)-1+j
     array => this%val%get_array(idx)
 
   end function
@@ -60,7 +60,7 @@ contains
     integer, intent(in) :: i, j
     integer :: idx
     
-    idx = this%ptr%get_first(j)-1+i
+    idx = this%ptr%get_first(i)-1+j
     num_3d = this%val%get_array_length(idx)
     
   end function

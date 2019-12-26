@@ -1,7 +1,8 @@
 module seq_factorize_m
   use node_data_m
   use factors_m
-  use block_local_index_m
+  use block_local_index_info_m
+  use jagged_array_3D_m
   implicit none
   private
 
@@ -9,10 +10,11 @@ module seq_factorize_m
   
 contains
 
-  subroutine seq_factorize(node_data, factors, block_local_index, parent)
+  subroutine seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
     type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
-    type(block_local_index_c), pointer :: block_local_index
+    type(jagged_array_3D_c), pointer :: block_local_index
+    type(block_local_index_info_c), pointer :: block_local_index_info
     integer, contiguous :: parent(:)
     integer :: node
 
@@ -21,7 +23,7 @@ contains
       if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
         call border_factorize2(node_data, factors, node)
       endif
-      call extend_add(node_data, factors, block_local_index, node, parent(node))
+      call extend_add(node_data, factors, block_local_index, block_local_index_info, node, parent(node))
     enddo
     
   end subroutine
@@ -76,19 +78,20 @@ contains
 
   end subroutine
 
-  subroutine extend_add(node_data, factors, block_local_index, node, parent_node)
+  subroutine extend_add(node_data, factors, block_local_index, block_local_index_info, node, parent_node)
     use extend_add_subroutines_m
     type(node_data_c), pointer :: node_data
     type(factors_c), pointer :: factors
-    type(block_local_index_c), pointer :: block_local_index
+    type(jagged_array_3D_c), pointer :: block_local_index
+    type(block_local_index_info_c), pointer :: block_local_index_info
     integer, intent(in) :: node, parent_node
     integer :: i, j, num_block
 
-    num_block = block_local_index%get_num_block(node)
+    num_block = block_local_index_info%get_num_block(node)
     do j=1, num_block
-      call extend_add_diag(node_data, factors, block_local_index, j, node, parent_node)
+      call extend_add_diag(node_data, factors, block_local_index, block_local_index_info, j, node, parent_node)
       do i=j+1, num_block
-        call extend_add_ndiag(node_data, factors, block_local_index, i, j, node, parent_node)
+        call extend_add_ndiag(node_data, factors, block_local_index, block_local_index_info, i, j, node, parent_node)
       enddo
     enddo
 

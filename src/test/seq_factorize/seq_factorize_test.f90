@@ -1,7 +1,8 @@
 program seq_factorize_test
   use factors_m
-  use block_local_index_m
+  use block_local_index_info_m
   use jagged_array_m
+  use jagged_array_3D_m
   use contiguous_sets_m
   use seq_factorize_m
   use test_util
@@ -10,7 +11,8 @@ program seq_factorize_test
   use node_data_m
   implicit none
   type(factors_c), pointer :: factors
-  type(block_local_index_c), pointer :: block_local_index
+  type(jagged_array_3D_c), pointer :: block_local_index
+  type(block_local_index_info_c), pointer :: block_local_index_info
   type(contiguous_sets_c), pointer :: node_sets
   type(jagged_array_c), pointer :: local_index, supernodal_index
   type(ccs_c), pointer :: ccs
@@ -26,9 +28,10 @@ program seq_factorize_test
   ccs => create_ccs(supernodal_index, val)
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data)
-  block_local_index => create_block_local_index(node_data, local_index)
+  block_local_index_info => create_block_local_index_info(node_data, local_index)
+  block_local_index => block_local_index_info%create_block_local_index()
   call set_coefficient(node_data, ccs, node_sets, factors)
-  call seq_factorize(node_data, factors, block_local_index, [2,3,0])
+  call seq_factorize(node_data, factors, block_local_index, block_local_index_info, [2,3,0])
   call check_nb_2()
 
   nb = 3
@@ -39,9 +42,10 @@ program seq_factorize_test
   ccs => create_ccs(supernodal_index, val)
   node_data => create_node_data([4,5,4],[5,3,0],nb)
   factors => create_factors(node_data)
-  block_local_index => create_block_local_index(node_data, local_index)
+  block_local_index_info => create_block_local_index_info(node_data, local_index)
+  block_local_index => block_local_index_info%create_block_local_index()
   call set_coefficient(node_data, ccs, node_sets, factors)
-  call seq_factorize(node_data, factors, block_local_index, [2,3,0])
+  call seq_factorize(node_data, factors, block_local_index, block_local_index_info, [2,3,0])
   call check_nb_3()
   
 contains

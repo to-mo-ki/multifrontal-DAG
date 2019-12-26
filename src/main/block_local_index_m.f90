@@ -1,18 +1,18 @@
-module block_local_index_m
+module block_local_index_info_m
   use jagged_array_m
   use contiguous_sets_m
   use jagged_array_3D_m
   use node_data_m
   implicit none
   private
-  type, public :: block_local_index_c
+  type, public :: block_local_index_info_c
     private
     type(contiguous_sets_c), pointer :: node_ptr, block_ptr
-    type(jagged_array_3D_c), pointer :: block_local_index
     type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: parent, child
+    type(jagged_array_c), pointer :: local_index
   contains
-    procedure :: get_local_index
+    procedure :: create_block_local_index
     procedure :: get_start_row_num
     procedure :: get_block_offset
     procedure :: get_parent_num
@@ -20,45 +20,41 @@ module block_local_index_m
     procedure :: get_num_block
   end type
 
-  public :: create_block_local_index
+  public :: create_block_local_index_info
   
 contains
 
-  function create_block_local_index(node_data, local_index) result(this)
-    use block_local_index_creator_m
+  function create_block_local_index_info(node_data, local_index) result(this)
+    use block_local_index_info_creator_m
     type(node_data_c), pointer :: node_data
     type(jagged_array_c), pointer :: local_index
-    type(block_local_index_c), pointer :: this
-    integer, pointer, contiguous :: val(:)
-    type(contiguous_sets_c), pointer :: set, set2
-    type(jagged_array_c), pointer :: jag_2d
+    type(block_local_index_info_c), pointer :: this
     allocate(this)
 
-    set => create_num_blocks(node_data, local_index)
-    set2 => create_num_indices(node_data, local_index, set%get_num_elements())
-    jag_2d => create_jagged_array(set2, local_index%get_raw_val())
-    this%block_local_index => create_jagged_array_3D(set, jag_2d)
-    val => local_index%get_raw_val()
-    call create_block_nums(node_data, local_index, set, this%parent, this%child)
-    call rebuild_val(val, node_data%nb)
-    
-    this%node_ptr => set
-    this%block_ptr => set2
+    this%node_ptr => create_num_blocks(node_data, local_index)
+    this%block_ptr => create_num_indices(node_data, local_index, this%node_ptr%get_num_elements())
+    call create_block_nums(node_data, local_index, this%node_ptr, this%parent, this%child)
     this%node_data => node_data
+    this%local_index => local_index
     
   end function
 
-  function get_local_index(this, node, block_num) result(ptr)
-    class(block_local_index_c) :: this
-    integer, intent(in) :: node, block_num
-    integer, pointer, contiguous :: ptr(:)
-
-    ptr => this%block_local_index%get_array(block_num, node)
+  function create_block_local_index(this) result(block_local_index)
+    use block_local_index_info_creator_m
+    class(block_local_index_info_c) :: this
+    type(jagged_array_3D_c), pointer :: block_local_index
+    integer, pointer, contiguous :: val(:)
+    type(jagged_array_c), pointer :: jag_2d
     
+    val => this%local_index%get_raw_val()
+    jag_2d => create_jagged_array(this%block_ptr, val)
+    block_local_index => create_jagged_array_3D(this%node_ptr, jag_2d)
+    call rebuild_val(val, this%node_data%nb)
+
   end function
 
   integer function get_start_row_num(this, node, idx) result(row_num)
-    class(block_local_index_c) :: this
+    class(block_local_index_info_c) :: this
     integer, intent(in) :: node, idx
     integer :: first_block_idx, block_idx, first_block_pos, block_pos
 
@@ -71,7 +67,7 @@ contains
   end function
 
   integer function get_block_offset(this, node, idx) result(offset)
-    class(block_local_index_c) :: this
+    class(block_local_index_info_c) :: this
     integer, intent(in) :: node, idx
     integer :: ssize, wsize
 
@@ -87,7 +83,7 @@ contains
   end function
 
   integer function get_parent_num(this, node, idx) result(parent_num)
-    class(block_local_index_c) :: this
+    class(block_local_index_info_c) :: this
     integer, intent(in) :: node, idx
     integer, pointer, contiguous :: ptr(:)
 
@@ -97,7 +93,7 @@ contains
   end function
 
   integer function get_child_num(this, node, idx) result(child_num)
-    class(block_local_index_c) :: this
+    class(block_local_index_info_c) :: this
     integer, intent(in) :: node, idx
     integer, pointer, contiguous :: ptr(:)
 
@@ -107,7 +103,7 @@ contains
   end function
 
   integer function get_num_block(this, node) result(num_block)
-    class(block_local_index_c) :: this
+    class(block_local_index_info_c) :: this
     integer :: node
 
     num_block = this%child%get_array_length(node)
