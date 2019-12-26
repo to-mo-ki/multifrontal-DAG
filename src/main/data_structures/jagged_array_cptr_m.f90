@@ -8,7 +8,7 @@ module jagged_array_cptr_m
     type(contiguous_sets_c), pointer :: set
     type(c_ptr), pointer, contiguous :: val(:)
   contains
-    procedure :: get_array
+    procedure :: get
   end type
 
   public :: create_jagged_array_cptr
@@ -24,11 +24,13 @@ contains
 
   end function
 
-  function get_array(this, idx) result(ptr)
+  type(c_ptr) function get(this, i, j) result(ptr)
     class(jagged_array_cptr_c), target :: this
-    integer, intent(in) :: idx
-    type(c_ptr), pointer, contiguous :: ptr(:)
-    ptr => this%val(this%set%get_first(idx):this%set%get_last(idx))
+    integer, intent(in) :: i, j
+    type(c_ptr), pointer, contiguous :: array(:)
+    
+    array => this%val(this%set%get_first(i):this%set%get_last(i))
+    ptr = array(j)
   end function
 
 end module
