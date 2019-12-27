@@ -34,8 +34,8 @@ subroutine factorize_test
     call border_factorize_task%insert_task((/3,2/),(/a_dh, b_dh/))
     call task_wait_for_all
     
-    call assert_equal("factorizet:a", a, [double precision::1,0,0,2,2,0,3,3,3,4,4,4,5,5,5])
-    call assert_equal("factorize:b", b, [double precision::16,0,20,50])
+    call assert_equal("factorizet:a", a, [1,0,0,2,2,0,3,3,3,4,4,4,5,5,5])
+    call assert_equal("factorize:b", b, [16,0,20,50])
 
   end subroutine
 
@@ -61,8 +61,8 @@ subroutine factorize_test
     call border_solve_task%insert_task((/3,2,2/),(/diag_a_dh, lower_a_dh, lower_b_dh/))
     call task_wait_for_all
 
-    call assert_equal("solve:1a", lower_a, [double precision::1,2,3,4,5,6])
-    call assert_equal("solve:1b", lower_b, [double precision::-24,-30,-60,-75])
+    call assert_equal("solve:1a", lower_a, [1,2,3,4,5,6])
+    call assert_equal("solve:1b", lower_b, [-24,-30,-60,-75])
     
   end subroutine
 
@@ -87,8 +87,8 @@ subroutine factorize_test
     call border_solve_task%insert_task((/2,3,2/),(/diag_a_dh, lower_a_dh, lower_b_dh/))
     call task_wait_for_all
 
-    call assert_equal("solve1:a", lower_a, [double precision::1,2,4,5d0 ])
-    call assert_equal("solve1:b", lower_b, [double precision::-9,-12,-15,-27,-36,-45])
+    call assert_equal("solve1:a", lower_a, [1,2,4,5])
+    call assert_equal("solve1:b", lower_b, [-9,-12,-15,-27,-36,-45])
     
   end subroutine
 end program

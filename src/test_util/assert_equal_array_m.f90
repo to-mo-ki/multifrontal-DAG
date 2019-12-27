@@ -4,7 +4,7 @@ module assert_equal_array_m
   implicit none
   private
 
-  public :: assert_equal_array_DP, assert_equal_array_int, assert_equal_array_logical, assert_equal_partial_array
+  public :: assert_equal_array_DP, assert_equal_array_DP2, assert_equal_array_int, assert_equal_array_logical, assert_equal_partial_array
   
 contains
   subroutine assert_equal_array_DP(message, answer, check)
@@ -44,6 +44,17 @@ contains
         & ' is NOT EQUAL to ', trim(to_str(check(i)))
       endif
     enddo
+
+  end subroutine
+
+  subroutine assert_equal_array_DP2(message, answer, check)
+    character(*), intent(in) :: message
+    double precision, intent(in) :: answer(:)
+    integer, intent(in) :: check(:)
+    double precision, allocatable :: check_db(:)
+
+    allocate(check_db, source=[dble(check)])
+    call assert_equal_array_DP(message, answer, check_db)
 
   end subroutine
 

@@ -37,8 +37,8 @@ contains
     call split_tri_matrix_task%insert_task((/3, 4/), (/origin_dh, left_dh, right_dh/))
     call task_wait_for_all
 
-    call assert_equal("diag:left", left, [double precision::11,-1,-1,21,22,-1,31,32,33,41,42,43,51,52,53,61,62,63,71,72,73])
-    call assert_equal("diag:right", right, [double precision::44,-1,-1,-1,54,55,-1,-1,64,65,66,-1,74,75,76,77])
+    call assert_equal("diag:left", left, [11,-1,-1,21,22,-1,31,32,33,41,42,43,51,52,53,61,62,63,71,72,73])
+    call assert_equal("diag:right", right, [44,-1,-1,-1,54,55,-1,-1,64,65,66,-1,74,75,76,77])
 
   end subroutine
 
@@ -63,8 +63,8 @@ contains
 
     call split_rect_matrix_task%insert_task((/2, 3, 4/), (/origin_dh, left_dh, right_dh/))
     call task_wait_for_all
-    call assert_equal("diag:left", left, [double precision::11,12,21,22,31,32,41,42d0])
-    call assert_equal("diag:right", right, [double precision::13,14,15,23,24,25,33,34,35,43,44,45])
+    call assert_equal("diag:left", left, [11,12,21,22,31,32,41,42])
+    call assert_equal("diag:right", right, [13,14,15,23,24,25,33,34,35,43,44,45])
   end subroutine
   
 end program
