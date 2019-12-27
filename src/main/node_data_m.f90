@@ -14,6 +14,7 @@ module node_data_m
     procedure :: divisible
     procedure :: get_num_matrix_block
     procedure :: get_num_supernode_block
+    procedure :: get_num_work_block
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
@@ -87,6 +88,14 @@ contains
     integer, intent(in) :: node
     
     num_block = div_ceiling(this%supernode_size(node), this%nb)
+    
+  end function
+
+  integer function get_num_work_block(this, node) result(num_block)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    
+    num_block = this%get_num_matrix_block(node)-this%get_work_start_index(node)+1
     
   end function
 
