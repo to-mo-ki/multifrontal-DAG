@@ -33,7 +33,7 @@ contains
     integer, intent(in) :: node
     integer :: nb, nc, nr, idx
 
-    if(this%node_data%divisible(node))then
+    if(.not. this%node_data%exist_border(node))then
       border_size = 0
     else
       idx = this%node_data%get_work_start_index(node)

@@ -43,7 +43,7 @@ contains
     integer :: node, i, j
     
     do node=1, node_data%num_node
-      if(node_data%divisible(node))then
+      if(.not. node_data%exist_border(node))then
         cycle
       endif
       j = node_data%get_work_start_index(node)

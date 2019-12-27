@@ -21,7 +21,7 @@ contains
     class(border_extractor_c) :: this
     integer, intent(in) :: node
     integer :: num_block, border_index
-    if(this%node_data%divisible(node))then
+    if(.not. this%node_data%exist_border(node))then
       estimate_size = 0
       return
     endif
