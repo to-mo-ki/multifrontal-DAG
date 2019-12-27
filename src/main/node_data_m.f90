@@ -2,6 +2,7 @@ module node_data_m
   use contiguous_sets_m
   use block_size_calculator_m
   use integer_function_m
+  use extractor_types_m
   implicit none
   private
   type, public :: node_data_c
@@ -18,6 +19,7 @@ module node_data_m
     procedure :: get_matrix_block_size
     procedure :: get_supernode_block_size
     procedure :: get_work_block_size
+    procedure :: get_extractor_type
   end type
 
   public :: create_node_data
@@ -130,6 +132,30 @@ contains
       block_size = get_block_size(idx, this%nb, n)
     endif
 
+  end function
+
+  integer function get_extractor_type(this, idx, node) result(extractor_type)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: nc
+
+    if(this%divisible(node))then
+      nc = this%get_work_start_index(node)-1
+      if(idx <= nc)then
+        extractor_type = SUPERNODE_EXTRACTOR
+      else
+        extractor_type = WORK_EXTRACTOR
+      endif
+    else
+      nc = this%get_work_start_index(node)
+      if(idx < nc)then
+        extractor_type = SUPERNODE_EXTRACTOR
+      else if(idx > nc)then
+        extractor_type = WORK_EXTRACTOR
+      else
+        extractor_type = BORDER_EXTRACTOR
+      endif
+    endif
   end function
 
 end module

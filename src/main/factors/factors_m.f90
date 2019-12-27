@@ -36,30 +36,17 @@ contains
     double precision, pointer, contiguous :: ptr(:)
     class(factors_c) :: this
     integer, intent(in) :: node, i, j
-    integer :: nc
     type(block_matrices_c), pointer :: block_matrices
 
-    if(this%node_data%divisible(node))then
-      nc = this%node_data%get_work_start_index(node)-1
-      if(j <= nc)then
+    select case(this%node_data%get_extractor_type(j, node))
+      case(SUPERNODE_EXTRACTOR)
         block_matrices => this%supernode
-      else
-        block_matrices => this%work
-      endif
-    else
-      nc = this%node_data%get_work_start_index(node)
-      if(j < nc)then
-        block_matrices => this%supernode
-      else if(j > nc)then
-        block_matrices => this%work
-      else
+      case(BORDER_EXTRACTOR)
         block_matrices => this%border
-      endif
-    endif
-    !TODO: これがないときにエラーを発生させるテスト作成
-    if(node == this%node_data%num_node)then
-      block_matrices => this%supernode
-    endif
+      case(WORK_EXTRACTOR)
+        block_matrices => this%work
+    end select
+    
     ptr => block_matrices%get_ptr(node, i, j)
     
   end function
