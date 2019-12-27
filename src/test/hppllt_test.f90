@@ -17,6 +17,7 @@ contains
     use to_str_m
     character(*) :: matrix_name
     integer :: arg_max_zero, arg_nb
+    integer, allocatable :: options(:)
     file_name="./test_matrix/"//matrix_name
     nb = arg_nb
     max_zero = arg_max_zero
@@ -25,9 +26,12 @@ contains
     call coo_to_ccs
     rh = 10d0
     allocate(b(n), source=rh)
-    call hppllt_analyze(ccs_col, ccs_row, n, 10, 10)
+    allocate(options, source=[nb, max_zero, 1])
+    call hppllt_init(options)
+    call hppllt_analyze(ccs_col, ccs_row, n)
     call hppllt_factorize(ccs_val)
     call hppllt_solve(b)
+    call hppllt_finalize
     
     error = calc_error()
     

@@ -3,11 +3,23 @@ module hppllt
   implicit none
   private
 
-  public :: hppllt_analyze, hppllt_factorize, hppllt_solve
+  public :: hppllt_init, hppllt_analyze, hppllt_factorize, hppllt_solve, hppllt_finalize
   
 contains
 
-  subroutine hppllt_analyze(ccs_col, ccs_row, n, nb, max_zero)
+  subroutine hppllt_init(input_options)
+    use options_m, only: NUM_OPTIONS, options
+    integer :: input_options(:)
+    if(size(input_options) /= NUM_OPTIONS)then
+      print *, "incorrect size of options"
+      return
+    endif
+    allocate(options, source=input_options)
+
+  end subroutine
+
+  subroutine hppllt_analyze(ccs_col, ccs_row, n)
+    use options_m, only: OPTION_NB, OPTION_MAX_ZERO, OPTION_USE_STARPU, options
     use analyze_phase_m
     use reordering_m
     use perm_m
@@ -15,7 +27,7 @@ contains
     use create_supernodal_index_m
     use ordering_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
-    integer, intent(in) :: n, nb, max_zero
+    integer, intent(in) :: n
     type(contiguous_sets_c), pointer :: origin_set
     type(jagged_array_c), pointer :: l_structure
     type(jagged_array_c), pointer :: reordered_ccs
@@ -23,8 +35,12 @@ contains
     integer, pointer, contiguous :: reordering_perm(:), reordering_iperm(:), analyze_perm(:), analyze_iperm(:)
     integer, pointer, contiguous :: reordering_ccs_perm(:), analyze_ccs_perm(:)
     type(jagged_array_c), pointer :: local_index
-    integer :: i
+    integer :: i, nb, max_zero
+    type(contiguous_sets_c), pointer :: set
     
+    nb = options(OPTION_NB)
+    max_zero = options(OPTION_MAX_ZERO)
+
     origin_set => create_raw_contiguous_sets(ccs_col, n)
     origin_structure => create_jagged_array(origin_set, ccs_row)
     
@@ -53,6 +69,12 @@ contains
     local_index => create_local_index(l_structure, node_sets, tree_child)
     block_local_index_info => create_block_local_index_info(node_data, local_index)
     block_local_index => block_local_index_info%create_block_local_index()
+
+    if(options(OPTION_USE_STARPU) == 1)then
+      starpu_factors => create_starpu_factors(node_data)
+      set => block_local_index_info%node_ptr
+      starpu_block_local_index => create_jagged_array_cptr(set)
+    endif
 
   end subroutine
 
@@ -91,4 +113,10 @@ contains
 
   end subroutine
 
+  subroutine hppllt_finalize()
+    use options_m
+    
+    deallocate(options)
+
+  end subroutine
 end module

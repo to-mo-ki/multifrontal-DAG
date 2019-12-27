@@ -7,6 +7,8 @@ module hppllt_data_m
   use block_local_index_info_m
   use right_hand_m
   use ccs_m
+  use jagged_array_cptr_m
+  use starpu_factors_m
   implicit none
   
   type(node_data_c), pointer :: node_data
@@ -22,5 +24,8 @@ module hppllt_data_m
   integer, pointer, contiguous :: perm(:)
   type(jagged_array_c), pointer :: tree_child
   integer, pointer, contiguous :: ccs_perm(:)
+
+  type(jagged_array_cptr_c), pointer :: starpu_block_local_index
+  type(starpu_factors_c), pointer :: starpu_factors
 
 end module
