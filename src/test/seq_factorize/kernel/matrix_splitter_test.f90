@@ -8,8 +8,6 @@ program matrix_splitter_test
 contains
   subroutine diag_test()
     double precision :: origin(7*7), left(3*7), right(4*4)
-    integer :: pos_left(18), pos_right(10)
-    double precision :: check_left(18), check_right(10)
     integer :: i, j
     
     do i=1, 7
@@ -23,14 +21,13 @@ contains
 
     call split_tri_matrix(origin, left, right, 3, 4)
     
-    call assert_equal("diag:left", left, [double precision::11,-1,-1,21,22,-1,31,32,33,41,42,43,51,52,53,61,62,63,71,72,73])
-    call assert_equal("diag:right", right, [double precision::44,-1,-1,-1,54,55,-1,-1,64,65,66,-1,74,75,76,77])
+    call assert_equal("diag:left", left, [11,-1,-1,21,22,-1,31,32,33,41,42,43,51,52,53,61,62,63,71,72,73])
+    call assert_equal("diag:right", right, [44,-1,-1,-1,54,55,-1,-1,64,65,66,-1,74,75,76,77])
 
   end subroutine
 
   subroutine rect_test()
     double precision :: origin(5, 4), left(2*4), right(3*4)
-    double precision :: check_left(8), check_right(12)
     integer :: i, j
     
     do i=1, 4
@@ -40,10 +37,8 @@ contains
     enddo
 
     call split_rect_matrix(origin, left, right, 2, 3, 4)
-    check_left = [11d0, 12d0, 21d0, 22d0, 31d0, 32d0, 41d0, 42d0]
-    call assert_equal("rect:left", left, check_left)
-    check_right = [13d0, 14d0, 15d0, 23d0, 24d0, 25d0, 33d0, 34d0, 35d0, 43d0, 44d0, 45d0]
-    call assert_equal("rect:right", right, check_right)
+    call assert_equal("rect:left", left, [11,12,21,22,31,32,41,42])
+    call assert_equal("rect:right", right, [13,14,15,23,24,25,33,34,35,43,44,45])
 
   end subroutine
 

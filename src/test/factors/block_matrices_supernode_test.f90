@@ -1,6 +1,7 @@
 program block_matrices_supernode_test
   use block_matrices_m
   use node_data_m
+  use extractor_types_m
   use test_util
   implicit none
   type(block_matrices_c), pointer :: block_matrices

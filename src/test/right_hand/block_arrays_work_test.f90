@@ -1,6 +1,7 @@
 program block_arrays_work_test
   use block_arrays_m
   use node_data_m
+  use extractor_types_m
   use test_util
   implicit none
   type(block_arrays_c), pointer :: block_arrays

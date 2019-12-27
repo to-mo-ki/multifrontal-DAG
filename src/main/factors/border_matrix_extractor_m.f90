@@ -42,7 +42,7 @@ contains
     nc = this%node_data%supernode_size(node)
     nr = this%node_data%work_size(node)
 
-    if(this%node_data%divisible(node))then
+    if(.not. this%node_data%exist_border(node))then
       border_size = 0
       return
     endif

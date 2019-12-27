@@ -27,7 +27,7 @@ contains
     a_dh = register_vector_data(a)
     call factorize_task%insert_task((/3/), (/a_dh/))
     call task_wait_for_all
-    call assert_equal("factorize", a, [double precision::1,0,0,2,2,0,3,3,3])
+    call assert_equal("factorize", a, [1,0,0,2,2,0,3,3,3])
     
   end subroutine
 
@@ -45,7 +45,7 @@ contains
     b_dh = register_vector_data(b)
     call solve_task%insert_task((/3, 2/), (/a_dh, b_dh/))
     call task_wait_for_all
-    call assert_equal("solve", b, [double precision::1,2,3,4,5,6])
+    call assert_equal("solve", b, [1,2,3,4,5,6])
     
   end subroutine
 
@@ -88,7 +88,7 @@ contains
     update_dh = register_vector_data(update)
     call update_task%insert_task((/3,2,4/),(/lower_dh, upper_dh, update_dh/))
     call task_wait_for_all
-    call assert_equal("update", update, [double precision::-13,-31,-49,-67,-31,-76,-121,-166])
+    call assert_equal("update", update, [-13,-31,-49,-67,-31,-76,-121,-166])
 
   end subroutine
   

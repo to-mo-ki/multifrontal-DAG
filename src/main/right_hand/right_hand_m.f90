@@ -3,6 +3,7 @@ module right_hand_m
   use jagged_array_m
   use block_arrays_m
   use node_data_m
+  use extractor_types_m
   implicit none
   private
   type, public :: right_hand_c
@@ -50,27 +51,14 @@ contains
     integer :: nc
     type(block_arrays_c), pointer :: block_arrays
     
-    if(this%node_data%divisible(node))then
-      nc = this%node_data%get_work_start_index(node)-1
-      if(idx <= nc)then
-        block_arrays => this%supernode
-      else
-        block_arrays => this%work
-      endif
-    else
-      nc = this%node_data%get_work_start_index(node)
-      if(idx < nc)then
-        block_arrays => this%supernode
-      else if(idx > nc)then
-        block_arrays => this%work
-      else
-        block_arrays => this%border
-      endif
-    endif
-    
-    if(node == this%node_data%num_node)then
+    select case(this%node_data%get_extractor_type(idx, node))
+    case(SUPERNODE_EXTRACTOR)
       block_arrays => this%supernode
-    endif
+    case(BORDER_EXTRACTOR)
+      block_arrays => this%border
+    case(WORK_EXTRACTOR)
+      block_arrays => this%work
+  end select
     ptr => block_arrays%get_ptr(node, idx)
     
   end function

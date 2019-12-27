@@ -1,6 +1,7 @@
 program block_matrices_border_test
   use block_matrices_m
   use test_util
+  use extractor_types_m
   use node_data_m
   implicit none
   type(block_matrices_c), pointer :: block_matrices

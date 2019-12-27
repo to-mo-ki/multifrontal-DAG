@@ -64,18 +64,11 @@ contains
     last_num = this%node_data%get_num_matrix_block(node)
     lower_row_size = this%node_data%get_matrix_block_size(last_num, node)
     fw = this%node_data%border_work_size(node)
+    wn = this%node_data%get_num_work_block(node)-2
     
-    if(this%node_data%divisible(node))then
-      wn = this%node_data%get_num_matrix_block(node)-sn-1
-      left = 0
-      internal = partial_sum(wn)*nb*nb
-      lower = lower_row_size*nr
-    else
-      wn = this%node_data%get_num_matrix_block(node)-sn-2
-      left = nr*fw
-      internal = partial_sum(wn)*nb*nb
-      lower = (nr-fw)*lower_row_size
-    endif
+    left = nr*fw
+    internal = partial_sum(wn)*nb*nb
+    lower = (nr-fw)*lower_row_size
 
     work_size = left + internal + lower
     

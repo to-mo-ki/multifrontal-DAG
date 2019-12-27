@@ -13,7 +13,11 @@ contains
 
   integer function partial_sum1(e)
     integer, intent(in) :: e
-    partial_sum1 = e*(e+1)/2
+    if(e < 1)then
+      partial_sum1 = 0
+    else
+      partial_sum1 = e*(e+1)/2
+    endif
   end function
 
   integer function partial_sum2(s, e)

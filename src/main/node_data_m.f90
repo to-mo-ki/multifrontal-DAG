@@ -2,6 +2,7 @@ module node_data_m
   use contiguous_sets_m
   use block_size_calculator_m
   use integer_function_m
+  use extractor_types_m
   implicit none
   private
   type, public :: node_data_c
@@ -12,12 +13,16 @@ module node_data_m
   contains
     procedure :: divisible
     procedure :: get_num_matrix_block
+    procedure :: get_num_supernode_block
+    procedure :: get_num_work_block
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
     procedure :: get_matrix_block_size
     procedure :: get_supernode_block_size
     procedure :: get_work_block_size
+    procedure :: get_extractor_type
+    procedure :: exist_border
   end type
 
   public :: create_node_data
@@ -78,6 +83,22 @@ contains
     
   end function
 
+  integer function get_num_supernode_block(this, node) result(num_block)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    
+    num_block = div_ceiling(this%supernode_size(node), this%nb)
+    
+  end function
+
+  integer function get_num_work_block(this, node) result(num_block)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    
+    num_block = this%get_num_matrix_block(node)-this%get_work_start_index(node)+1
+    
+  end function
+
   integer function get_work_start_index(this, node) result(idx)
     class(node_data_c) :: this
     integer, intent(in) :: node
@@ -130,6 +151,36 @@ contains
       block_size = get_block_size(idx, this%nb, n)
     endif
 
+  end function
+
+  integer function get_extractor_type(this, idx, node) result(extractor_type)
+    class(node_data_c) :: this
+    integer, intent(in) :: idx, node
+    integer :: nc
+
+    if(this%divisible(node))then
+      nc = this%get_work_start_index(node)-1
+      if(idx <= nc)then
+        extractor_type = SUPERNODE_EXTRACTOR
+      else
+        extractor_type = WORK_EXTRACTOR
+      endif
+    else
+      nc = this%get_work_start_index(node)
+      if(idx < nc)then
+        extractor_type = SUPERNODE_EXTRACTOR
+      else if(idx > nc)then
+        extractor_type = WORK_EXTRACTOR
+      else
+        extractor_type = BORDER_EXTRACTOR
+      endif
+    endif
+  end function
+
+  logical function exist_border(this, node)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    exist_border = .not. this%divisible(node) .and. this%work_size(node) /= 0
   end function
 
 end module
