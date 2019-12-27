@@ -24,15 +24,10 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: starpu_factors
     type(factors_c), pointer :: factors
-    integer :: node, i, j, jend
+    integer :: node, i, j
     
     do node=1, node_data%num_node
-      if(node_data%divisible(node))then
-        jend = node_data%get_work_start_index(node) - 1
-      else
-        jend = node_data%get_work_start_index(node)
-      endif
-      do j=1, jend
+      do j=1, node_data%get_num_supernode_block(node)
         do i=j, node_data%get_num_matrix_block(node)
           starpu_factors%get_supernode(node,i,j) = register_vector_data(factors%get_supernode(node,i,j))
         enddo

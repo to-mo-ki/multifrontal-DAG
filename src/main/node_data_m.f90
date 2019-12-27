@@ -13,6 +13,7 @@ module node_data_m
   contains
     procedure :: divisible
     procedure :: get_num_matrix_block
+    procedure :: get_num_supernode_block
     procedure :: get_matrix_num
     procedure :: get_work_num
     procedure :: get_work_start_index
@@ -78,6 +79,14 @@ contains
     
     n = this%supernode_size(node)+this%work_size(node)
     num_block = div_ceiling(n, this%nb)
+    
+  end function
+
+  integer function get_num_supernode_block(this, node) result(num_block)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    
+    num_block = div_ceiling(this%supernode_size(node), this%nb)
     
   end function
 

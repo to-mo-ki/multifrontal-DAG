@@ -27,11 +27,7 @@ contains
     integer :: num_matrix, last, num_last
     
     num_matrix = this%node_data%get_num_matrix_block(node)
-    if(this%node_data%divisible(node))then
-      last = this%node_data%get_work_start_index(node) - 1
-    else
-      last = this%node_data%get_work_start_index(node)
-    endif
+    last = this%node_data%get_num_supernode_block(node)
     num_last = num_matrix - last + 1
     estimate_size = partial_sum(num_last, num_matrix)
 
