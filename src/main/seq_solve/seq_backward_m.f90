@@ -23,7 +23,7 @@ contains
     do node=node_data%num_node, 1, -1
       call sparse_add(rh, block_local_index, block_local_index_info, node, parent(node))
       !TODO: TEST
-      if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
+      if(node_data%exist_border(node))then
         call border_backward2(node_data, factors, rh, node)
       endif
       call supernode_backward(node_data, factors, rh, node)

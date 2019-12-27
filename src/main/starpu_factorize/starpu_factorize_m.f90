@@ -20,7 +20,7 @@ contains
 
     do node=1, node_data%num_node
       call supernode_factrize(node_data, factors, node)
-      if(.not. node_data%divisible(node) .and. node /= node_data%num_node)then
+      if(node_data%exist_border(node))then
         call border_factorize2(node_data, factors, node)
       endif
       call extend_add(node_data, factors, block_local_index, block_local_index_info, node, parent(node))

@@ -20,6 +20,7 @@ module node_data_m
     procedure :: get_supernode_block_size
     procedure :: get_work_block_size
     procedure :: get_extractor_type
+    procedure :: exist_border
   end type
 
   public :: create_node_data
@@ -156,6 +157,12 @@ contains
         extractor_type = BORDER_EXTRACTOR
       endif
     endif
+  end function
+
+  logical function exist_border(this, node)
+    class(node_data_c) :: this
+    integer, intent(in) :: node
+    exist_border = .not. this%divisible(node) .and. this%work_size(node) /= 0
   end function
 
 end module
