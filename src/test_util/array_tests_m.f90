@@ -72,26 +72,9 @@ contains
     double precision, contiguous :: answer(:)
     integer, contiguous :: check(:)
     double precision, allocatable :: check_db(:)
-    logical :: err_flag
-    integer :: i, n
 
-    allocate(check_db(size(check)), source=[(dble(check), i=1,size(check))])
-
-    if(size(answer) /= size(check_db))then
-      call add_size_error_node(message, "different of array size "//"answer:"//to_str(size(answer))//" check:"//to_str(size(check_db)))
-      return
-    endif
-    n = size(answer)
-    err_flag = .false.
-    do i=1,n
-      if(answer(i) /= check_db(i))then
-        if(.not. err_flag)then
-          call add_node(message)
-          err_flag = .true.
-        endif
-        call add_array_err(to_str(i)//"-th element ", to_str(answer(i)), to_str(check_db(i)))
-      endif
-    enddo
+    allocate(check_db, source=[dble(check)])
+    call add_test6(message, answer, check_db)
 
   end subroutine
 
