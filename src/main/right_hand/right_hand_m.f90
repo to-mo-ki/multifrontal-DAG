@@ -3,6 +3,7 @@ module right_hand_m
   use jagged_array_m
   use block_arrays_m
   use node_data_m
+  use extractor_types_m
   implicit none
   private
   type, public :: right_hand_c

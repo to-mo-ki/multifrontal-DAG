@@ -6,11 +6,9 @@ module block_matrix_ptrs_m
   use supernode_starpu_matrix_extractor_m
   use node_data_m
   use iso_c_binding, only: c_ptr
+  use extractor_types_m
   implicit none
   private
-  integer, parameter, public :: SUPERNODE_EXTRACTOR = 1
-  integer, parameter, public :: BORDER_EXTRACTOR = 2
-  integer, parameter, public :: WORK_EXTRACTOR = 3
   type, public :: block_matrix_ptrs_c
     private
     type(c_ptr), pointer, contiguous :: val(:)

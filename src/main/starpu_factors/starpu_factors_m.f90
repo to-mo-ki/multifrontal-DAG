@@ -4,6 +4,7 @@ module starpu_factors_m
   use block_matrix_ptrs_m
   use node_data_m
   use iso_c_binding
+  use extractor_types_m
   implicit none
   private
   type, public :: starpu_factors_c

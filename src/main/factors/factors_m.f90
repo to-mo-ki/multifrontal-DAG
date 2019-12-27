@@ -3,6 +3,7 @@ module factors_m
   use jagged_array_m
   use block_matrices_m
   use node_data_m
+  use extractor_types_m
   implicit none
   private
   type, public :: factors_c
