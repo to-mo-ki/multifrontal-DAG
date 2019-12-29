@@ -139,7 +139,7 @@ contains
     call set_coefficient(node_data, ccs, node_sets, factors)
     
     call start_time(REAL_FACTORIZE_TIME)
-    if(options(OPTION_USE_STARPU))then
+    if(options(OPTION_USE_STARPU) == 1)then
       call starpu_factorize(node_data, starpu_factors, starpu_block_local_index, block_local_index_info, parent)
     else
       call seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
