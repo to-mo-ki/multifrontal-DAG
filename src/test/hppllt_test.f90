@@ -9,29 +9,32 @@ program main
   integer :: n, nonzero, max_zero, nb
   character(len=128) :: file_name
 
-  call test("bcsstk01.mtx", 10, 10)
-  call test("poisson_9_9.mtx", 10, 10)
+  call test("bcsstk01.mtx", [10,10,1,1])
+  call test("poisson_9_9.mtx", [10,10,1,1])
+  call test("bcsstk01.mtx", [10,10,1,0])
+  call test("poisson_9_9.mtx", [10,10,1,0])
 
 contains
-  subroutine test(matrix_name, arg_max_zero, arg_nb)
+  subroutine test(matrix_name, options)
     use to_str_m
     character(*) :: matrix_name
-    integer :: arg_max_zero, arg_nb
+    integer :: options(:)
     file_name="./test_matrix/"//matrix_name
-    nb = arg_nb
-    max_zero = arg_max_zero
 
     call read_data
     call coo_to_ccs
     rh = 10d0
     allocate(b(n), source=rh)
-    call hppllt_analyze(ccs_col, ccs_row, n, 10, 10)
+    call hppllt_init(options)
+    call hppllt_analyze(ccs_col, ccs_row, n)
     call hppllt_factorize(ccs_val)
     call hppllt_solve(b)
+    call hppllt_finalize
     
     error = calc_error()
     
-    call assert_equal(matrix_name//", max_zero="//to_str(max_zero)//", nb="//to_str(nb), error, 0d0, in_ignore_digits=1D-8)
+    print *, options
+    call assert_equal(matrix_name, error, 0d0, in_ignore_digits=1D-8)
 
   end subroutine
 
