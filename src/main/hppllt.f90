@@ -23,24 +23,16 @@ contains
     use analyze_phase_m
     use reordering_m
     use perm_m
-    use create_local_index_m
-    use create_supernodal_index_m
     use ordering_m
-    use starpu_wrapper_m, only: starpu_init
-    use tasks_m, only: task_init => init
-    use register_block_local_index_m
-    use register_factors_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
     integer, intent(in) :: n
     type(contiguous_sets_c), pointer :: origin_set
     type(jagged_array_c), pointer :: l_structure
     type(jagged_array_c), pointer :: reordered_ccs
-    integer, pointer, contiguous :: supernode_size(:), work_size(:)
     integer, pointer, contiguous :: reordering_perm(:), reordering_iperm(:), analyze_perm(:), analyze_iperm(:)
     integer, pointer, contiguous :: reordering_ccs_perm(:), analyze_ccs_perm(:)
     type(jagged_array_c), pointer :: local_index
     integer :: i, nb, max_zero
-    type(contiguous_sets_c), pointer :: set
     
     nb = options(OPTION_NB)
     max_zero = options(OPTION_MAX_ZERO)
@@ -72,6 +64,21 @@ contains
       ccs_perm => analyze_ccs_perm
     endif
 
+    call create_data_structure(l_structure, local_index, nb)
+
+    if(options(OPTION_USE_STARPU) == 1)then
+      call create_starpu_data_structure
+    endif
+
+  end subroutine
+
+  subroutine create_data_structure(l_structure, local_index, nb)
+    use create_local_index_m
+    use create_supernodal_index_m
+    type(jagged_array_c), pointer :: l_structure, local_index
+    integer, pointer, contiguous :: supernode_size(:), work_size(:)
+    integer :: i, nb
+
     ! TODO:node_sets%get_lengthsを作成する？
     allocate(supernode_size(node_sets%get_num_sets()))
     do i=1, node_sets%get_num_sets()
@@ -88,15 +95,20 @@ contains
     block_local_index_info => create_block_local_index_info(node_data, local_index)
     block_local_index => block_local_index_info%create_block_local_index()
 
-    if(options(OPTION_USE_STARPU) == 1)then
-      starpu_factors => create_starpu_factors(node_data)
-      set => block_local_index_info%node_ptr
-      starpu_block_local_index => create_jagged_array_cptr(set)
-      call starpu_init
-      call task_init
-      call register_factors(node_data, starpu_factors, factors)
-      call register_block_local_index(starpu_block_local_index, block_local_index)
-    endif
+  end subroutine
+
+  subroutine create_starpu_data_structure()
+    use starpu_wrapper_m, only: starpu_init
+    use tasks_m, only: task_init => init
+    use register_block_local_index_m
+    use register_factors_m
+
+    starpu_factors => create_starpu_factors(node_data)
+    starpu_block_local_index => create_jagged_array_cptr(block_local_index_info%node_ptr)
+    call starpu_init
+    call task_init
+    call register_factors(node_data, starpu_factors, factors)
+    call register_block_local_index(starpu_block_local_index, block_local_index)
 
   end subroutine
 
