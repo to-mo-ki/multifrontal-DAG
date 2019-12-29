@@ -1,9 +1,12 @@
 module hppllt
   use hppllt_data_m
+  use time_manager_m
+  use time_list_m
   implicit none
   private
 
   public :: hppllt_init, hppllt_analyze, hppllt_factorize, hppllt_solve, hppllt_finalize
+  public :: hppllt_get_time_info
   
 contains
 
@@ -34,6 +37,7 @@ contains
     type(jagged_array_c), pointer :: local_index
     integer :: i, nb, max_zero
     
+    call start_time(ANALYZE_TIME)
     nb = options(OPTION_NB)
     max_zero = options(OPTION_MAX_ZERO)
 
@@ -69,6 +73,8 @@ contains
     if(options(OPTION_USE_STARPU) == 1)then
       call create_starpu_data_structure
     endif
+
+    call end_time(ANALYZE_TIME)
 
   end subroutine
 
@@ -123,17 +129,21 @@ contains
     double precision, pointer, contiguous :: a(:)
     double precision, pointer, contiguous :: ccs_val(:)
 
+    call start_time(FACTORIZE_TIME)
     allocate(ccs_val(size(ccs_perm)))
     call permutate(ccs_perm, a, ccs_val)
     ccs => create_ccs(supernodal_index, ccs_val)
     call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
     
+    call start_time(REAL_FACTORIZE_TIME)
     if(options(OPTION_USE_STARPU))then
       call starpu_factorize(node_data, starpu_factors, starpu_block_local_index, block_local_index_info, parent)
     else
       call seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
     endif
+    call end_time(REAL_FACTORIZE_TIME)
+    call end_time(FACTORIZE_TIME)
 
   end subroutine
 
@@ -145,13 +155,19 @@ contains
     double precision, contiguous :: b(:)
     double precision, pointer, contiguous :: tmp_b(:)
 
+    call start_time(SOLVE_TIME)
     allocate(tmp_b(size(perm)))
     call permutate(perm, b, tmp_b)
     call rh%set_val(tmp_b)
+    call start_time(FORWARD_TIME)
     call seq_forward(node_data, factors, rh, block_local_index, block_local_index_info, parent)
+    call end_time(FORWARD_TIME)
+    call start_time(BACKWARD_TIME)
     call seq_backward(node_data, factors, rh, block_local_index, block_local_index_info, parent)
+    call end_time(BACKWARD_TIME)
     call inverse_permutate(perm, tmp_b, b)
-
+    call end_time(SOLVE_TIME)
+    
   end subroutine
 
   subroutine hppllt_finalize()
@@ -164,4 +180,9 @@ contains
     call starpu_finalize
 
   end subroutine
+
+  double precision function hppllt_get_time_info(num) result(time)
+    integer :: num
+    time = get_time(num)
+  end function
 end module
