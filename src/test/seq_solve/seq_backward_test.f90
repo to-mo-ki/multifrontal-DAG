@@ -25,7 +25,8 @@ program seq_forward_test
   block_local_index => block_local_index_info%create_block_local_index()
   rh => create_right_hand(node_data, nb)
 
-  allocate(rh_val, source=[double precision::25,24,22,19,21,20,18,15,11,10,9,7,4])
+  allocate(rh_val(13))
+  rh_val = [25,24,22,19,21,20,18,15,11,10,9,7,4])
   call rh%set_val(rh_val)
   
   factors%get_supernode(1,1,1) = [1,0,2,2]
@@ -61,7 +62,8 @@ program seq_forward_test
   block_local_index => block_local_index_info%create_block_local_index()
   rh => create_right_hand(node_data, nb)
 
-  allocate(rh_val, source=[double precision::25,24,22,19,21,20,18,15,11,10,9,7,4])
+  allocate(rh_val(13))
+  rh_val = [25,24,22,19,21,20,18,15,11,10,9,7,4])
   call rh%set_val(rh_val)
   
   factors%get_supernode(1,1,1) = [1,0,0,2,2,0,3,3,3]

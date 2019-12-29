@@ -23,7 +23,8 @@ contains
     double precision, pointer, contiguous :: a(:)
     type(c_ptr) :: a_dh
     
-    allocate(a, source=[double precision::1,0,0,2,8,0,3,12,27])
+    allocate(a(9))
+    a = [1,0,0,2,8,0,3,12,27]
     a_dh = register_vector_data(a)
     call factorize_task%insert_task((/3/), (/a_dh/))
     call task_wait_for_all
@@ -38,8 +39,9 @@ contains
     double precision, pointer, contiguous :: a(:), b(:)
     type(c_ptr) :: a_dh, b_dh
 
-    allocate(a, source=[double precision::1,0,0,2,2,0,3,3,3])
-    allocate(b, source=[double precision::1,6,18,4,18,45])
+    allocate(a(9), b(6))
+    a=[1,0,0,2,2,0,3,3,3]
+    b=[1,6,18,4,18,45]
 
     a_dh = register_vector_data(a)
     b_dh = register_vector_data(b)
@@ -55,8 +57,9 @@ contains
     !            [3  6]
     double precision, pointer, contiguous :: a(:), b(:)
     type(c_ptr) :: a_dh, b_dh
+    integer :: i
 
-    allocate(a, source=[double precision::1,2,3,4,5,6])
+    allocate(a, source=[(dble(i), i=1,6)])
     allocate(b(4), source=1d0)
 
     a_dh = register_vector_data(a)

@@ -11,7 +11,8 @@ program extend_add_test
 
 contains
   subroutine test_tri
-    allocate(from(4*4), source=[double precision :: 22,0,0,0,32,33,0,0,72,73,77,0,82,83,87,88])
+    allocate(from(4*4))
+    from = [22,0,0,0,32,33,0,0,72,73,77,0,82,83,87,88]
     allocate(to(9*9), source=100d0)
     allocate(local(4), source=[2,3,7,8])
     call extend_add_tri(from, to, local, 4, 9, 0)
@@ -33,7 +34,8 @@ contains
   end subroutine
 
   subroutine test_rect1
-    allocate(from(5*4), source=[double precision :: 21,23,26,28,29,31,33,36,38,39,71,73,76,78,79,81,83,86,88,89])
+    allocate(from(5*4))
+    from = [21,23,26,28,29,31,33,36,38,39,71,73,76,78,79,81,83,86,88,89]
     allocate(to(9*9), source=100d0)
     allocate(col_local(5), source=[1,3,6,8,9])
     allocate(row_local(4), source=[2,3,7,8])
@@ -68,7 +70,8 @@ contains
   end subroutine
 
   subroutine test_rect2
-    allocate(from(4*5), source=[double precision :: 12,13,17,18,32,33,37,38,62,63,67,68,82,83,87,88,92,93,97,98])
+    allocate(from(4*5))
+    from = [12,13,17,18,32,33,37,38,62,63,67,68,82,83,87,88,92,93,97,98]
     allocate(to(9*9), source=100d0)
     allocate(col_local(4), source=[2,3,7,8])
     allocate(row_local(5), source=[1,3,6,8,9])
