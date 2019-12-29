@@ -26,6 +26,10 @@ contains
     use create_local_index_m
     use create_supernodal_index_m
     use ordering_m
+    use starpu_wrapper_m, only: starpu_init
+    use tasks_m, only: task_init => init
+    use register_block_local_index_m
+    use register_factors_m
     integer, contiguous :: ccs_col(:), ccs_row(:)
     integer, intent(in) :: n
     type(contiguous_sets_c), pointer :: origin_set
@@ -74,6 +78,10 @@ contains
       starpu_factors => create_starpu_factors(node_data)
       set => block_local_index_info%node_ptr
       starpu_block_local_index => create_jagged_array_cptr(set)
+      call starpu_init
+      call task_init
+      call register_factors(node_data, starpu_factors, factors)
+      call register_block_local_index(starpu_block_local_index, block_local_index)
     endif
 
   end subroutine
@@ -81,9 +89,11 @@ contains
   subroutine hppllt_factorize(a)
     use coefficient_setter_m
     use seq_factorize_m
+    use starpu_factorize_m
     use perm_m
     use reordering_m
     use zero_setter_m
+    use options_m, only: options, OPTION_USE_STARPU
     double precision, pointer, contiguous :: a(:)
     double precision, pointer, contiguous :: ccs_val(:)
 
@@ -92,7 +102,12 @@ contains
     ccs => create_ccs(supernodal_index, ccs_val)
     call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
-    call seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
+    
+    if(options(OPTION_USE_STARPU))then
+      call starpu_factorize(node_data, starpu_factors, starpu_block_local_index, block_local_index_info, parent)
+    else
+      call seq_factorize(node_data, factors, block_local_index, block_local_index_info, parent)
+    endif
 
   end subroutine
 
@@ -114,9 +129,13 @@ contains
   end subroutine
 
   subroutine hppllt_finalize()
+    use starpu_wrapper_m, only: starpu_finalize
+    use tasks_m, only: task_finalize => finalize
     use options_m
     
     deallocate(options)
+    call task_finalize
+    call starpu_finalize
 
   end subroutine
 end module
