@@ -9,7 +9,7 @@ module work_matrix_extractor_m
     private
     procedure :: get_start_pos
     procedure :: get_size
-    procedure :: estimate_size
+    procedure, public :: estimate_size
   end type
 contains
   integer function get_start_pos(this, node, i, j) result(pos)

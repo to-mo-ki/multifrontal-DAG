@@ -5,7 +5,7 @@ module doubly_linked_list_m
   type, public :: doubly_linked_list_c
     private
     integer :: head
-    integer, pointer:: next(:), prev(:)
+    integer, pointer, contiguous:: next(:), prev(:)
   contains
     procedure :: add
     procedure :: remove
@@ -64,7 +64,7 @@ contains
   end subroutine remove
 
   integer function get_length(this) result(length)
-    class(doubly_linked_list_c) :: this
+    class(doubly_linked_list_c), target :: this
     type(iterator_c), pointer :: iterator
     integer :: tmp
 

@@ -3,6 +3,7 @@ module register_factors_m
   use starpu_factors_m
   use node_data_m
   use starpu_wrapper_m
+  use iso_c_binding
   implicit none
   private
 
@@ -24,12 +25,14 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: starpu_factors
     type(factors_c), pointer :: factors
+    type(c_ptr), pointer :: ptr
     integer :: node, i, j
     
     do node=1, node_data%num_node
       do j=1, node_data%get_num_supernode_block(node)
         do i=j, node_data%get_num_matrix_block(node)
-          starpu_factors%get_supernode(node,i,j) = register_vector_data(factors%get_supernode(node,i,j))
+          ptr => starpu_factors%get_supernode(node,i,j)
+          ptr = register_vector_data(factors%get_supernode(node,i,j))
         enddo
       enddo
     enddo
@@ -40,6 +43,7 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: starpu_factors
     type(factors_c), pointer :: factors
+    type(c_ptr), pointer :: ptr
     integer :: node, i, j
     
     do node=1, node_data%num_node
@@ -48,7 +52,8 @@ contains
       endif
       j = node_data%get_work_start_index(node)
       do i=j, node_data%get_num_matrix_block(node)
-        starpu_factors%get_border(node,i,j) = register_vector_data(factors%get_border(node,i,j))
+        ptr => starpu_factors%get_border(node,i,j)
+        ptr = register_vector_data(factors%get_border(node,i,j))
       enddo
     enddo
     
@@ -58,12 +63,14 @@ contains
     type(node_data_c), pointer :: node_data
     type(starpu_factors_c), pointer :: starpu_factors
     type(factors_c), pointer :: factors
+    type(c_ptr), pointer :: ptr
     integer :: node, i, j
     
     do node=1, node_data%num_node
       do j=node_data%get_work_start_index(node), node_data%get_num_matrix_block(node)
         do i=j, node_data%get_num_matrix_block(node)
-          starpu_factors%get_work(node,i,j) = register_vector_data(factors%get_work(node,i,j))
+          ptr => starpu_factors%get_work(node,i,j)
+          ptr = register_vector_data(factors%get_work(node,i,j))
         enddo
       enddo
     enddo
