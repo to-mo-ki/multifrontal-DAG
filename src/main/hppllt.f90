@@ -45,7 +45,9 @@ contains
     origin_structure => create_jagged_array(origin_set, ccs_row)
     
     if(options(OPTION_USE_METIS) == 1)then
+      call start_time(ORDERING_TIME)
       call Metis_ordering(origin_structure, reordering_perm, reordering_iperm)
+      call end_time(ORDERING_TIME)
       reordered_ccs => reordering_ccs(origin_structure, reordering_perm, reordering_iperm, reordering_ccs_perm)
     else
       reordered_ccs => origin_structure
