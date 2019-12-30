@@ -8,6 +8,7 @@ program starpu_factorize_test
   use contiguous_sets_m
   use starpu_factorize_m
   use test_util
+  use zero_setter_m
   use coefficient_setter_m
   use ccs_m
   use node_data_m
@@ -92,6 +93,7 @@ contains
     starpu_factors => create_starpu_factors(node_data)
     starpu_block_local_index => create_jagged_array_cptr(block_local_index_info%node_ptr)
     
+    call set_zero(node_data, factors)
     call set_coefficient(node_data, ccs, node_sets, factors)
     call register_factors(node_data, starpu_factors, factors)
     call register_block_local_index(starpu_block_local_index, block_local_index)
