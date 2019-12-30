@@ -79,7 +79,7 @@ subroutine factorize_test
     type(c_ptr) :: diag_a_dh, lower_a_dh, lower_b_dh
     
     allocate(diag_a(10), lower_a(4), lower_b(6))
-    diag_a = [1,0,2,2d0,3,3,4,4,5,5]
+    diag_a = [1,0,2,2,3,3,4,4,5,5]
     lower_a = [1,6,4,18]
     lower_b = 0d0
 

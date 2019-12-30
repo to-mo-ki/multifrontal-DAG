@@ -29,7 +29,7 @@ contains
     call rearrange_diag(node_data, factors, 1, 2)
 
     allocate(chk, source=[1d0,6d0,7d0,11d0,12d0,13d0,16d0,17d0,18d0,21d0,22d0,23d0])
-    allocate(pos, source=[1d0,4d0,5d0,7d0,8d0,9d0,10d0,11d0,12d0,13d0,14d0,15d0])
+    allocate(pos, source=[1,4,5,7,8,9,10,11,12,13,14,15])
     ans => factors%get_supernode(1,2,2)
     call assert_equal_partial_array("diag_supernode", ans, pos, 12, chk)
 
