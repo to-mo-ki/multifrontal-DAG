@@ -5,11 +5,10 @@ module matrix_extractor_m
   type, abstract, public :: extractor_c
     type(node_data_c), pointer :: node_data
   contains
-    private
-    procedure, public :: get_ptr
+    procedure :: get_ptr
     procedure(get_start_pos), deferred :: get_start_pos
     procedure(get_size), deferred :: get_size
-    procedure(estimate_size), deferred, public :: estimate_size
+    procedure(estimate_size), deferred :: estimate_size
   end type
   interface
     integer function get_start_pos(this, node, i, j)

@@ -5,10 +5,9 @@ module border_matrix_extractor_m
   private
   type, extends(extractor_c), public :: border_extractor_c
   contains
-    private
     procedure :: get_start_pos
     procedure :: get_size
-    procedure, public :: estimate_size
+    procedure :: estimate_size
   end type
 contains
   integer function get_start_pos(this, node, i, j) result(pos)
