@@ -7,16 +7,17 @@ program block_matrices_border_test
   type(block_matrices_c), pointer :: block_matrices
   type(node_data_c), pointer :: node_data
   integer :: nb, i
+  double precision, pointer, contiguous :: ptr(:)
 
   nb = 3
   node_data => create_node_data([1, 6, 4], [4, 5, 0], nb)
   block_matrices => create_block_matrices(node_data, BORDER_EXTRACTOR)
 
-  block_matrices%get_ptr(1,1,1) = 0.0d0
-  block_matrices%get_ptr(1,2,1) = 0.0d0
+  ptr => block_matrices%get_ptr(1,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(1,2,1); ptr = 0.0d0
   
-  block_matrices%get_ptr(1,1,1) = block_matrices%get_ptr(1,1,1) + 1.0d0
-  block_matrices%get_ptr(1,2,1) = block_matrices%get_ptr(1,2,1) + 1.0d0
+  ptr => block_matrices%get_ptr(1,1,1); ptr = ptr + 1.0d0
+  ptr => block_matrices%get_ptr(1,2,1); ptr = ptr + 1.0d0
   
   call start_array_tests("double access & size:test1")
   call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
@@ -27,21 +28,21 @@ program block_matrices_border_test
   node_data => create_node_data([5, 6, 7, 5, 3, 6], [5, 4, 4, 4, 6, 0], nb)
   block_matrices => create_block_matrices(node_data, BORDER_EXTRACTOR)
   
-  block_matrices%get_ptr(1,2,2) = 0d0
-  block_matrices%get_ptr(1,3,2) = 0d0
-  block_matrices%get_ptr(1,4,2) = 0d0
-  block_matrices%get_ptr(3,3,3) = 0d0
-  block_matrices%get_ptr(3,4,3) = 0d0
-  block_matrices%get_ptr(4,2,2) = 0d0
-  block_matrices%get_ptr(4,3,2) = 0d0
+  ptr => block_matrices%get_ptr(1,2,2); ptr = 0d0
+  ptr => block_matrices%get_ptr(1,3,2); ptr = 0d0
+  ptr => block_matrices%get_ptr(1,4,2); ptr = 0d0
+  ptr => block_matrices%get_ptr(3,3,3); ptr = 0d0
+  ptr => block_matrices%get_ptr(3,4,3); ptr = 0d0
+  ptr => block_matrices%get_ptr(4,2,2); ptr = 0d0
+  ptr => block_matrices%get_ptr(4,3,2); ptr = 0d0
 
-  block_matrices%get_ptr(1,2,2) = block_matrices%get_ptr(1,2,2) + 1d0
-  block_matrices%get_ptr(1,3,2) = block_matrices%get_ptr(1,3,2) + 1d0
-  block_matrices%get_ptr(1,4,2) = block_matrices%get_ptr(1,4,2) + 1d0
-  block_matrices%get_ptr(3,3,3) = block_matrices%get_ptr(3,3,3) + 1d0
-  block_matrices%get_ptr(3,4,3) = block_matrices%get_ptr(3,4,3) + 1d0
-  block_matrices%get_ptr(4,2,2) = block_matrices%get_ptr(4,2,2) + 1d0
-  block_matrices%get_ptr(4,3,2) = block_matrices%get_ptr(4,3,2) + 1d0
+  ptr => block_matrices%get_ptr(1,2,2); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(1,3,2); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(1,4,2); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(3,3,3); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(3,4,3); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(4,2,2); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(4,3,2); ptr = ptr + 1d0
 
   call start_array_tests("double access & size:test2")
   call add_test("(1,2,2)", block_matrices%get_ptr(1,2,2), [(1d0, i=1,9)])
@@ -57,26 +58,26 @@ program block_matrices_border_test
   node_data => create_node_data([1,1,1,1,1,4], [2,3,3,3,3,0], nb)
   block_matrices => create_block_matrices(node_data, BORDER_EXTRACTOR)
 
-  block_matrices%get_ptr(1,1,1) = 0.0d0
-  block_matrices%get_ptr(2,1,1) = 0.0d0
-  block_matrices%get_ptr(2,2,1) = 0.0d0
-  block_matrices%get_ptr(3,1,1) = 0.0d0
-  block_matrices%get_ptr(3,2,1) = 0.0d0
-  block_matrices%get_ptr(4,1,1) = 0.0d0
-  block_matrices%get_ptr(4,2,1) = 0.0d0
-  block_matrices%get_ptr(5,1,1) = 0.0d0
-  block_matrices%get_ptr(5,2,1) = 0.0d0
+  ptr => block_matrices%get_ptr(1,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(2,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(2,2,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(3,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(3,2,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(4,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(4,2,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(5,1,1); ptr = 0.0d0
+  ptr => block_matrices%get_ptr(5,2,1); ptr = 0.0d0
   
   
-  block_matrices%get_ptr(1,1,1) = block_matrices%get_ptr(1,1,1) + 1d0
-  block_matrices%get_ptr(2,1,1) = block_matrices%get_ptr(2,1,1) + 1d0
-  block_matrices%get_ptr(2,2,1) = block_matrices%get_ptr(2,2,1) + 1d0
-  block_matrices%get_ptr(3,1,1) = block_matrices%get_ptr(3,1,1) + 1d0
-  block_matrices%get_ptr(3,2,1) = block_matrices%get_ptr(3,2,1) + 1d0
-  block_matrices%get_ptr(4,1,1) = block_matrices%get_ptr(4,1,1) + 1d0
-  block_matrices%get_ptr(4,2,1) = block_matrices%get_ptr(4,2,1) + 1d0
-  block_matrices%get_ptr(5,1,1) = block_matrices%get_ptr(5,1,1) + 1d0
-  block_matrices%get_ptr(5,2,1) = block_matrices%get_ptr(5,2,1) + 1d0
+  ptr => block_matrices%get_ptr(1,1,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(2,1,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(2,2,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(3,1,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(3,2,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(4,1,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(4,2,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(5,1,1); ptr = ptr + 1d0
+  ptr => block_matrices%get_ptr(5,2,1); ptr = ptr + 1d0
   
   call start_array_tests("double access & size:test1")
   call add_test("(node, i, j) = (1,1,1)", block_matrices%get_ptr(1,1,1), [(1d0, i=1,9)])
