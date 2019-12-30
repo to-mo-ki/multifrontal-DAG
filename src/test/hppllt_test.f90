@@ -123,7 +123,7 @@ contains
 
   end subroutine
 
-  double precision function calc_error result(error)
+  double precision function calc_error
     double precision :: sum_b
     double precision, allocatable :: tmp(:)
     integer :: i, j
@@ -146,7 +146,7 @@ contains
     enddo
     
     do i=1,n
-      error = error + (rh - tmp(i))**2
+      calc_error = error + (rh - tmp(i))**2
     enddo
     
     sum_b = 0.0d0
@@ -154,7 +154,7 @@ contains
       sum_b = sum_b + b(i)**2
     enddo
   
-    error = sqrt(error)/sqrt(sum_b)
+    calc_error = sqrt(calc_error)/sqrt(sum_b)
   
   end function
 

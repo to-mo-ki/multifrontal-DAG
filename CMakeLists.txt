@@ -18,7 +18,13 @@ add_library(
   ${SOURCES}
 )
 
+
+# StarPU
+find_package(PkgConfig)
+pkg_check_modules(STARPU starpu-1.3 REQUIRED)
 link_directories(${STARPU_LIBRARY_DIRS})
+
+# Metis
 find_library(METIS_LIBRARY metis PATHS ${METIS_LIBRARY_DIRS})
 if(METIS_LIBRARY)
   message(STATUS "Library metis found in ${METIS_LIBRARY_DIRS}")

@@ -6,7 +6,6 @@ module work_matrix_extractor_m
   private
   type, extends(extractor_c), public :: work_extractor_c
   contains
-    private
     procedure :: get_start_pos
     procedure :: get_size
     procedure :: estimate_size

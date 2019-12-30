@@ -6,10 +6,9 @@ module work_array_extractor_m
   private
   type, extends(extractor_c), public :: work_extractor_c
   contains
-    private
     procedure :: get_start_pos
     procedure :: get_size
-    procedure, public :: estimate_size
+    procedure :: estimate_size
   end type
 contains
   integer function get_start_pos(this, node, idx) result(pos)

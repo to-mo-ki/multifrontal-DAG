@@ -4,7 +4,7 @@ module doubly_linked_lists_m
   private
   type, public :: doubly_linked_lists_c
     private
-    integer, pointer:: head(:), tail(:), next(:), prev(:)
+    integer, pointer, contiguous:: head(:), tail(:), next(:), prev(:)
   contains
     procedure :: add
     procedure :: merge

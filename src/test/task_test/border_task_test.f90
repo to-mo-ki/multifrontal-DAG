@@ -25,8 +25,9 @@ subroutine factorize_test
     type(c_ptr) :: a_dh, b_dh
 
 
-    allocate(a, source=[double precision::1,0,0,2,8,0,3,12,27,4,16,36,5,20,45])
-    allocate(b, source=[double precision::64,0,80,125])
+    allocate(a(15), b(4))
+    a = [1,0,0,2,8,0,3,12,27,4,16,36,5,20,45]
+    b = [64,0,80,125]
 
     a_dh = register_vector_data(a)
     b_dh = register_vector_data(b)
@@ -50,9 +51,10 @@ subroutine factorize_test
     double precision, pointer, contiguous :: diag_a(:), lower_a(:), lower_b(:)
     type(c_ptr) :: diag_a_dh, lower_a_dh, lower_b_dh
     
-    allocate(diag_a, source=[double precision::1,0,0,2,2,0,3,3,3,4,4,4,5,5,5])
-    allocate(lower_a, source=[double precision::1,6,18,4,18,45])
-    allocate(lower_b(4), source=0d0)
+    allocate(diag_a(15), lower_a(6), lower_b(4))
+    diag_a = [1,0,0,2,2,0,3,3,3,4,4,4,5,5,5]
+    lower_a = [1,6,18,4,18,45]
+    lower_b = 0d0
 
     diag_a_dh = register_vector_data(diag_a)
     lower_a_dh = register_vector_data(lower_a)
@@ -76,9 +78,10 @@ subroutine factorize_test
     double precision, pointer, contiguous :: diag_a(:), lower_a(:), lower_b(:)
     type(c_ptr) :: diag_a_dh, lower_a_dh, lower_b_dh
     
-    allocate(diag_a, source=[double precision::1,0,2,2d0,3,3,4,4,5,5])
-    allocate(lower_a, source=[double precision::1,6,4,18])
-    allocate(lower_b(6), source=0d0)
+    allocate(diag_a(10), lower_a(4), lower_b(6))
+    diag_a = [1,0,2,2,3,3,4,4,5,5]
+    lower_a = [1,6,4,18]
+    lower_b = 0d0
 
     diag_a_dh = register_vector_data(diag_a)
     lower_a_dh = register_vector_data(lower_a)

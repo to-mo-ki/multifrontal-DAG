@@ -6,9 +6,8 @@ module supernode_starpu_matrix_extractor_m
   private
   type, extends(extractor_c), public :: supernode_extractor_c
   contains
-    private
     procedure :: get_pos
-    procedure, public :: estimate_size
+    procedure :: estimate_size
   end type
 contains
   integer function get_pos(this, node, i, j) result(ptr)

@@ -16,6 +16,7 @@ program sparse_add_subroutines_test
   type(jagged_array_3D_c), pointer :: block_local_index
   type(block_local_index_info_c), pointer :: block_local_index_info
   type(right_hand_c), pointer :: rh
+  double precision, pointer, contiguous :: ptr(:)
 
   local_index => create_jagged_array([7, 3, 0], [3,4,5,6,8,9,10,1,2,3])
   node_set => create_contiguous_sets([4, 7, 3])
@@ -26,13 +27,13 @@ program sparse_add_subroutines_test
   block_local_index => block_local_index_info%create_block_local_index()
   rh => create_right_hand(node_data, 3)
   
-  rh%get_work(1,2) = [1,2]
-  rh%get_work(1,3) = [3,4,5]
-  rh%get_work(1,4) = [6,7]
-  rh%get_array_ptr(2,1) = 0d0
-  rh%get_array_ptr(2,2) = 0d0
-  rh%get_array_ptr(2,3) = 0d0
-  rh%get_array_ptr(2,4) = 0d0
+  ptr => rh%get_work(1,2); ptr = [1,2]
+  ptr => rh%get_work(1,3); ptr = [3,4,5]
+  ptr => rh%get_work(1,4); ptr = [6,7]
+  ptr => rh%get_array_ptr(2,1); ptr = 0d0
+  ptr => rh%get_array_ptr(2,2); ptr = 0d0
+  ptr => rh%get_array_ptr(2,3); ptr = 0d0
+  ptr => rh%get_array_ptr(2,4); ptr = 0d0
   
   call start_array_tests("scatter_add")
   call scatter_add(rh, block_local_index, block_local_index_info, 1, 1, 2)
@@ -49,14 +50,14 @@ program sparse_add_subroutines_test
   call add_test("node=1, index=6", rh%get_array_ptr(2, 4), [7d0])
   call end_array_tests()
   
-  rh%get_work(1,2) = 0d0
-  rh%get_work(1,3) = 0d0
-  rh%get_work(1,4) = 0d0
+  ptr => rh%get_work(1,2); ptr = 0d0
+  ptr => rh%get_work(1,3); ptr = 0d0
+  ptr => rh%get_work(1,4); ptr = 0d0
 
-  rh%get_array_ptr(2,1) = [1,2,3]
-  rh%get_array_ptr(2,2) = [4,5,6]
-  rh%get_array_ptr(2,3) = [7,8,9]
-  rh%get_array_ptr(2,4) = [10]
+  ptr => rh%get_array_ptr(2,1); ptr = [1,2,3]
+  ptr => rh%get_array_ptr(2,2); ptr = [4,5,6]
+  ptr => rh%get_array_ptr(2,3); ptr = [7,8,9]
+  ptr => rh%get_array_ptr(2,4); ptr = [10]
 
   call start_array_tests("gather")
   call gather(rh, block_local_index, block_local_index_info, 1, 1, 2)
