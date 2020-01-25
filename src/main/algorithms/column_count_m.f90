@@ -34,7 +34,7 @@ contains
     lca => create_jagged_array(ccs%get_set())
     allocate(prev_p(n))
     prev_p = 0
-    do j=1, n
+    do j=1, n-1
       rows => ccs%get_array(j)
       lca_rows => lca%get_array(j)
       do i=2, size(rows)
