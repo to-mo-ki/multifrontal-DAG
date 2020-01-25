@@ -12,25 +12,16 @@ contains
     ! TODO: understand algorithm
     integer, pointer, contiguous :: cc(:)
     type(jagged_array_c), pointer, intent(in) :: ccs, tree_child
+    type(jagged_array_c), pointer :: lca
     type(disjoint_set_c), pointer :: disjoint_set
     integer, pointer, contiguous, intent(in) :: parent(:)
-    integer :: n, p, pp, q, i, u
+    integer :: n, p, pp, i, j
     integer, allocatable :: wt(:), prev_p(:)
     integer, pointer, contiguous :: level(:)
-    integer, pointer, contiguous :: childs(:), rows(:)
+    integer, pointer, contiguous :: childs(:), rows(:), lca_rows(:)
 
     n = size(parent)
-    allocate(wt(n), prev_p(n), level(n))
-
-    prev_p = 0
-    
-    do i=1, n
-      if(tree_child%get_array_length(i) == 0)then
-        wt(i) = 1
-      else
-        wt(i) = 0
-      endif
-    enddo
+    allocate(level(n))
 
     level(n) = 0
     childs => tree_child%get_array(n)
@@ -40,23 +31,46 @@ contains
 
     disjoint_set => create_disjoint_set(n)
 
-    do p=1, n
-      if(p /= n)then
-        wt(parent(p)) = wt(parent(p)) - 1
-      endif
-      rows => ccs%get_array(p)
+    lca => create_jagged_array(ccs%get_set())
+    allocate(prev_p(n))
+    prev_p = 0
+    do j=1, n
+      rows => ccs%get_array(j)
+      lca_rows => lca%get_array(j)
       do i=2, size(rows)
-        u = rows(i)
-        wt(p) = wt(p) + 1
-        pp = prev_p(u)
+        pp = prev_p(rows(i))
         if(pp /= 0)then
-          q = disjoint_set%find(pp)
-          wt(q) = wt(q) - 1
+          lca_rows(i) = disjoint_set%find(pp)
+        else
+          lca_rows(i) = 0
         endif
-        prev_p(u) = p
+        prev_p(rows(i)) = j
       enddo
-      call disjoint_set%link(p, parent(p))
+      call disjoint_set%link(j, parent(j))
     enddo
+    allocate(wt(n))
+    do i=1, n
+      if(tree_child%get_array_length(i) == 0)then
+        wt(i) = 1
+      else
+        wt(i) = 0
+      endif
+    enddo
+
+    do j=1, n
+      if(j /= n)then
+        wt(parent(j)) = wt(parent(j)) - 1
+      endif
+      rows => ccs%get_array(j)
+      lca_rows => lca%get_array(j)
+      do i=2, size(rows)
+        wt(j) = wt(j) + 1
+        if(lca_rows(i) /= 0)then
+          wt(lca_rows(i)) = wt(lca_rows(i)) - 1
+        endif
+      enddo
+    enddo
+
     allocate(cc(n))
     cc = wt
     do i=1, n-1
