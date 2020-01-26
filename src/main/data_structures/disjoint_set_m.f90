@@ -32,25 +32,19 @@ contains
   integer function find(this, idx) result(root)
     class(disjoint_set_c) :: this
     integer, intent(in) :: idx
-    if(this%parent(idx) == idx)then
-      root = this%realroot(idx)
-      return
-    endif
-    root = this%find2(this%parent(idx))
-    this%parent(idx) = root
-    root = this%realroot(root)
+    integer :: vroot
+    vroot = this%find2(idx)
+    root = this%realroot(vroot)
 
   end function
 
   recursive integer function find2(this, idx) result(root)
     class(disjoint_set_c) :: this
     integer, intent(in) :: idx
-    if(this%parent(idx) == idx)then
-      root = idx
-      return
+    if(this%parent(idx) /= idx)then
+      this%parent(idx) = this%find2(this%parent(idx))
     endif
-    root = this%find2(this%parent(idx))
-    this%parent(idx) = root
+    root = this%parent(idx)
   end function
 
   subroutine link(this, node, parent)
@@ -60,15 +54,15 @@ contains
     
     node_vroot = this%virtualroot(node)
     parent_vroot = this%virtualroot(parent)
-    if(this%rank(parent_vroot) > this%rank(node_vroot))then
+    if(this%rank(parent) > this%rank(node))then
       this%parent(node_vroot) = parent_vroot
-    else if(this%rank(parent_vroot) < this%rank(node_vroot))then
+    else if(this%rank(parent) < this%rank(node))then
       this%parent(parent_vroot) = node_vroot
       this%realroot(node_vroot) = this%realroot(parent_vroot)
       this%virtualroot(parent) = node_vroot
     else
       this%parent(node_vroot) = parent_vroot
-      this%rank(parent_vroot) = this%rank(parent_vroot) + 1
+      this%rank(parent) = this%rank(parent) + 1
     endif
     
 
