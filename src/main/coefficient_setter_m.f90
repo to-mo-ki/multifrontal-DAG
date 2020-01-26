@@ -22,6 +22,7 @@ contains
     double precision, pointer, contiguous :: vals(:), block_matrix(:)
 
     nb = node_data%nb
+    !$omp parallel do private(node, j, rows, vals, col_num, block_col_num, block_j, i, block_row_num, block_matrix, block_i, ld)
     do node=1, node_data%num_node
       do j=node_sets%get_first(node), node_sets%get_last(node)
         rows => ccs%get_row_array(j)

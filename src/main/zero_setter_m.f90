@@ -14,6 +14,8 @@ contains
     type(factors_c), pointer :: factors
     integer :: i, j, node, ncol, nrow
     double precision, pointer, contiguous :: a(:)
+
+    !$omp parallel do private(node, j, ncol, a, i, nrow)
     do node=1, node_data%num_node
       do j=1, node_data%get_num_matrix_block(node)
         ncol = node_data%get_matrix_block_size(j, node)
