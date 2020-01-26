@@ -6,7 +6,7 @@ module hppllt
   private
 
   public :: hppllt_init, hppllt_analyze, hppllt_factorize, hppllt_solve, hppllt_finalize
-  public :: hppllt_get_time_info
+  public :: hppllt_get_time_info, hppllt_get_cost
   
 contains
 
@@ -186,5 +186,10 @@ contains
   double precision function hppllt_get_time_info(num) result(time)
     integer :: num
     time = get_time(num)
+  end function
+
+  integer(8) function hppllt_get_cost() result(cost)
+    use cost_calculator_m
+    cost = calculate_cost(node_data)
   end function
 end module

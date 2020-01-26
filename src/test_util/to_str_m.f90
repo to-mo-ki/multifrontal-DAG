@@ -1,7 +1,7 @@
 module to_str_m
   implicit none
   private
-  integer :: STR_LENGTH = 20
+  integer :: STR_LENGTH = 24
   public :: to_str
 contains
 
@@ -13,6 +13,8 @@ function to_str(a) result(res)
   allocate(character(len=length)::res)
 
   select type (p => a)
+  type is (integer(8))
+    res = trim(to_str_big_int(p))
   type is (integer)
     res = trim(to_str_int(p))
   type is (double precision)
@@ -47,6 +49,15 @@ function to_str_int(i) result(res)
   res = trim(str)
 end function
 
+function to_str_big_int(i) result(res)
+  character(STR_LENGTH) :: str, res, digit
+  integer(8), intent(in) :: i
+  write(digit, "(i2)") calc_big_digit(i)
+  write(str, "(I"//digit//".1)") i
+  ! TODO:trimされない(STR_LENGTH分は確保してしまっている)
+  res = trim(str)
+end function
+
 function to_str_logical(i) result(res)
   character(STR_LENGTH) :: res
   logical, intent(in) :: i
@@ -61,7 +72,6 @@ function to_str_DP(a) result(res)
 end function
 
 integer function calc_digit(num) result(digit)
-  ! TODO:負の数の対策
   integer, value :: num
   if(num == 0)then
     digit = 1
@@ -72,5 +82,25 @@ integer function calc_digit(num) result(digit)
     num = num / 10
     digit = digit + 1
   enddo
+  if(num < 0)then
+    digit = digit + 1
+  endif
 end function
+
+integer function calc_big_digit(num) result(digit)
+  integer(8), value :: num
+  if(num == 0)then
+    digit = 1
+    return
+  endif
+  digit = 1
+  do while(num /= 0)
+    num = num / 10
+    digit = digit + 1
+  enddo
+  if(num < 0)then
+    digit = digit + 1
+  endif
+end function
+
 end module
