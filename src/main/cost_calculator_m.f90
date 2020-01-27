@@ -4,7 +4,7 @@ module cost_calculator_m
   implicit none
   private
 
-  public :: calculate_cost
+  public :: calculate_cost, count_nonzero
 contains
   integer(8) function calculate_cost(node_data) result(cost)
     type(node_data_c), pointer :: node_data
@@ -15,6 +15,19 @@ contains
       col = node_data%supernode_size(node)
       row = node_data%work_size(node)
       cost = cost + partial_square_sum(row+1, row+col)
+    enddo
+
+  end function
+
+  integer function count_nonzero(node_data) result(nonzero)
+    type(node_data_c), pointer :: node_data
+    integer :: node, col, row
+
+    nonzero = 0
+    do node=1, node_data%num_node
+      col = node_data%supernode_size(node)
+      row = node_data%work_size(node)
+      nonzero = nonzero + partial_sum(row+1, row+col)
     enddo
 
   end function

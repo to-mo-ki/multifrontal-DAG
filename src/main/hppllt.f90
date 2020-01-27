@@ -6,7 +6,7 @@ module hppllt
   private
 
   public :: hppllt_init, hppllt_analyze, hppllt_factorize, hppllt_solve, hppllt_finalize
-  public :: hppllt_get_time_info, hppllt_get_cost
+  public :: hppllt_get_time_info, hppllt_get_cost, hppllt_get_nonzero
   
 contains
 
@@ -192,4 +192,10 @@ contains
     use cost_calculator_m
     cost = calculate_cost(node_data)
   end function
+
+  integer function hppllt_get_nonzero() result(nonzero)
+    use cost_calculator_m
+    nonzero = count_nonzero(node_data)
+  end function
+
 end module
