@@ -1,5 +1,5 @@
 module block_matrices_m
-  use contiguous_sets_m
+  use contiguous_sets_long_m
   use matrix_extractor_m
   use supernode_matrix_extractor_m
   use work_matrix_extractor_m
@@ -11,7 +11,7 @@ module block_matrices_m
   type, public :: block_matrices_c
     private
     double precision, pointer, contiguous :: val(:)
-    type(contiguous_sets_c), pointer :: ptr
+    type(contiguous_sets_long_c), pointer :: ptr
     class(extractor_c), pointer :: extractor
     integer :: nb
   contains
@@ -45,7 +45,7 @@ contains
     do i=1, node_data%num_node
       matrix_size(i) = this%extractor%estimate_size(i)
     enddo
-    this%ptr => create_contiguous_sets(matrix_size)
+    this%ptr => create_contiguous_sets_long(matrix_size)
     deallocate(matrix_size)
     allocate(this%val(this%ptr%get_num_elements()))
     

@@ -11,6 +11,8 @@ module tests_m
     procedure :: add_test5
     procedure :: add_test6
     procedure :: add_test7
+    procedure :: add_test_long_int
+    procedure :: add_test_long_short_int
   end interface
 
   public :: add_test, add_test_tri

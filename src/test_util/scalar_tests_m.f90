@@ -9,6 +9,7 @@ module scalar_tests_m
 
   public :: start_tests, end_tests
   public :: add_test1, add_test2, add_test3, add_test4
+  public :: add_test_long_int, add_test_long_short_int
 
 contains
 
@@ -59,4 +60,19 @@ contains
     deallocate(message_buffer)
   end subroutine
 
+  subroutine add_test_long_int(message, answer, check)
+    character(*) :: message
+    integer(8) :: answer, check
+    if(answer /= check)then
+      call add_node(message, to_str(answer), to_str(check))
+    endif
+  end subroutine
+
+  subroutine add_test_long_short_int(message, answer, check)
+    character(*) :: message
+    integer(8) :: answer, long_check
+    integer :: check
+    long_check = check
+    call add_test_long_int(message, answer, long_check)
+  end subroutine
 end module
