@@ -15,6 +15,9 @@ module factors_m
     procedure :: get_supernode
     procedure :: get_work
     procedure :: get_border
+    procedure :: get_supernode_size
+    procedure :: get_work_size
+    procedure :: get_border_size
   end type
 
   public :: create_factors
@@ -75,6 +78,21 @@ contains
     
     ptr => this%border%get_ptr(node, i, j)
 
+  end function
+
+  integer(8) function get_supernode_size(this)
+    class(factors_c) :: this
+    get_supernode_size = this%supernode%get_array_size()
+  end function
+
+  integer(8) function get_work_size(this)
+    class(factors_c) :: this
+    get_work_size = this%work%get_array_size()
+  end function
+
+  integer(8) function get_border_size(this)
+    class(factors_c) :: this
+    get_border_size = this%border%get_array_size()
   end function
 
 end module

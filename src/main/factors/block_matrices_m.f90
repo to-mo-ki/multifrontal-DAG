@@ -16,6 +16,7 @@ module block_matrices_m
     integer :: nb
   contains
     procedure :: get_ptr
+    procedure :: get_array_size
   end type
 
   public :: create_block_matrices
@@ -60,5 +61,11 @@ contains
     array => this%val(this%ptr%get_first(node):this%ptr%get_last(node))
     ptr => this%extractor%get_ptr(array, node, i, j)
 
-  end function  
+  end function
+
+  integer(8) function get_array_size(this)
+    class(block_matrices_c) :: this
+    get_array_size = this%ptr%get_num_elements()
+  end function
+
 end module

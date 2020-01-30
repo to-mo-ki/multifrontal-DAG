@@ -6,7 +6,7 @@ module hppllt
   private
 
   public :: hppllt_init, hppllt_analyze, hppllt_factorize, hppllt_solve, hppllt_finalize
-  public :: hppllt_get_time_info, hppllt_get_cost, hppllt_get_nonzero
+  public :: hppllt_get_time_info, hppllt_get_cost, hppllt_get_nonzero, hppllt_get_array_size
   
 contains
 
@@ -196,6 +196,18 @@ contains
   integer function hppllt_get_nonzero() result(nonzero)
     use cost_calculator_m
     nonzero = count_nonzero(node_data)
+  end function
+
+  integer(8) function hppllt_get_array_size(num) result(array_size)
+    integer :: num
+    select case(num)
+      case(1)
+        array_size = factors%get_supernode_size()
+      case(2)
+        array_size = factors%get_work_size()
+      case(3)
+        array_size = factors%get_border_size()
+    end select
   end function
 
 end module
