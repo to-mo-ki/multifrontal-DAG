@@ -7,7 +7,7 @@ module integer_function_m
     procedure :: partial_sum2
   end interface
 
-  public :: partial_sum, div_ceiling, mod2, triangular_pos
+  public :: partial_sum, partial_square_sum, div_ceiling, mod2, triangular_pos
 
 contains
 
@@ -27,6 +27,20 @@ contains
     else
       partial_sum2 = partial_sum(e)-partial_sum(s-1)
     endif
+  end function
+
+
+  integer(8) function partial_square_sum(s, e)
+    integer, intent(in) :: s, e
+    integer(8) :: i 
+
+    partial_square_sum = 0
+    if(e < s)then
+      return
+    endif
+    do i=s, e
+      partial_square_sum = partial_square_sum + i*i
+    enddo
   end function
 
   integer function div_ceiling(a, p)

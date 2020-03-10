@@ -4,12 +4,22 @@ module assert_equal_m
   implicit none
   private
   
-  public :: assert_equal_int, assert_equal_logical, assert_equal_char, assert_equal_DP
+  public :: assert_equal_int, assert_equal_big_int, assert_equal_logical, assert_equal_char, assert_equal_DP
   
 contains
   subroutine assert_equal_int(message, answer, check)
     character(*), intent(in) :: message
     integer, intent(in) :: answer, check
+    logical :: err_flag
+  
+    err_flag = answer /= check
+    call disp_log(err_flag, message, to_str(answer), to_str(check))
+  
+  end subroutine
+
+  subroutine assert_equal_big_int(message, answer, check)
+    character(*), intent(in) :: message
+    integer(8), intent(in) :: answer, check
     logical :: err_flag
   
     err_flag = answer /= check

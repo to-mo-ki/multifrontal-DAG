@@ -12,18 +12,35 @@ contains
     ! TODO: understand algorithm
     integer, pointer, contiguous :: cc(:)
     type(jagged_array_c), pointer, intent(in) :: ccs, tree_child
+    type(jagged_array_c), pointer :: lca
     type(disjoint_set_c), pointer :: disjoint_set
     integer, pointer, contiguous, intent(in) :: parent(:)
-    integer :: n, p, pp, q, i, u
+    integer :: n, p, pp, i, j
     integer, allocatable :: wt(:), prev_p(:)
-    integer, pointer, contiguous :: level(:)
-    integer, pointer, contiguous :: childs(:), rows(:)
+    integer, pointer, contiguous :: childs(:), rows(:), lca_rows(:)
 
     n = size(parent)
-    allocate(wt(n), prev_p(n), level(n))
 
+    disjoint_set => create_disjoint_set(n)
+
+    lca => create_jagged_array(ccs%get_set())
+    allocate(prev_p(n))
     prev_p = 0
-    
+    do j=1, n-1
+      rows => ccs%get_array(j)
+      lca_rows => lca%get_array(j)
+      do i=2, size(rows)
+        pp = prev_p(rows(i))
+        if(pp /= 0)then
+          lca_rows(i) = disjoint_set%find(pp)
+        else
+          lca_rows(i) = 0
+        endif
+        prev_p(rows(i)) = j
+      enddo
+      call disjoint_set%link(j, parent(j))
+    enddo
+    allocate(wt(n))
     do i=1, n
       if(tree_child%get_array_length(i) == 0)then
         wt(i) = 1
@@ -32,31 +49,20 @@ contains
       endif
     enddo
 
-    level(n) = 0
-    childs => tree_child%get_array(n)
-    do i=1, size(childs)
-      call compute_level(childs(i), n, level, tree_child)
-    enddo
-
-    disjoint_set => create_disjoint_set(n)
-
-    do p=1, n
-      if(p /= n)then
-        wt(parent(p)) = wt(parent(p)) - 1
+    do j=1, n
+      if(j /= n)then
+        wt(parent(j)) = wt(parent(j)) - 1
       endif
-      rows => ccs%get_array(p)
+      rows => ccs%get_array(j)
+      lca_rows => lca%get_array(j)
       do i=2, size(rows)
-        u = rows(i)
-        wt(p) = wt(p) + 1
-        pp = prev_p(u)
-        if(pp /= 0)then
-          q = disjoint_set%find(pp)
-          wt(q) = wt(q) - 1
+        wt(j) = wt(j) + 1
+        if(lca_rows(i) /= 0)then
+          wt(lca_rows(i)) = wt(lca_rows(i)) - 1
         endif
-        prev_p(u) = p
       enddo
-      call disjoint_set%link(p, parent(p))
     enddo
+
     allocate(cc(n))
     cc = wt
     do i=1, n-1
@@ -65,20 +71,4 @@ contains
     
   end function
 
-  recursive subroutine compute_level(node, parent, level, tree_child)
-    integer, intent(in) :: node, parent
-    integer, pointer, contiguous :: level(:), childs(:)
-    type(jagged_array_c), pointer, intent(in) :: tree_child
-    integer :: i
-
-    level(node) = level(parent) + 1
-    if(tree_child%get_array_length(node) == 0)then
-      return
-    endif
-    childs => tree_child%get_array(node)
-    do i=1, size(childs)
-      call compute_level(childs(i), node, level, tree_child)
-    enddo
-  
-  end subroutine
 end module

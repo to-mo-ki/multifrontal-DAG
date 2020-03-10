@@ -8,6 +8,7 @@ module test_util
   implicit none
   interface assert_equal
     module procedure assert_equal_int
+    module procedure assert_equal_big_int
     module procedure assert_equal_logical
     module procedure assert_equal_char
     module procedure assert_equal_DP

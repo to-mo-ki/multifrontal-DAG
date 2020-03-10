@@ -1,5 +1,6 @@
 module compute_tree_m
   use jagged_array_m
+  use disjoint_set_m
   implicit none
   private
 
@@ -10,31 +11,27 @@ contains
     ! OPTIMIZE: 素集合データ構造を用いたものに変更する必要あり
     integer, pointer, contiguous :: parent(:)
     type(jagged_array_c), pointer, intent(in) :: crs
-    integer :: j, i, r, t, n
-    integer, pointer, contiguous :: rows(:)
-    integer, allocatable :: virtual(:), pos_parent(:)
+    integer :: i, k, t, n
+    integer, pointer, contiguous :: cols(:)
+    type(disjoint_set_c), pointer :: disjoint_set
 
     n = crs%get_num_arrays()
     allocate(parent(n))
-    allocate(virtual(n), pos_parent(n))
 
-    do j = 1, n
-      parent(j) = 0
-      virtual(j) = n+1
-      rows => crs%get_array(j)
-      do i = 1, size(rows) - 1
-        r = rows(i)
-        do while(virtual(r) < j)
-          t = virtual(r)
-          virtual(r) = j
-          r = t
-        enddo
-        if(virtual(r) == n+1)then
-          virtual(r) = j
-          parent(r) = j
+    disjoint_set => create_disjoint_set(n)
+    
+    do i=1, n
+      parent(i) = 0
+      cols => crs%get_array(i)
+      do k=1, size(cols)-1
+        t = disjoint_set%find(cols(k))
+        if(parent(t) == 0 .and. t /= i)then
+          parent(t) = i
+          call disjoint_set%link(t, i)
         endif
       enddo
     enddo
+
   end function
 
 end module
