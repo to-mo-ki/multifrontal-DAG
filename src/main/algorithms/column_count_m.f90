@@ -17,17 +17,9 @@ contains
     integer, pointer, contiguous, intent(in) :: parent(:)
     integer :: n, p, pp, i, j
     integer, allocatable :: wt(:), prev_p(:)
-    integer, pointer, contiguous :: level(:)
     integer, pointer, contiguous :: childs(:), rows(:), lca_rows(:)
 
     n = size(parent)
-    allocate(level(n))
-
-    level(n) = 0
-    childs => tree_child%get_array(n)
-    do i=1, size(childs)
-      call compute_level(childs(i), n, level, tree_child)
-    enddo
 
     disjoint_set => create_disjoint_set(n)
 
@@ -79,20 +71,4 @@ contains
     
   end function
 
-  recursive subroutine compute_level(node, parent, level, tree_child)
-    integer, intent(in) :: node, parent
-    integer, pointer, contiguous :: level(:), childs(:)
-    type(jagged_array_c), pointer, intent(in) :: tree_child
-    integer :: i
-
-    level(node) = level(parent) + 1
-    if(tree_child%get_array_length(node) == 0)then
-      return
-    endif
-    childs => tree_child%get_array(node)
-    do i=1, size(childs)
-      call compute_level(childs(i), node, level, tree_child)
-    enddo
-  
-  end subroutine
 end module
